@@ -5,19 +5,19 @@ namespace Deployer;
 require_once 'recipe/symfony4.php';
 require_once 'recipe/yarn.php';
 
-set('repository', 'git@github.com:roberto910907/Lideres.git');
+set('repository', 'https://github.com/uafonseca/lideres-development.git');
 
 set('application', 'lideres');
 
 host('beta')
     ->hostname('lideres.cortex.com.ec')
-    ->set('branch', 'development')
+    ->set('branch', 'main')
     ->user('deploy')
     ->set('deploy_path', '/var/www/html/Lideres');
 
 host('production')
     ->hostname('corplideres.com')
-    ->set('branch', 'development')
+    ->set('branch', 'main')
     ->user('deploy')
     ->set('deploy_path', '/var/www/html/Lideres_prod');
 
@@ -49,14 +49,14 @@ task('yarn:run:production', 'yarn run encore production');
 
 desc('Database update');
 task('database:update', function () {
-    run('{{bin/console}} doctrine:schema:update --force');
+    run('php {{bin/console}} doctrine:schema:update --force');
 });
 
 desc('Publish assets');
-task('assets:install', '{{bin/console}} assets:install --symlink public');
+task('assets:install', 'php {{bin/console}} assets:install --symlink public');
 
 desc('Dumping js routes');
-task('dump:js-routes', '{{bin/console}} fos:js-routing:dump --target=public/bundles/fosjsrouting/js/fos_js_routing.js');
+task('dump:js-routes', 'php {{bin/console}} fos:js-routing:dump --target=public/bundles/fosjsrouting/js/fos_js_routing.js');
 
 desc('chmod');
 task('chmod:777', function () {
