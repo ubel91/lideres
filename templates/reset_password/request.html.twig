@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recuperar contraseña{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row mt-5 mb-5">
+            <div class="offset-lg-4 col-lg-4 justify-content-center">
+{#                <div class="row justify-content-center" style="margin-bottom: 4rem">#}
+                    <img src="{{ asset('build/assets/images/e9e457896b8606e213e7f387b4cc7e65.0.png') }}" class="img-fluid" id="logoLideres" alt="logo_lideres" width="500">
+{#                </div>#}
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-lg-4 col-lg-4 justify-content-center">
+                {% for flashError in app.flashes('reset_password_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="offset-lg-4 col-lg-4 justify-content-center">
+                <h3>Recuperar contraseña</h3>
+                <br>
+
+                {{ form_start(requestForm) }}
+                {{ form_row(requestForm.e_mail) }}
+                <div>
+                    <small>
+                        Introduzca su dirección de correo electrónico a donde le
+                        será enviado un enlace para recuperar su contraseña
+                    </small>
+                </div>
+
+                <button class="btn btn-primary mt-3">Enviar correo</button>
+                {{ form_end(requestForm) }}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

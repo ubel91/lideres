@@ -1,0 +1,77 @@
+{% extends 'super/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        .activities-list {
+            cursor: pointer;
+        }
+        .modal-header:hover {
+            cursor: grab;
+        }
+        .delete-item > .text-danger:hover {
+            color: #9b3545 !important;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block title %}
+    Asignar Unidad
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block searcher %}
+{% endblock %}
+
+
+
+{% block right_block %}
+
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-3 offset-lg-3 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Asignar Unidad</h4>
+                {% endblock %}
+            </div>
+{#            <div class="col-lg-4 offset-lg-1">#}
+{#                <h4 class="text-center" style="color: #aacd4e"> Actividades del Unidad</h4>#}
+{#            </div>#}
+        </div>
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-2 mt-3">
+                {{ include('unidad/_form.html.twig') }}
+            </div>
+{#            <div class="col-lg-6 offset-lg-1">#}
+{#                <div class="list-group list-group-flush" id="list-tab" role="tablist">#}
+{#                    {% for a in unidad.actividades %}#}
+{#                        <div class="list-group-item list-group-item-action">#}
+{#                            <a class="activities-list" id="{{'actividad_'~a.id}}" data-id = "{{ a.id }}" aria-controls="profile"><i class="fas fa-clipboard-check mr-3"></i>{{ a.nombre }}</a>#}
+{#                            <div class="delete-item" id="{{ 'delete_'~a.id }}" style="display: inline-block"><span class="far fa-trash-alt text-danger ml-4"></span></div>#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+        </div>
+
+    </div>
+
+{#    <a href="{{ path('unidad_index') }}">back to list</a>#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        let formURLUnidad = '{{ path('unidad_new')}}';
+    </script>
+
+    {{ encore_entry_script_tags('unidad_form') }}
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'super/index.html.twig' %}
+
+{% block title %}
+    Registro de Usuario
+{% endblock %}
+
+{% block navbar %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+{% endblock %}
+{% block right_block %}
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-3 offset-lg-3 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Editar Usuario</h4>
+                {% endblock %}
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                {% block searcher %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-2">
+                {{ include('catalogo/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

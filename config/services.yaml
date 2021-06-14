@@ -1,0 +1,81 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    images_directory: '%kernel.project_dir%/assets/images'
+    uploads_directory: '%kernel.project_dir%/uploads'
+    files_directory: '%kernel.project_dir%/uploads/unidades'
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+        bind:
+            $uploadFilesystem: '@oneup_flysystem.uploads_filesystem_filesystem'
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%images_directory%'
+            $filesDirectory: '%files_directory%'
+            $uploadsDirectory: '%uploads_directory%'
+    Yectep\PhpSpreadsheetBundle: '@phpoffice.spreadsheet'
+    App\Controller\RecursoController:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
+    App\EventListener\UnidadDeleteFiles:
+        tags:
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'postRemove'
+                entity: 'App\Entity\Unidad'
+                lazy: true
+    App\EventListener\LibroDeleteFiles:
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+              event: 'postRemove'
+              entity: 'App\Entity\Libro'
+              lazy: true
+    App\EventListener\UserDeleteFiles:
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+              event: 'postRemove'
+              entity: 'App\Entity\User'
+              lazy: true
+    App\EventListener\RecursoDeleteFiles:
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+              event: 'postRemove'
+              entity: 'App\Entity\Recurso'
+              lazy: true
+    App\EventListener\ImagenGuardadaDeleteFiles:
+        arguments: ['@App\Service\FileUploader','@security.untracked_token_storage']
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+              event: 'postRemove'
+              entity: 'App\Entity\ImagenGuardada'
+              lazy: true
+
+    Symfony\Component\Asset\Context\RequestStackContext: '@assets.context'
+
+    # App\Cache\RedisCache:
+    #   $redis_database_host: '%env(resolve:REDIS_DATABASE_HOST)%'
+    #   $redis_database_port: '%env(resolve:REDIS_DATABASE_PORT)%'

@@ -1,0 +1,116 @@
+{% extends 'super/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ parent() }} - Listados Usuarios
+{% endblock %}
+
+{% block title_panel %}
+    <h4 style="color: #aacd4e"> Listado de Profesores</h4>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block right_block %}
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="row">
+                        <div class="col-md-6 pull-left">Listado de textos</div>
+                        <div class="col-md-6 text-right">
+                            <a href="{{ path('print_activados') }}" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Imprimir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive-sm">
+                            <table class="table table-bordered display" id="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Libro</th>
+                                    <th scope="col">Categoría</th>
+                                    <th scope="col">Materia</th>
+                                    <th scope="col">Fecha de activación</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for book in books %}
+                                    <tr>
+                                        <td>
+                                            {% if book.profesor is not null %}
+                                                {{ book.profesor.user.nombre }}
+                                            {% elseif  book.estudiante is not null %}
+                                                {{ book.estudiante.user.nombre }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if book.profesor is not null %}
+                                                {{ book.profesor.user.roles|join(',') }}
+                                            {% elseif  book.estudiante is not null %}
+                                                {{ book.estudiante.user.roles|join(',') }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ book.libro.nombre }}</td>
+                                        <td>{{ book.libro.subCategoria.nombre }}</td>
+                                        <td>{{ book.libro.catalogo.materias.nombre }}</td>
+                                        <td>
+                                            {% set codeString = book.codigoActivacion %}
+                                            {% for code in book.libro.codigos %}
+                                                {% if codeString == code.codebook %}
+                                                    {{ code.fechaInicio|date('d/m/Y') }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% set codeString = book.codigoActivacion %}
+                                            {% set exist = false %}
+                                            {% for code in book.libro.codigos %}
+                                                {% if codeString == code.codebook %}
+                                                    {% set exist = true %}
+                                                    {% if code.fechaFin|date('U') < 'now'|date('U') %}
+                                                        <span class="text-warning"><i class="fa fa-exclamation-triangle"></i> Caducado</span>
+                                                    {% elseif  code.fechaFin('U') >= 'now'|date('U') %}
+                                                        <span class="text-success"><i class="fa fa-check-circle"></i> Activo</span>
+                                                    {% else %}
+                                                        <span class="text-danger"><i class="fa fa-times-circle"></i> Desactivado</span>
+                                                        {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+{#                                            <a href="#" class="btn btn-primary" title="Editar"><i class="fa fa-edit"></i></a>#}
+{#                                            {% if not exist %}#}
+{#                                                <a href="#" class="btn btn-info" title="Activar"><i class="fa fa-check-circle"></i></a>#}
+{#                                            {% else %}#}
+{#                                                <a href="#" class=" btn btn-info" title="Desactivar"> <i class="fa fa-times-circle"></i></a>#}
+{#                                            {% endif %}#}
+                                            <button class="btn btn-danger btnDelete" title="Borrar" id="{{ book.id }}" data-routename="eliminar_activado"><i class="fas fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('listados') }}
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'super/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ parent() }} - Listados Usuarios
+{% endblock %}
+
+{% block title_panel %}
+    <h4 style="color: #aacd4e" > Listado de Estudiantes</h4>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block right_block %}
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title text-right">
+                    <a href="{{ path('superPrintAll',{'type':'estudiantes'}) }}" target="_blank" class="btn btn-success"> <i class="fa fa-print"></i></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive-sm">
+                            <table class="table table-bordered display" id="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Roles</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Nombres</th>
+                                    <th scope="col">Institución</th>
+                                    <th scope="col">Provincia</th>
+                                    <th scope="col">Cantón</th>
+                                    <th scope="col">Grado</th>
+                                    <th scope="col" style="min-width: 5rem">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set count = 0 %}
+                                {% for u in user %}
+                                    {% set count = count + 1 %}
+                                    <tr id="{{ "tr"~u.id }}">
+                                        <th scope="row"> {{ count }}</th>
+                                        <td>{{ u.username }}</td>
+                                        <td>
+                                            {% if u %}
+                                                {% for role in u.roles %}
+                                                    {% if role == 'ROLE_ESTUDIANTE' %}
+                                                        Estudiante
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ u.email }}</td>
+                                        <td>{{ u.nombre }}</td>
+                                        <td>{{ u.nombreinstitucion }}</td>
+                                        <td>{{ u.canton.provincia.nombre }}</td>
+                                        <td>{{ u.canton.nombre }}</td>
+                                        <td>{{ u.estudiantes.grado }}</td>
+                                        <td>
+                                            <a class="btn btn-primary" href="{{ path('profile', {'id': u.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                            <a class="btn btn-info" href="{{ path('superPrint', {'id': u.id }) }}" target="_blank" id="btnEditar"><i class="fas fa-print" title="Editar"></i></a>
+                                            <button class="btn btn-danger btnDelete" title="Borrar" id="{{ u.id }}" data-routename="usuario_delete"><i class="fas fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('listados') }}
+{% endblock %}

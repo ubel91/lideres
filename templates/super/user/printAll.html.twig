@@ -1,0 +1,70 @@
+{% extends 'pdf_templates/base.html.twig' %}
+{% block titulo %}
+
+{% endblock %}
+{% block content %}
+    <hr class="line">
+    <div class="col-md-12">
+        {% if type == 'estudiantes' %}
+            <h5 class="text-center">Reporte de registro de estudiantes</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th class="text-center">Institucion</th>
+                    <th class="text-center">Cantón</th>
+                    <th class="text-center">Provincia</th>
+                    <th class="text-center">Fecha de nacimiento</th>
+                    <th class="text-center">Identificacion</th>
+                    <th class="text-center">Celular</th>
+                    <th class="text-center">Grado</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for e in users %}
+                <tr class="text-center">
+                    <td>{{ e.username }}</td>
+                    <td>{{ e.nombreInstitucion }}</td>
+                    <td>{{ e.canton != null ? e.canton.nombre:'-' }}</td>
+                    <td>{{ e.canton != null ? e.canton.provincia.nombre:'-' }}</td>
+                    <td>{{ e.estudiantes.fechaNacimiento|date('d/m/Y') }}</td>
+                    <td>{{ e.estudiantes.numeroIdentificacion }}</td>
+                    <td>{{ e.estudiantes.celular }}</td>
+                    <td>{{ e.estudiantes.grado }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% elseif type == 'profesores' %}
+            <h5 class="text-center">Reporte de registro de profesores</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Roles</th>
+                    <th class="text-center">Institucion</th>
+                    <th class="text-center">Cantón</th>
+                    <th class="text-center">Provincia</th>
+                    <th class="text-center">Identificacion</th>
+                    <th class="text-center">Celular</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for e in users %}
+                <tr class="text-center">
+                    <td>{{ e.username }}</td>
+                    <td>{{ e.nombre }}</td>
+                    <td> {{ e.roles|join(',') }}</td>
+                    <td>{{ e.nombreInstitucion }}</td>
+                    <td>{{ e.canton != null ? e.canton.nombre:'-' }}</td>
+                    <td>{{ e.canton != null ? e.canton.provincia.nombre:'-' }}</td>
+                    <td>{{ e.profesor.numeroIdentificacion }}</td>
+                    <td>{{ e.profesor.celular }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

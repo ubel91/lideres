@@ -1,0 +1,149 @@
+{% extends 'super/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .loadExcel
+        {
+            left: 1%;
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            width: 13%;
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    Registro de Códigos
+{% endblock %}
+
+{% block navbar %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+    <div class="overlay" style="display: none">
+        <div class="overlay__inner">
+            <div class="overlay__content">
+                <div class="spinner">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block right_block %}
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-3 offset-lg-3 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Registro de Códigos</h4>
+                {% endblock %}
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                {% block searcher %}
+                {% endblock %}
+            </div>
+        </div>
+{#        <div class="row mb-3 mt-3">#}
+{#            <div class="col offset-lg-2">#}
+{#                <button class="btn btn-success" id="btnLoad"><span class="fas fa-upload"></span> Cargar Códigos</button>#}
+{#                <input type="file" class="loadExcel" id="loadExcel">#}
+{#            </div>#}
+{#        </div>#}
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-2">
+                {{ include('codigo/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('listados') }}
+    <script>
+        $(document).ready(function () {
+
+            let $loadExcel = $('.loadExcel');
+            let textInputFile = '';
+            $loadExcel.on('change', function (event) {
+                event.preventDefault();
+                let inputFile = event.currentTarget;
+                textInputFile = inputFile.files[0].name;
+                $(inputFile).parent().children('#btnLoad').text(textInputFile);
+            });
+
+            $('#codigo_Asignar').click((e)=>{
+                textInputFile = $('.custom-file-label').text();
+                if (!textInputFile){
+                    e.preventDefault();
+                    $('.invalid-feedback').remove();
+                    $customFile = $('.custom-file');
+                    $customFile.removeClass("is-invalid");
+
+                    $customFile.parent().append(" <div class=\"invalid-feedback\">\n" +
+                        "        Debe seleccionar un archivo Excel" +
+                        "      </div> ");
+                    $customFile.addClass("is-invalid");
+                }
+            });
+
+
+        });
+
+            // $('#code_form').submit(function (e) {
+                // e.preventDefault();
+                // let file = document.getElementById('loadExcel').files[0];
+                // if (file){
+                //     let nombre = file.name;
+                //     let arrayCadena = nombre.split(".");
+                //     let extension = arrayCadena[(arrayCadena.length)-1];
+                //
+                //     if (extension === "xlsx" || extension === "xls"){
+                //         let formData = new FormData();
+                //         formData.append('file', file);
+                //
+                //         let $form = $(e.currentTarget);
+
+
+                    {#    $.ajax({#}
+                    {#        type: 'post',#}
+                    {#        url: "{{ path('codigo_excel') }}",#}
+                    {#        processData: false,#}
+                    {#        contentType: false,#}
+                    {#        data: {#}
+                    {#            $form#}
+                    {#        },#}
+                    {#        beforeSend: function () {#}
+                    {#            $('.overlay').show();#}
+                    {#        },#}
+                    {#        success: function (data) {#}
+                    {#            window.location.reload();#}
+                    {#        },#}
+                    {#        complete: function () {#}
+                    {#            $('.overlay').hide();#}
+                    {#        }#}
+                    {#    })#}
+                    {#} else {#}
+                    {#    e.preventDefault();#}
+                    {#    swal.fire(#}
+                    {#        '¡Error!',#}
+                    {#        'La extensión no corresponde con algún formato para Excel',#}
+                    {#        'error'#}
+                    {#    )#}
+                    {#}#}
+                // }
+            // })
+        // })
+    </script>
+
+{% endblock %}
+
+{#{% block body %}#}
+{#    #}
+{#    <a href="{{ path('codigo_index') }}">back to list</a>#}
+{#{% endblock %}#}

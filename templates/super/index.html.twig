@@ -1,0 +1,117 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% block title %}
+    Panel Administración
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark my-navbar">
+        <a class="navbar-brand" href="{{ path('super') }}">
+            <img src="{{ asset('build/assets/images/354cf86c4a09e74ab5954d94bd76dbe5.0.png') }}" width="140" height="50" class="d-inline-block align-top" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown mr-1 ml-5">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Registro Usuarios
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{path('superAdd')}}">Adicionar</a>
+                        <a class="dropdown-item" href="{{ path('superListado') }}">Listado</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown mr-1 ml-5">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Textos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('add_catalogo') }}">Adicionar Catálogo</a>
+                        <a class="dropdown-item" href="{{ path('catalogo_listado') }}">Listar Catálogo</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{path('addTextos')}}">Adicionar Texto</a>
+                        <a class="dropdown-item" href="{{path('listado_admin')}}">Listado Texto</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{path('unidad_new')}}">Asignar Unidad</a>
+                        <a class="dropdown-item" href="{{path('unidad_index')}}">Listado Unidades</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{path('recurso_new')}}">Asignar Recursos</a>
+                        <a class="dropdown-item" href="{{path('recurso_index')}}">Listado Recursos</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown mr-1 ml-5">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Codificación
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('codigo_new') }}">Adicionar</a>
+                        <a class="dropdown-item" href="{{ path('codigo_index') }}">Listado</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown mr-1 ml-5">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Usuarios
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('superListadoEstudiantes') }}">Estudiantes</a>
+                        <a class="dropdown-item" href="{{ path('superListadoProfesores') }}">Profesores</a>
+                        <a class="dropdown-item" href="{{ path('listado_de_textos') }}">Listado de textos</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown mr-1 ml-5">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Otros Registros
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <h6 class="dropdown-header">Datos Cátalogos</h6>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('etapa') }}">Etapas</a>
+                        <a class="dropdown-item" href="{{ path('materia') }}">Materias</a>
+                        <a class="dropdown-item" href="{{ path('grado_escolar') }}">Grados</a>
+{#                        <a class="dropdown-item" href="{{ path('recurso_index') }}">Tipo Recursos</a>#}
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header">Categorías y Sub-Categorías</h6>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('categoria') }}">Categorías</a>
+                        <a class="dropdown-item" href="{{ path('sub_categoria') }}">Sub-Categorías</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                <li class="nav-item dropdown">
+                    <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% block username %}
+                            {{ parent() }}
+                        {% endblock %}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+                        <a class="dropdown-item" href="{{ path('super_edit', {'id': app.user.id}) }}"><i class="fas fa-pencil-alt"></i> Editar Perfil</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Salir</a>
+                    </div>
+                </li>
+            </ul>
+            <span>
+                {% block avatar %}
+                    {{ parent() }}
+                {% endblock %}
+            </span>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+    <div class="overlay overlayGeneral" style="display: none">
+        <div class="overlay__inner">
+            <div class="overlay__content">
+                <span class="spinner"></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block right_block %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}
+    {{ book.nombre }}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-12">
+            <iframe src="{{ book.bookLink }}" width="100%" height="90%" frameborder="1"></iframe>
+        </div>
+    </div>
+{% endblock %}
+{% block right_block %}
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

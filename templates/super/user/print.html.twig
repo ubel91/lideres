@@ -1,0 +1,80 @@
+{% extends 'pdf_templates/base.html.twig' %}
+{% block titulo %}
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+
+    </div>
+    <hr class="line">
+    <div class="row">
+        <div class="col-md-6 inline">
+            <div class="row col-md-border">
+                <p class="no-margin text-muted">Datos del usuario</p>
+                <p class="no-margin">Nombre: <strong> {{ user.nombre }} </strong></p>
+                <p class="no-margin">Primer apellido: <strong>{{ user.primerApellido }} </strong></p>
+                <p class="no-margin">Segundo apellido: <strong>{{ user.segundoApellido }} </strong></p>
+                <p class="no-margin">E-mail: <strong>{{ user.eMail }} </strong></p>
+            </div>
+        </div>
+        <div class="col-md-6 inline">
+
+        </div>
+    </div>
+    <hr class="line">
+    <div class="col-md-12">
+        {% if user.estudiantes %}
+            <h5 class="text-center">Datos del estudiante</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th class="text-center">Institucion</th>
+                    <th class="text-center">Cantón</th>
+                    <th class="text-center">Provincia</th>
+                    <th class="text-center">Fecha de nacimiento</th>
+                    <th class="text-center">Identificacion</th>
+                    <th class="text-center">Celular</th>
+                    <th class="text-center">Grado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.nombreInstitucion }}</td>
+                    <td>{{ user.canton != null ? user.canton.nombre:'-' }}</td>
+                    <td>{{ user.canton != null ? user.canton.provincia.nombre:'-' }}</td>
+                    <td>{{ user.estudiantes.fechaNacimiento|date('d/m/Y') }}</td>
+                    <td>{{ user.estudiantes.numeroIdentificacion }}</td>
+                    <td>{{ user.estudiantes.celular }}</td>
+                    <td>{{ user.estudiantes.grado }}</td>
+                </tr>
+                </tbody>
+            </table>
+        {% elseif user.profesor %}
+            <h5 class="text-center">Datos del profesor</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th class="text-center">Institucion</th>
+                    <th class="text-center">Cantón</th>
+                    <th class="text-center">Provincia</th>
+                    <th class="text-center">Identificacion</th>
+                    <th class="text-center">Celular</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.nombreInstitucion }}</td>
+                    <td>{{ user.canton != null ? user.canton.nombre:'-' }}</td>
+                    <td>{{ user.canton != null ? user.canton.provincia.nombre:'-' }}</td>
+                    <td>{{ user.profesor.numeroIdentificacion }}</td>
+                    <td>{{ user.profesor.celular }}</td>
+                </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

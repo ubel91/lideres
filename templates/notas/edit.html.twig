@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Notas{% endblock %}
+
+{% block body %}
+    <h1>Edit Notas</h1>
+
+    {{ include('notas/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('notas_index') }}">back to list</a>
+
+    {{ include('notas/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% block title %}
+   Mis Textos
+{% endblock %}
+
+{% block username %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+   {{ parent() }}
+{% endblock %}
+{% block title_panel %}
+      <h2>Mis textos</h2>
+{%  endblock %}
+{% block searcher %}
+{% endblock %}
+
+{% block book_loop %}
+
+    {% for r in result %}
+            {% set images = r.libro.portadaDir %}
+            {% set footer = r.libro.nombre %}
+        <figure class="figure mr-5">
+            <a href="{{ path('libro_show',  {'id': r.libro.id}) }}">
+                <img src="{{ r.libro.portadaDir|imagine_filter('squared_thumbnail_medium')  }}" height="300" class="figure-img rounded" alt="libro_portada">
+            </a>
+
+            {% block picture_footer %}
+                <figcaption class="figure-caption"><strong>Periodo de Activación: </strong></figcaption>
+                <figcaption class="figure-caption"><strong>Fecha inicio: {{ r.fechaInicio | date('d-m-Y') }} </strong></figcaption>
+                <figcaption class="figure-caption"><strong>Fecha Fin: {{ r.fechaFin | date('d-m-Y') }} </strong></figcaption>
+            {% endblock %}
+        </figure>
+    {% endfor %}
+{% endblock %}

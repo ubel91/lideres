@@ -1,0 +1,61 @@
+{% extends 'super/index.html.twig' %}
+
+{% block title %}
+    Tipos de Recurso
+{% endblock %}
+
+{% block title_panel %}
+    <h4 style="color: #aacd4e" > Tipos de Recurso</h4>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block right_block %}
+
+    <div class="col-lg-9 pt-5">
+        <div class="row mb-1">
+            <div class="col">
+                <a class="btn btn-success" href="{{ path('tipo_recurso_new') }}"><span class="fas fa-plus"></span> Adicionar</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered display" id="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col" style="min-width: 5rem">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set count = 0 %}
+                        {% for tr in tipo_recursos %}
+                            {% set count = count + 1 %}
+                            <tr id="{{ "tr"~tr.id }}">
+                                <th scope="row"> {{ count }}</th>
+                                <td>{{ tr.nombre }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('tipo_recurso_edit', {'id': tr.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                    <button class="btn btn-danger btnDelete" title="Borrar" id="{{ tr.id }}" data-routename="tipo_delete"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let delete_message = 'Se <b class="text-danger">eliminarán todos los Recursos asociados</b> y a su ves los registros vinculados a estos. ';
+    </script>
+    {{ encore_entry_script_tags('listados') }}
+{% endblock %}

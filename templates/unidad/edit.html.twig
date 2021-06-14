@@ -1,0 +1,100 @@
+{% extends 'super/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        .activities-list {
+            cursor: pointer;
+        }
+        .modal-header:hover {
+            cursor: grab;
+        }
+        .delete-item > .text-danger:hover {
+            color: #9b3545 !important;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block title %}
+    Editar Unidad
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block searcher %}
+{% endblock %}
+
+{% block right_block %}
+
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-3 offset-lg-2 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Editar Unidad</h4>
+                {% endblock %}
+            </div>
+            <div class="col-lg-4 offset-lg-1">
+                <h4 class="text-center" style="color: #aacd4e"> Actividades del Unidad</h4>
+            </div>
+        </div>
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-1 mt-3">
+                {{ include('unidad/_form.html.twig') }}
+            </div>
+            <div class="col-lg-6 offset-lg-1">
+                <div class="list-group list-group-flush" id="list-tab" role="tablist">
+                    {% for a in unidad.actividades %}
+                    <div class="list-group-item list-group-item-action">
+                        <a class="activities-list" id="{{'actividad_'~a.id}}" data-id = "{{ a.id }}" aria-controls="profile"><i class="fas fa-clipboard-check mr-3"></i>{{ a.nombre }}</a>
+                        <div class="delete-item" id="{{ 'delete_'~a.id }}" style="display: inline-block"><span class="far fa-trash-alt text-danger ml-5"></span></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        let activities = {{ actividades | json_encode | raw }};
+        activities = JSON.parse(activities);
+        let formURLUnidad = '{{ path('unidad_edit', {'id': unidad.id}) }}';
+        let unidad_id = {{ unidad.id }};
+    </script>
+
+    {{ encore_entry_script_tags('unidad_form') }}
+
+{% endblock %}
+
+
+{#{% block javascript %}#}
+{#    {{ parent() }}#}
+
+
+{#    <script>#}
+{#        Dropzone.autoDiscover = false;#}
+{#        $(document).ready(function() {#}
+{#            initializeDropzone();#}
+{#        });#}
+
+{#        function initializeDropzone() {#}
+{#          let formElement = document.querySelector('js-reference-dropzone');#}
+{#          if (!formElement){#}
+{#              return;#}
+{#          }#}
+
+{#          let dropzone = new Dropzone(formElement, {#}
+{#              paramName: 'archivo'#}
+{#          })#}
+{#        }#}
+{#    </script>#}
+{#{% endblock %}#}

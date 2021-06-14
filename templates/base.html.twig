@@ -1,0 +1,260 @@
+{% set url = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+        {% set dashboard = 'nav-item mr-1 ml-5 ' %}
+        {% set textos = 'nav-item mr-1 ml-5 ' %}
+        {% if url == '/dashboard' %}
+            {% set dashboard = dashboard~'active' %}
+        {% elseif url == '/textos' %}
+            {% set textos = textos~'active' %}
+        {% endif %}
+{% set homepath = '' %}
+{% set perfilpath = '' %}
+{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN') %}
+    {% set homepath = 'super' %}
+    {% set perfilpath = 'super_edit' %}
+{% else %}
+    {% set homepath = 'dashboard' %}
+    {% set perfilpath = 'profile' %}
+    {% if is_granted('ROLE_ESTUDIANTE') %}
+        {% set plattform = {
+            'path' : 'plataforma_index',
+            'name' : 'Mis Plataformas'
+        } %}
+    {% elseif is_granted('ROLE_PROFESOR') %}
+        {% set plattform = {
+            'path' : 'plataforma_index',
+            'name' : 'Recursos'
+        } %}
+    {% endif %}
+    {# {% set homepath = 'super' %} #}
+{% endif %}
+
+{% block stylesheet %}
+    <style>
+        .my-navbar {
+            background-color: #fd6810;
+            font-family: "Arial", sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .left-items-navbar {
+            height: 2.5rem;
+        }
+
+        /*footer {*/
+        /*    position: relative;*/
+        /*    margin-top: -150px; !* negative value of footer height *!*/
+        /*    height: 150px;*/
+        /*    clear:both;*/
+        /*    padding-top:20px;*/
+        /*    bottom: 0!important;*/
+        /*}*/
+
+    </style>
+{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    {% block extraStyles %}
+    {% endblock %}
+</head>
+<body>
+{% block navbar %}
+    {% if homepath != 'super' %}
+        <nav class="navbar navbar-expand-lg navbar-dark my-navbar">
+            <a class="navbar-brand" href="{{ path(homepath) }}">
+                <img src="{{ asset('build/assets/images/118622689_809238586479064_8879715261408005034_n.jpg') }}"
+                     width="140" height="50" class="d-inline-block rounded align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto left-items-navbar">
+                    <li class="{{ dashboard }}">
+                        <a class="nav-link" href="{{ path(homepath) }}">Inicio <span
+                                    class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="{{ textos }}">
+                        <a class="nav-link" href="{{ path('textos') }}">Mis Textos</a>
+                    </li>
+                    <li class="nav-item mr-1 ml-5">
+                        <a class="nav-link" href="{{ path(plattform.path) }}">{{ plattform.name }}</a>
+                    </li>
+                    <form class="form-inline ml-5">
+                        <a class="btn btn-success" href="{{ path('libro_activado_new') }}">Activar Texto</a>
+                    </form>
+                </ul>
+                <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                    <li class="nav-item dropdown">
+                        <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% block username %}
+                                Desconocido
+                            {% endblock %}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+                            <a class="dropdown-item" href="{{ path(perfilpath) }}"><i class="fas fa-pencil-alt"></i>
+                                Editar Perfil</a>
+                            <a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i>
+                                Salir</a>
+                        </div>
+                    </li>
+                </ul>
+                <span>
+                            {% block avatar %}
+                                <img src="{{ asset('build/assets/images/user.png') }}"
+                                     class="img-thumbnail rounded float-right" width="60" height="60" alt=""
+                                     id="avatar">
+                            {% endblock %}
+                        </span>
+            </div>
+        </nav>
+    {% endif %}
+{% endblock %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="offset-lg-4 col-lg-4 mt-1" style="position: absolute; z-index: 1">
+                {% for message in app.flashes('success') %}
+                    <div id="flashSection" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <h5><span class="fas fa-check-circle mr-3"></span>{{ message }}</h5>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            {% block left_body %}
+                <div class="col-lg-2" id="left_body">
+                    <div class="card">
+                        <div class="card-header">
+                            <p class="card-title">Area personal</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-12">
+                                    <div class="row justify-content-center">
+                                        {% block profile_avatar %}
+                                            <img src="{{ asset('build/assets/images/user.png') }}" id='profilePic'
+                                                 alt="perfil" class="img-thumbnail rounded-circle" width="100">
+                                        {% endblock %}
+                                    </div>
+                                    <div class="row justify-content-center mt-2">
+                                        <div class="col-md-12 text-center mt-2">
+                                            <strong>
+                                                {% block usernick %}
+                                                    Mi Perfil
+                                                {% endblock %}
+                                            </strong>
+                                        </div>
+                                        <div class="col-md-12 text-center mt-2">
+                                            {{ app.user.nombreInstitucion }}
+                                        </div>
+                                        {% if not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SUPER_ADMIN') %}
+                                            <div class="col-md-12 text-center mt-2">
+                                                <a class="btn btn-warning" href="{{ path('textos') }}">Mis Textos</a>
+                                            </div>
+                                        {% endif %}
+                                        <div class="col-12">
+                                            <div class="card mt-3">
+                                                <div class="card-header">
+                                                    Mis enlaces
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12 mt-2">
+                                                            <a href="https://www.formandolideresec.com/"
+                                                               target="_blank">Formando lideres<img class="float-right"
+                                                                                                    width="24"
+                                                                                                    height="24"
+                                                                                                    src="{{ asset('build/assets/images/form-lideres.89e7e4ac.jpeg') }}"
+                                                                                                    alt=""></a>
+                                                        </div>
+                                                        <div class="col-md-12 mt-2">
+                                                            <a href="https://classroom.google.com/" target="_blank">Google
+                                                                classroom <img class="float-right" width="24"
+                                                                               height="24"
+                                                                               src="{{ asset('build/assets/images/classroom.b142d6a6.jpeg') }}"
+                                                                               alt=""></a>
+                                                        </div>
+                                                        <div class="col-md-12 mt-2">
+                                                            <a href="https://www.microsoft.com/es-ww/microsoft-teams/log-in"
+                                                               target="_blank">Microsoft teams<img class="float-right"
+                                                                                                   width="24"
+                                                                                                   height="24"
+                                                                                                   src="{{ asset('build/assets/images/teams.d2a87e73.jpeg') }}"
+                                                                                                   alt=""></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center mt-3">
+                                {% block reset_password %}
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Usuario</label>
+                                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                                   aria-describedby="emailHelp">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">Clave</label>
+                                            <input type="password" class="form-control" id="exampleInputPassword1">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Cambiar Clave</button>
+                                    </form>
+                                {% endblock %}
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    {% block left_body_footer %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endblock %}
+            {% block right_block %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    <footer>
+        <div class="container-fluid m-5">
+            <div class="row pt-5">
+                <div class="col-md-4 text-center">
+                    <img src="{{ asset('build/assets/images/Logo-creative.024be38e.gif') }}" alt="logo" width="200px"
+                         class="img-responsive">
+                </div>
+                <div class="col-md-4 text-center pt-3">
+                    <p>PLATAFORMA CREATIVE DE LIDERES</p>
+                </div>
+                <div class="col-md-4 text-center pt-3">
+                    <p>DERECHOS RESERVADOS -(C) CORPLIDERES CIALTDA</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/fos_js_routing.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+{% extends 'super/index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .tui-image-editor-container {
+            height: 1000px !important;
+        }
+        .tui-image-editor-header-logo > img {
+            width: 20rem !important;
+            height: 5rem !important;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block title %}
+    Adicionar Texto
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+{% endblock %}
+{% block right_block %}
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Adicionar Texto</h4>
+                {% endblock %}
+            </div>
+            <div class="card-body">
+                {% block searcher %}
+                {% endblock %}
+                <div class="row mt-4 ml-15">
+                    <div class="col-lg-4 offset-lg-2">
+                        {{ form_start(form, {'attr': {'id': 'texto_form'}}) }}
+                        <div class="my-custom-class-for-errors">
+                            {{ form_errors(form) }}
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.nombre) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.catalogo) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.categoria) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{ form_row(form.subCategoria) }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                {{ form_row(form.portada) }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                {{ form_row(form.solucionario) }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-lg-10" style="padding-right: 0">
+                                {{ form_row(form.book_link) }}
+                            </div>
+                            <div class="col-lg-2" style="padding-left: 0">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    {{ form_row(form.use_book_link, {'attr': {'class' : 'custom-control-input'}}) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-lg-10" style="padding-right: 0">
+                                {{ form_row(form.code) }}
+                            </div>
+                            <div class="col-lg-2" style="padding-left: 0">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    {{ form_row(form.use_code, {'attr': {'class' : 'custom-control-input'}}) }}
+                                </div>
+                            </div>
+                        </div>
+                        <h6>Dirigido para: </h6>
+                        <div class="row justify-content-center">
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                {{ form_widget(form.paraDocente, {'attr': {'class' : 'custom-control-input'}}) }}
+                            </div>
+                            <div class="custom-control custom-checkbox custom-control-inline">
+                                {{ form_widget(form.paraEstudiante, {'attr': {'class' : 'custom-control-input'}}) }}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-4 offset-lg-4">
+                                {{ form_row(form.registrar) }}
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {#<div class="row">#}
+            {#<div class="col-lg-3 offset-lg-3 justify-content-start">#}
+                {#{% block title_panel %}#}
+                    {#<h4 style="color: #aacd4e" > Adicionar Texto</h4>#}
+                {#{% endblock %}#}
+            {#</div>#}
+            {#<div class="col-lg-4 offset-lg-2">#}
+                {#{% block searcher %}#}
+                {#{% endblock %}#}
+            {#</div>#}
+        {#</div>#}
+        {#<div class="row mt-4 ml-15">#}
+            {#<div class="col-lg-4 offset-lg-2">#}
+                {#{{ form_start(form, {'attr': {'id': 'texto_form'}}) }}#}
+                {#<div class="my-custom-class-for-errors">#}
+                    {#{{ form_errors(form) }}#}
+                {#</div>#}
+                {#<div class="row">#}
+                    {#<div class="col">#}
+                        {#{{ form_row(form.nombre) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row">#}
+                    {#<div class="col">#}
+                        {#{{ form_row(form.catalogo) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row">#}
+                    {#<div class="col">#}
+                        {#{{ form_row(form.categoria) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row">#}
+                    {#<div class="col">#}
+                        {#{{ form_row(form.subCategoria) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row mb-2">#}
+                    {#<div class="col">#}
+                        {#{{ form_row(form.portada) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row mb-2">#}
+                    {#<div class="col-lg-10" style="padding-right: 0">#}
+                        {#{{ form_row(form.book_link) }}#}
+                    {#</div>#}
+                    {#<div class="col-lg-2" style="padding-left: 0">#}
+                        {#<div class="custom-control custom-checkbox custom-control-inline">#}
+                            {#{{ form_row(form.use_book_link, {'attr': {'class' : 'custom-control-input'}}) }}#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row mb-2">#}
+                    {#<div class="col-lg-10" style="padding-right: 0">#}
+                        {#{{ form_row(form.code) }}#}
+                    {#</div>#}
+                    {#<div class="col-lg-2" style="padding-left: 0">#}
+                        {#<div class="custom-control custom-checkbox custom-control-inline">#}
+                            {#{{ form_row(form.use_code, {'attr': {'class' : 'custom-control-input'}}) }}#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<h6>Dirigido para: </h6>#}
+                {#<div class="row justify-content-center">#}
+                    {#<div class="custom-control custom-checkbox custom-control-inline">#}
+                        {#{{ form_widget(form.paraDocente, {'attr': {'class' : 'custom-control-input'}}) }}#}
+                    {#</div>#}
+                    {#<div class="custom-control custom-checkbox custom-control-inline">#}
+                        {#{{ form_widget(form.paraEstudiante, {'attr': {'class' : 'custom-control-input'}}) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="row mt-3">#}
+                    {#<div class="col-lg-4 offset-lg-4">#}
+                        {#{{ form_row(form.registrar) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#{{ form_end(form) }}#}
+            {#</div>#}
+
+        {#</div>#}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let route = "{{ path('subcategorias_by_categorias')}}";
+    </script>
+    {{ encore_entry_script_tags('ajax_categoria') }}
+
+{#    <script>#}
+{#        $('#libro_categoria').change(function () {#}
+{#            let data = {#}
+{#                id: $(this).val()#}
+{#            };#}
+{#            $.ajax({#}
+{#                type: 'post',#}
+{#                url: '{{ path('subcategorias_by_categorias')}}',#}
+{#                data: data,#}
+{#                success: function (data) {#}
+{#                    let subCatSelector = $('#libro_subCategoria');#}
+{#                    subCatSelector.html('<option>Seleccione una Sub-Categoría...</option>');#}
+{#                    for (let i = 0, total = data.length; i < total; i++){#}
+{#                        subCatSelector.append('<option value="'+ data[i].id + '">' + data[i].nombre + '</option>')#}
+{#                    }#}
+{#                }#}
+{#            })#}
+{#        });#}
+{#    </script>#}
+
+{% endblock %}

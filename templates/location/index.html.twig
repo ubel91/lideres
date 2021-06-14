@@ -1,0 +1,47 @@
+{% extends 'super/index.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Listados Locaciones
+{% endblock %}
+
+{% block title_panel %}
+    <h4 style="color: #aacd4e" > Listado de Locaciones</h4>
+{% endblock %}
+{% block right_block %}
+
+{#    <!-- Insert this where you want the table to appear -->#}
+{#    <div id="presidents">Loading...</div>#}
+
+    <div class="col-lg-9 pt-5">
+        <table class="table-responsive-sm">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Cantón</th>
+                    <th scope="col">Provincia</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for c in canton %}
+                    <tr>
+                        <th scope="row">{{ c.id }}</th>
+                        <td>{{ c.nombre }}</td>
+                        <td>{{ c.provincia_nombre }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </table>
+    </div>
+{% endblock %}
+{#{% block javascripts %}#}
+{#    <!-- Insert this at the end of your body element, but before the closing tag -->#}
+{#    <script src="{{ asset('bundles/jquery-1.7.2.js') }}" ></script>#}
+{#    <script src="{{ asset('bundles/datatables/js/datatables.js') }}" defer></script>#}
+{#    <script>#}
+{#        $(document).ready(function () {#}
+{#            $('#presidents').initDataTables({{ datatable_settings(datatable) }});#}
+{#        });#}
+{#     </script>#}
+{#{% endblock %}#}

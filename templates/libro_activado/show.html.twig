@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LibroActivado{% endblock %}
+
+{% block body %}
+    <h1>LibroActivado</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ libro_activado.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha_inicio</th>
+                <td>{{ libro_activado.fechaInicio ? libro_activado.fechaInicio|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Fecha_fin</th>
+                <td>{{ libro_activado.fechaFin ? libro_activado.fechaFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Codigo_activacion</th>
+                <td>{{ libro_activado.codigoActivacion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('libro_activado_index') }}">back to list</a>
+
+    <a href="{{ path('libro_activado_edit', {'id': libro_activado.id}) }}">edit</a>
+
+    {{ include('libro_activado/_delete_form.html.twig') }}
+{% endblock %}

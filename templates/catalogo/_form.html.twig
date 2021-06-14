@@ -1,0 +1,30 @@
+{{ form_start(form, {'attr': {'id': 'catalogo_form'}}) }}
+<div class="my-custom-class-for-errors">
+    {{ form_errors(form) }}
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.nombre) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.etapas) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.materias) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.grados) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4 offset-lg-4">
+        {{ form_row(form.registrar) }}
+    </div>
+</div>
+{{ form_end(form) }}

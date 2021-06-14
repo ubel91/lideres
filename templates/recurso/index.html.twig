@@ -1,0 +1,155 @@
+{% extends 'super/index.html.twig' %}
+
+{% set TIPO_URL = 'url' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .link-item {
+            text-decoration: none !important;
+        }
+    </style>
+
+{% endblock %}
+
+{% block title %}
+    Recursos
+{% endblock %}
+
+{% block title_panel %}
+    <h4 style="color: #aacd4e" > Recursos</h4>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block right_block %}
+
+    <div class="col-lg-9 pt-5">
+        <div class="row mb-1">
+            <div class="col">
+                <a class="btn btn-success" href="{{ path('recurso_new') }}"><span class="fas fa-plus"></span> Adicionar</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered display" id="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Texto</th>
+                            <th scope="col">Dirigido a:</th>
+                            <th scope="col">Recursos</th>
+                            <th scope="col" style="min-width: 5rem">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set count = 0 %}
+                        {% for r in recursos %}
+                            {% set count = count + 1 %}
+                            <tr id="{{ "tr"~r.id }}">
+                                <th scope="row"> {{ count }}</th>
+                                <td>{{ r.nombreRecurso }}</td>
+                                <td>{{ r.libro.nombre }}</td>
+
+                                <td>
+                                    {% set estudiante = r.paraPlataforma %}
+                                    {% set docente = r.paraDocente %}
+                                    {% if not estudiante and not docente %}
+                                        <span class="text-danger">No esta definido...</span>
+                                    {% elseif estudiante or docente %}
+                                        <ul>
+                                            {% if estudiante %}
+                                                <li>Plataforma</li>
+                                            {% endif %}
+                                            {% if docente %}
+                                                <li>Recursos Docentes</li>
+                                            {% endif %}
+                                        </ul>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set customId = r.tipo.nombre ~ '_' ~ r.id %}
+                                    {% set audioMime = 'audio/mpeg' %}
+                                    {% set videoMime = 'video/mp4' %}
+                                    {% set customId = r.tipo.nombre ~ '_' ~ r.id %}
+
+                                    {% if r.tipo.nombre == TIPO_URL %}
+                                        <a href="{{ r.referencia }}" id="{{ customId }}" data-mimetype="{{ r.mimeType }}" data-referencia="{{ r.referencia }}" class="link-item" ><h6 class="mt-0"><i class="fas fa-link"></i> Enlace YouTube</h6></a>
+                                    {% elseif r.mimeType == audioMime %}
+                                        <a href="{{ r.referencia }}" id="{{ customId }}" data-mimetype="{{ r.mimeType }}" class="link-item" ><h6 class="mt-0"><i class="far fa-file-audio"></i> {{ r.referencia }} </h6></a>
+                                    {% elseif r.mimeType == videoMime %}
+                                        <a href="{{ r.referencia }}" id="{{ customId }}" data-mimetype="{{ r.mimeType }}" class="link-item" ><h6 class="mt-0"><i class="far fa-file-video"></i> {{ r.referencia }} </h6></a>
+                                    {% else %}
+                                        <a href="{{ path('resourceLoader', {'id': r.id}) }}" id="{{ customId }}" data-mimetype="{{ r.mimeType }}" class="link-item" target="_blank"><h6 class="mt-0"><i class="far fa-file-alt"></i> {{ r.referencia }} </h6></a>
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('recurso_edit', {'id': r.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                    <button class="btn btn-danger btnDelete" title="Borrar" id="{{ r.id }}" data-routename="recurso_delete"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalVideoY" tabindex="-1" role="dialog" aria-labelledby="modalVideoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalVideoLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="embed-responsive embed-responsive-16by9" style="display: none">
+                        <iframe class="embed-responsive-item" id="iframeVideo"
+                                src=""
+                                allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalMediaLocal" tabindex="-1" role="dialog" aria-labelledby="modalAudioLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAudioLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <audio controls controlsList="nodownload" style="display: none">
+                        <source src="" type="audio/mpeg">
+                        Su navegador no soporta el reproductor de audio.
+                    </audio>
+                    <video controls controlsList="nodownload" style="display: none; width: 100%; height: 25rem">
+                        <source src="" type="video/mp4">
+                        Su navegador no soporta el reproductor de video.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('listados') }}
+    {{ encore_entry_script_tags('modal_recursos') }}
+    <script>
+
+    </script>
+{% endblock %}

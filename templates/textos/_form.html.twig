@@ -1,0 +1,71 @@
+{{ form_start(form, {'attr': {'id': 'texto_form'}}) }}
+<div class="my-custom-class-for-errors">
+    {{ form_errors(form) }}
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.nombre) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.catalogo) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.categoria) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.subCategoria) }}
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col">
+        <div class="form-group">
+            {{ form_row(form.portada) }}
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col">
+        {{ form_row(form.solucionario) }}
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-lg-10" style="padding-right: 0">
+        {{ form_row(form.book_link) }}
+    </div>
+    <div class="col-lg-2" style="padding-left: 0">
+        <div class="custom-control custom-checkbox custom-control-inline">
+            {{ form_row(form.use_book_link, {'attr': {'class' : 'custom-control-input'}}) }}
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-lg-10" style="padding-right: 0">
+        {{ form_row(form.code) }}
+    </div>
+    <div class="col-lg-2" style="padding-left: 0">
+        <div class="custom-control custom-checkbox custom-control-inline">
+            {{ form_row(form.use_code, {'attr': {'class' : 'custom-control-input'}}) }}
+        </div>
+    </div>
+</div>
+<h6>Dirigido para: </h6>
+<div class="row justify-content-center">
+    <div class="custom-control custom-checkbox custom-control-inline">
+        {{ form_widget(form.paraDocente, {'attr': {'class' : 'custom-control-input'}}) }}
+    </div>
+    <div class="custom-control custom-checkbox custom-control-inline">
+        {{ form_widget(form.paraEstudiante, {'attr': {'class' : 'custom-control-input'}}) }}
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-lg-4 offset-lg-4">
+        {{ form_row(form.registrar) }}
+    </div>
+</div>
+{{ form_end(form) }}

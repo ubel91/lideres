@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Correo para Recuperar su Contraseña enviado...{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row justify-content-center my-3">
+                    <div class="col">
+                            <img src="{{ asset('build/assets/images/e9e457896b8606e213e7f387b4cc7e65.0.png') }}" class="img-fluid" width="500" alt="logo">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="lead">
+                            Un correo ha sido enviado con un enlace de confirmación para recuperar su contraseña. Este enlace expira en {{ tokenLifetime|date('g') }} hora(s).
+                        </p>
+                        <p class="lead">
+                            Si usted no ha recibido el correo por favor verifique en su carpeta de spam o <a href="{{ path('app_forgot_password_request') }}">inténtelo otra vez</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}

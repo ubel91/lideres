@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        form div:nth-child(1), form div:nth-child(2) {
+            display: block !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block title %}Cambiar contraseña{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="row justify-content-center my-3">
+                    <div class="col">
+                        <img src="{{ asset('build/assets/images/e9e457896b8606e213e7f387b4cc7e65.0.png') }}" class="img-fluid" width="500" alt="logo">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h3>Cambie su contraseña</h3>
+                        <br>
+                        {{ form_start(resetForm) }}
+                                {{ form_row(resetForm.plainPassword) }}
+                                <button class="btn btn-primary">Cambiar Contraseña</button>
+                        {{ form_end(resetForm) }}
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

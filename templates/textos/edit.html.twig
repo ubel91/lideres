@@ -1,0 +1,40 @@
+{% extends 'super/index.html.twig' %}
+
+{% block title %}
+    Editar Texto
+{% endblock %}
+
+{% block navbar %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+{% endblock %}
+{% block right_block %}
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-3 offset-lg-3 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Editar Texto</h4>
+                {% endblock %}
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                {% block searcher %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-2">
+                {{ include('textos/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        let route = "{{ path('subcategorias_by_categorias')}}";
+    </script>
+    {{ encore_entry_script_tags('ajax_categoria') }}
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'pdf_templates/base.html.twig' %}
+{% block titulo %}
+
+{% endblock %}
+{% block content %}
+    <hr class="line">
+    <div class="col-md-12">
+            <h5 class="text-center">Libros activados</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Roles</th>
+                    <th scope="col">Libro</th>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Materia</th>
+                    <th scope="col">Fecha de activación</th>
+                    <th scope="col">Estado</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>
+                            {% if book.profesor is not null %}
+                                {{ book.profesor.user.nombre }}
+                            {% elseif  book.estudiante is not null %}
+                                {{ book.estudiante.user.nombre }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if book.profesor is not null %}
+                                {{ book.profesor.user.roles|join(',') }}
+                            {% elseif  book.estudiante is not null %}
+                                {{ book.estudiante.user.roles|join(',') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ book.libro.nombre }}</td>
+                        <td>{{ book.libro.subCategoria.nombre }}</td>
+                        <td>{{ book.libro.catalogo.materias.nombre }}</td>
+                        <td>
+                            {% set codeString = book.codigoActivacion %}
+                            {% for code in book.libro.codigos %}
+                                {% if codeString == code.codebook %}
+                                    {{ code.fechaInicio|date('d/m/Y') }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% set codeString = book.codigoActivacion %}
+                            {% set exist = false %}
+                            {% for code in book.libro.codigos %}
+                                {% if codeString == code.codebook %}
+                                    {% set exist = true %}
+                                    {% if code.fechaFin|date('U') < 'now'|date('U') %}
+                                        <span class="text-warning"><i class="fa fa-exclamation-triangle"></i> Caducado</span>
+                                    {% elseif  code.fechaFin('U') >= 'now'|date('U') %}
+                                        <span class="text-success"><i class="fa fa-check-circle"></i> Activo</span>
+                                    {% else %}
+                                        <span class="text-danger"><i class="fa fa-times-circle"></i> Desactivado</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{%  block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('unidad') }}
+    <style>
+        .page-left{
+            width: 100%!important;
+            background-position: center;
+            background-size: contain!important;
+        }
+        .pages-container{
+            left: 0!important;
+        }
+        #page-flip {
+            width: 100%!important;
+            display: inline-block!important;
+            height: 100% !important;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    {{ unidad.nombre }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="overlay overlayUnidad">
+        <div class="overlay__inner">
+            <div class="overlay__content">
+                    <p style="color: #D3D3D3"><small>Cargando Unidad.....</small></p>
+                    <div class="progress" style="height: 2px; width: 20rem">
+                        <div class="progress-bar" role="progressbar" style="width: 0;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block left_body %}
+    {#{{ parent() }}#}
+{% endblock %}
+{% block left_body_footer %}
+    <div class="row">
+        <div class="col">
+            <h6 style="text-align: center">
+                {{ libro.nombre }}
+            </h6>
+            <div class="mt-3" style="text-align: center">
+                <button type="button" class="btn btn-primary btn-lg btn-block" style="display: inline-block; width: 50%">
+                    {{ unidad.nombre }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            {% for a in unidad.actividades %}
+                <h6 style="margin-left: 6rem">
+                    <a href="{{ path('actividades_show', { 'id': a.id }) }}" target="_blank" style="text-decoration: none"> {{ a.nombre ~ ' pag. ' ~ a.pagina }} </a>
+                </h6>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block right_block %}
+    <div class="col-lg-12 p-1" id="right_block">
+        <div id="board" style="position: absolute;z-index: 1; max-width: 100%; max-height: 100%; margin-left: 0%; margin-top: 0%; left: 60%; top: 5%">
+        </div>
+        <div class="row">
+            <div class="col-12 text-center p-2" id="actionBtn">
+                <button id="fullWidth" class="btn btn-primary btn-lg p-1" style="padding: 0.05rem 0.5rem; font-weight: bolder">Ampliar</button>
+                <button id="editor" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="top" title="Editar páginas"><span class="fas fa-pencil-alt"></span></button>
+                {#<button id="one_page" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="top" title="Mostrar en una página"><span class="fas fa-file-alt"></span></button>#}
+                <button id="save" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="top" title="Guardar Cambios" style="display: none"><span class="fas fa-save"></span></button>
+                <button id="view" class="btn btn-primary btn-lg" data-toggle="tooltip" data-placement="top" title="Ver Página Editada" style="display: none"><span class="fas fa-eye"></span></button>
+                <button id="delete_page" class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="Eliminar Página Editada" style="display: none"><span class="fas fa-trash-alt"></span></button>
+                <a id="close" class="btn btn-danger ml-1 btn-lg" href="{{ path('libro_show', {'id': unidad.libro.id}) }}"><span class="fas fa-times"></span></a>
+            </div>
+        </div>
+        <div class="row" style="">
+            <div id="contenedor" class="col-md-5" style="margin: 0 auto 0 auto">
+                <div class="container-magazine">
+                    <div id="myDiv" style="background-color: #ededed;" data-url="{{ unidad.getArchivoDir() }}" ></div>
+                </div>
+                <div style="height: 100%; width: 100%; display: none">
+                    <canvas id="canvasFlip"></canvas>
+                </div>
+                <div id="tui-image-editor" style="height: 100%; width: 100%; display: none">
+                    <canvas id="canvas"></canvas>
+                </div>
+            </div>
+        </div>
+        <a href="javascript:" class="btn btn-success" id="add_new">Agregar Nota</a>
+    </div>
+    <input type="hidden" id="#rightBlockW">
+    <input type="hidden" id="#rightBlockH">
+
+{%  endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $( function() {
+            $( "#actionBtn" ).draggable();
+        } );
+    </script>
+
+    <script src="{{ asset('../pdfjs/pdf.js') }}"></script>
+    <script src="{{ asset('../pdfjs/pdf.worker.js') }}"></script>
+
+    <script>
+        let $myDiv = $('#myDiv');
+        let pdf = '{{ path('unitLoader', {id: unidad.id}) }}';
+        let unidad = '{{ unidad.id }}';
+        let unidad_nombre = '{{ unidad.nombre }}';
+        let csfr = '{{ csrf_token('notas') }}';
+        let csfrImagenGuardada = '{{ csrf_token('imagen_guardada') }}';
+        let notas ={{ notas | json_encode | raw }};
+        let totalNotes = notas.length;
+        let activities = {{ actividades | json_encode | raw }};
+        activities = JSON.parse(activities);
+        let imagenesGuardadas = {{ imagenesGuardadas | json_encode | raw }};
+        imagenesGuardadas = JSON.parse(imagenesGuardadas);
+        let pathGlue = '{{ asset('build/assets/images/glue.28bbcb9d.png') }}';
+        let image3 = new Image();
+        image3.src = pathGlue;
+    </script>
+
+    {{ encore_entry_script_tags('unidad') }}
+{% endblock %}

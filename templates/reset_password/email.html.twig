@@ -1,0 +1,12 @@
+<h1>¡Hola!</h1>
+
+<p>
+    Para reiniciar su contraseña haga click
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">aquí</a>
+    Este enlace caduca en {{ tokenLifetime|date('g') }} hora(s)..
+</p>
+
+<p>
+    ¡Saludos!
+    Líderes Ediciones
+</p>

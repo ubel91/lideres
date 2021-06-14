@@ -1,0 +1,28 @@
+{% extends 'super/index.html.twig' %}
+
+{% block title %}Registro de Categorías{% endblock %}
+
+{% block body %}
+    {{parent()}}
+{% endblock %}
+
+{% block right_block %}
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-4 offset-lg-3 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Registro de Categorías</h4>
+                {% endblock %}
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                {% block searcher %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-2">
+                {{ include('categoria/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% block title %}
+    {{ libro.nombre }}
+{% endblock %}
+
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+{% block left_body %}
+    {#{{ parent() }}#}
+{% endblock %}
+{% set activated_link =  libro.useBookLink %}
+{% block right_block %}
+    <div class="col-lg-12 pt-3">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        {% if activated_link %}
+                            <a class="btn btn-info -pull-left" href="{{ path('texto_embed', {'id': libro.id}) }}"
+                               role="button" target="_blank">Guía docente</a>
+                            {% set margin_class = 4 %}
+                        {% else %}
+                            {% set margin_class = 5 %}
+                        {% endif %}
+                        {% block title_panel %}
+                            <h3>{{ libro.nombre|upper }}</h3>
+                        {% endblock %}
+                    </div>
+                    <div class="card-body">
+                        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="unidades">
+                            {% for u in libro.unidades %}
+                                <a class="btn btn-primary btn-block mb-3" href="{{ path('unidad_show', {'id': u.id}) }}"
+                                   role="button">{{ u.nombre }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-header">
+                        Recursos Digitales
+                    </div>
+                    <div id="recursos-container" class="card-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 text-center p-5">
+                                    <i class="fas fa-3x fa-spinner fa-spin"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-header">
+                        Actividades
+                    </div>
+                    <div id="actividades-container" class="card-body">
+                        <ul class="nav">
+                            {% for actividad in actividades %}
+                                <li class="list-group-item-action">
+                                    <a href="{{ path('actividades_show',{id:actividad.id}) }}" target="_blank">
+                                        <i class="fas fa-check-circle text-success" aria-hidden="true"> </i>
+                                        {{ actividad.nombre }} Pág. {{ actividad.pagina }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        Portada
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="row">
+                            {% if libro.code is null %}
+                            <div class="col-md-12">
+                                <figure class="figure">
+                                    <img src="{{ libro.portadaDir|imagine_filter('big') }}" height="500"
+                                         class="figure-img rounded" alt="libro_portada" style="max-width: 100%">
+                                </figure>
+                            </div>
+                            {% else %}
+                            <div class="col-md-12" style="margin:  0 auto 0 auto">
+                                {{ libro.code|raw }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                {% if is_granted('ROLE_PROFESOR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER_ADMIN')  %}
+                    <div class="card">
+                        <div class="card-header">Solucionario</div>
+                        <div class="card-body">
+                            {{ libro.solucionario|raw }}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <div class="row p-5 justify-content-center">
+        <div class="row">
+
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $('#recursos-container').load(Routing.generate('plataforma_index',{'type':'personal','book':{{ libro.id }}}))
+        })
+    </script>
+{% endblock %}
+
+

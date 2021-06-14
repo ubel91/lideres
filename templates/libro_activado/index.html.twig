@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Libros Activados{% endblock %}
+
+{% block body %}
+    <h1>Libros Activados</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha_inicio</th>
+                <th>Fecha_fin</th>
+                <th>Codigo_activacion</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for libro_activado in libro_activados %}
+            <tr>
+                <td>{{ libro_activado.id }}</td>
+                <td>{{ libro_activado.fechaInicio ? libro_activado.fechaInicio|date('Y-m-d') : '' }}</td>
+                <td>{{ libro_activado.fechaFin ? libro_activado.fechaFin|date('Y-m-d') : '' }}</td>
+                <td>{{ libro_activado.codigoActivacion }}</td>
+                <td>
+                    <a href="{{ path('libro_activado_show', {'id': libro_activado.id}) }}">show</a>
+                    <a href="{{ path('libro_activado_edit', {'id': libro_activado.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('libro_activado_new') }}">Create new</a>
+{% endblock %}

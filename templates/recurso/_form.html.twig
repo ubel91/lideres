@@ -1,0 +1,42 @@
+{{ form_start(form) }}
+{#    {{ form_widget(form) }}#}
+{#    <div class="custom-file" style="display: none">#}
+{#        <input type="file" id="recurso_referencia_file" name="recurso[referencia]" placeholder="Seleccione un archivo" class="custom-file-input" disabled>#}
+{#        <label for="recurso_referencia" class="custom-file-label">Seleccione un archivo</label>#}
+{#    </div>#}
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.nombreRecurso) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.tipo) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.libro) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.referencia) }}
+            {{ form_row(form.referenciaFile) }}
+        </div>
+    </div>
+
+
+
+
+    <h6>Dirigido para: </h6>
+    <div class="row justify-content-center mb-3">
+        <div class="custom-control custom-checkbox custom-control-inline">
+            {{ form_widget(form.paraDocente, {'attr': {'class' : 'custom-control-input'}}) }}
+        </div>
+        <div class="custom-control custom-checkbox custom-control-inline">
+            {{ form_widget(form.paraPlataforma, {'attr': {'class' : 'custom-control-input'}}) }}
+        </div>
+    </div>
+    <button class="btn btn-primary" id="btnSubmit">{{ button_label|default('Asignar') }}</button>
+{{ form_end(form) }}

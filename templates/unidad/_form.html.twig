@@ -1,0 +1,49 @@
+{{ form_start(form, {'attr': {'id': 'unidad_form'}}) }}
+    {{ form_row(form.nombre) }}
+    {{ form_row(form.archivo) }}
+    {{ form_row(form.libro) }}
+
+    <button class="btn btn-success" id="displayActividad"><span class="fas fa-plus-circle"></span> Agregar Actividad</button>
+    <button class="btn btn-primary" id="submitBtn">{{ button_label|default('Asignar') }}</button>
+
+<div class="modal fade" id="actividadesModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="actividadesModalLabel" aria-hidden="true">
+    <div class="overlay" style="display: none; z-index: 100000000000">
+        <div class="overlay__inner">
+            <div class="overlay__content">
+                    <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actividadesModalLabel"> Nueva Actividad </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ form_row(form.actividadForm.actividad_nombre) }}
+                {{ form_row(form.actividadForm.pagina) }}
+                {{ form_row(form.actividadForm.actividad_url) }}
+                {{ form_row(form.actividadForm.unidad) }}
+{#                <input type="hidden" id="unidad_actividadForm_id" name="unidad[actividadForm][id]" value="">#}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Descartar</button>
+                <button type="submit" class="btn btn-primary" id="saveModal">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+
+
+
+
+{#<form action="{{ path('unidad_edit', {#}
+{#    id: unidad.id#}
+{#}) }}" method="POST" enctype="multipart/form-data" class="dropzone js-reference-dropzone">#}
+{##}
+{#    <button class="btn btn-primary">{{ button_label|default('Asignar') }}</button>#}
+{#</form>#}

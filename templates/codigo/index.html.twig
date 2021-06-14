@@ -1,0 +1,77 @@
+{% extends 'super/index.html.twig' %}
+
+
+{% block title %}
+    Códigos
+{% endblock %}
+
+{% block title_panel %}
+    <h4 style="color: #aacd4e" > Códigos</h4>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block right_block %}
+
+    <div class="col-lg-9 pt-5">
+        <div class="row my-2">
+            <div class="col">
+                <a href="{{ path('codigo_new') }}" class="btn btn-success"> <i class="fas fa-upload"></i> Cargar Códigos</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive-sm">
+                    <table class="table table-bordered display" id="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Codigo</th>
+                                <th scope="col">Libro</th>
+                                <th scope="col">Fecha Inicio</th>
+                                <th scope="col">Fecha Fin</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% set count = 0 %}
+                        {% for codigo in codigos %}
+                            {% set count = count + 1 %}
+                            <tr id="{{ "tr"~codigo.id }}">
+                                <th scope="row"> {{ count }}</th>
+                                <td>{{ codigo.codebook }}</td>
+                                <td>{{ codigo.libro.nombre }}</td>
+                                <td>{{ codigo.fechaInicio | date("m/d/Y") }}</td>
+                                <td>{{ codigo.fechaFin | date("m/d/Y") }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('codigo_edit', {'id': codigo.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                    <button class="btn btn-danger btnDelete" title="Borrar" id="{{ codigo.id }}" data-routename="codigo_delete"><i class="fas fa-trash-alt"></i></button>
+                                </td>
+{#                                <td>#}
+{#                                    <a href="{{ path('codigo_show', {'id': codigo.id}) }}">show</a>#}
+{#                                    <a href="{{ path('codigo_edit', {'id': codigo.id}) }}">edit</a>#}
+{#                                </td>#}
+                            </tr>
+{#                        {% else %}#}
+{#                            <tr>#}
+{#                                <td colspan="3">no records found</td>#}
+{#                            </tr>#}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{#    <a href="{{ path('codigo_new') }}">Create new</a>#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('listados') }}
+{% endblock %}

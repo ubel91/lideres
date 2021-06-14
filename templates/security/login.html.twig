@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}¡Bienvenidos!{% endblock %}
+    {% block extraStyles %}
+        <style>
+            body {
+                background-image: url("{{ asset('build/assets/images/bg.9248ea3d.jpeg') }}");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            #container-1{
+                border: solid 6px white;
+                background-color: #00133e;
+                border-radius: 30px;
+            }
+             #container-2{
+                border: solid 6px white;
+                background-color: #00133e;
+                border-radius: 0 50px 0 50px;
+            }
+            i.fa-circle {
+                 color:white;
+                position:absolute;
+                left: 321px;
+                top: 40%;
+                background-color: blue;
+                display: inline-block;
+                border: solid 3px white;
+                border-radius: 60px;
+                box-shadow: 0px 0px 2px #888;
+                padding: 0.5em 0.6em;
+                width:75px;
+                height:75px;
+                float: right:
+            }
+            i.fa-circle-2 {
+                color:white;
+                position:absolute;
+                left: 340px;
+                top: 40%;
+                background-color: blue;
+                display: inline-block;
+                border: solid 3px white;
+                border-radius: 60px;
+                box-shadow: 0px 0px 2px #888;
+                padding: 0.5em 0.6em;
+                width:75px;
+                height:75px;
+                float: right;
+                z-index: 100;
+            }
+            .footer img{
+                width: 50px;
+                height: 50px;
+            } 
+        </style>
+    {% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col-12">
+            <div class="row justify-content-center">
+                <div class="col-4 p-5">
+                    <img src="{{ asset('build/assets/images/CREATIVE-COMPL-LOGO-PNG-24.b11a1fc7.png') }}"
+                         class="img-fluid" id="logoLideres" alt="logo">
+                </div>
+            </div>
+
+            <div class="row h-100">
+                <div class="col-md-2"></div>
+                <div class="col-md-3 justify-content-center align-items-center text-center">
+                    <div id="container-1" class="card pt-5" style="height: 350px">
+                        <i class="fa fa-circle fa-user-plus fa-2x"></i>
+                        <div class="card-body mt-3">
+                            <h1 style="text-transform:uppercase; color:white;">¿Eres nuevo por aquí?</h1><br>
+                            <a href="{{ path('app_register') }}" class="btn btn-link"><h1 style="color:white;">REGISTRATE</h1></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div id="container-2" class="col-md-3 justify-content-center align-items-center">
+                    <div class="card rounded" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;" style="height: 350px">
+                        <i class="fa fa-circle-2 fa-lock fa-2x"></i>
+                        <div class="card-body">
+                            <div class="" id="login-form" >
+                                <form method="post">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                {% if error %}
+                                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                                {% endif %}
+
+                                                {% if app.user %}
+                                                    <div class="mb-3">
+                                                        Usted esta logueado como {{ app.user.username }}, <a
+                                                                href="{{ path('app_logout') }}">Logout</a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="form-row text-center">
+                                            <h1 style="text-transform:uppercase; color:white;" class="mb-3">INICIAR SESIÓN</h1>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="input-group" style="margin-bottom: 1rem">
+                                                <input type="text" value="{{ last_username }}" name="username"
+                                                       id="inputUsername" class="form-control" required autofocus
+                                                       placeholder="Usuario">
+                                                <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2"><i
+                                                        class="fas fa-lock"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="password" name="password" id="inputPassword"
+                                                       class="form-control"
+                                                       required placeholder="Contraseña">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="basic-addon2"><i
+                                                                class="fas fa-key"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf_token"
+                                           value="{{ csrf_token('authenticate') }}">
+                                    <div class="form-row">
+                                        <div class="form-group text-center col-12">
+                                            <button class="btn btn-primary btn-lg" type="submit">
+                                                <span><i class="far fa-paper-plane"></i></span> Ingresar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group text-center col-12">
+                                            <a href="{{ path('app_forgot_password_request') }}">¿Olvidaste tu
+                                                contraseña?</a>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block navbar %}
+    {% endblock %}
+    {% block  footer%}
+        <footer  class="footer fixed-bottom mb-2">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <a href='https://wa.me/+5930986257804' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/WHATSAPP-LOGO.png') }}" class="rounded" alt="..."></a>
+                    
+                    <a href='https://www.instagram.com/lideresec' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/INTAGRAM-LOGO.png') }}" class="rounded" alt="..."></a>
+                    
+                    <a href='https://www.facebook.com/lideresed' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/FACEBOOK-LOGO.png') }}" class="rounded" alt="..."></a>
+                    
+                    <a href='https://youtube.com/channel/UCka8tDjH0Ne8EgXkxv2WSpQ' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/YOUTUBE-LOGO.png') }}" class="rounded" alt="..."></a>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
+
+    {% block javascripts %}
+    {{ encore_entry_script_tags('login') }}
+{% endblock %}

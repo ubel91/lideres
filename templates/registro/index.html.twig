@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar usuario{% endblock %}
+{% block navbar %}
+{% endblock %}
+{% block left_body %}
+    <div class="col-lg-3">
+        {% for message in app.flashes('exito') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="row justify-content-center" style="padding: 2rem" >
+            <div class="col-lg-5">
+                <div class="row">
+                    <img src="{{asset('build/assets/images/user.png')}}" alt="..." class="img-thumbnail rounded-circle" width="100">
+                </div>
+                <div>
+                    <strong>Mi Perfil</strong>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            {{ form_start(form, {'attr': {'id': 'register_form'}}) }}
+            <div class="my-custom-class-for-errors">
+                {{ form_errors(form) }}
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    {{ form_row(form.username) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" id="some-custom-id">
+                    {{ form_row(form.password) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ form_row(form.registrar) }}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="radioEstudiante" name="customRadioInline1" class="custom-control-input">
+                        <label class="custom-control-label" for="radioEstudiante">Estudiante</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="radioProfesor" name="customRadioInline1" class="custom-control-input">
+                        <label class="custom-control-label" for="radioProfesor">Profesor</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block right_block %}
+        <div class="col-lg-9">
+            <div id="estudiantes_form" style="display:none">
+                <div class="row ml-5 mt-2">
+                    <h4 style="color: #aacd4e"> Registro Estudiantes </h4>
+                </div>
+
+                <div class="row justify-content-left mt-3">
+                    <div class="col-lg-4">
+                        <h6 class="ml-3 mb-3">Mis Datos Personales</h6>
+                        {{ form_row(form.estudiantesForm.nombre) }}
+                        {{ form_row(form.estudiantesForm.primer_apellido) }}
+                        {{ form_row(form.estudiantesForm.segundo_apellido) }}
+                        {{ form_row(form.estudiantesForm.fecha_nacimiento) }}
+                        {{ form_row(form.estudiantesForm.e_mail) }}
+
+                        <h6 class="mt-4 ml-3 mb-3">Datos de mi Representante</h6>
+                        {{ form_row(form.estudiantesForm.nombre_representante) }}
+                        {{ form_row(form.estudiantesForm.primer_apellido_representante) }}
+                        {{ form_row(form.estudiantesForm.segundo_apellido_representante) }}
+                        {{ form_row(form.estudiantesForm.numero_identificacion) }}
+                        {{ form_row(form.estudiantesForm.celular) }}
+
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 class="ml-3 mb-3">Datos de mi Institución</h6>
+                        {{ form_row(form.estudiantesForm.nombre_institucion) }}
+                        {{ form_row(form.estudiantesForm.pais_institucion) }}
+{#                        {{ form_row(form.estudiantesForm.provincia_institucion) }}#}
+{#                        {{ form_row(form.estudiantesForm.canton_institucion) }}#}
+
+                    </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+            <div id="profesores_form" style="display:none">
+                <div class="row ml-5 mt-2">
+                    <h4 style="color: #aacd4e"> Registro del Docente </h4>
+                </div>
+
+                <div class="row justify-content-left mt-3">
+                    <div class="col-lg-4">
+                        <h6 class="ml-3 mb-3">Mis Datos Personales</h6>
+                        {{ form_row(form.profesorForm.nombre) }}
+                        {{ form_row(form.profesorForm.primer_apellido) }}
+                        {{ form_row(form.profesorForm.segundo_apellido) }}
+                        {{ form_row(form.profesorForm.e_mail) }}
+                        {{ form_row(form.estudiantesForm.numero_identificacion) }}
+                        {{ form_row(form.profesorForm.e_mail) }}
+                        {{ form_row(form.profesorForm.celular) }}
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 class="ml-3 mb-3">Datos de mi Institución</h6>
+                        {{ form_row(form.profesorForm.nombre_institucion) }}
+                        {{ form_row(form.profesorForm.pais_institucion) }}
+{#                        {{ form_row(form.profesorForm.provincia_institucion) }}#}
+{#                        {{ form_row(form.profesorForm.canton_institucion) }}#}
+                    </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block body %}
+    {{parent()}}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notas{% endblock %}
+
+{% block body %}
+    <h1>Notas</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ nota.id }}</td>
+            </tr>
+            <tr>
+                <th>Titulo</th>
+                <td>{{ nota.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Texto</th>
+                <td>{{ nota.texto }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('notas_index') }}">back to list</a>
+
+    <a href="{{ path('notas_edit', {'id': nota.id}) }}">edit</a>
+
+    {{ include('notas/_delete_form.html.twig') }}
+{% endblock %}

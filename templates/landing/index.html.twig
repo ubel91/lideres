@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    {{parent()}}
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-5 col-lg-7 order-md-1">
+                <img src="{{ asset('build/assets/images/3afdf9ccd8e227f64a3f822b0fdb97e5.0.jpg') }}" class="img-fluid" alt="landing_image">
+            </div>
+            <div class="col-12 col-md-5 col-lg-4 order-md-2" style="margin-left: 3rem">
+                <div class="row justify-content-center" style="margin-bottom: 4rem">
+                    <img src="{{ asset('build/assets/images/e9e457896b8606e213e7f387b4cc7e65.0.png') }}" class="img-fluid" alt="logo">
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col">
+                        <button type="button" class="btn btn-login">Acceso</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

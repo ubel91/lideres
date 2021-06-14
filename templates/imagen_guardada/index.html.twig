@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ImagenGuardada index{% endblock %}
+
+{% block body %}
+    <h1>ImagenGuardada index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Archivo</th>
+                <th>MimeType</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imagen_guardada in imagen_guardadas %}
+            <tr>
+                <td>{{ imagen_guardada.id }}</td>
+                <td>{{ imagen_guardada.nombre }}</td>
+                <td>{{ imagen_guardada.archivo }}</td>
+                <td>{{ imagen_guardada.mimeType }}</td>
+                <td>
+                    <a href="{{ path('imagen_guardada_show', {'id': imagen_guardada.id}) }}">show</a>
+                    <a href="{{ path('imagen_guardada_edit', {'id': imagen_guardada.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('imagen_guardada_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'super/index.html.twig' %}
+
+{% block title %}
+    Registro de Usuario
+{% endblock %}
+
+{% block navbar %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{parent()}}
+{% endblock %}
+{% block right_block %}
+    <div class="col-lg-9 pt-5">
+        <div class="row">
+            <div class="col-lg-3 offset-lg-3 justify-content-start">
+                {% block title_panel %}
+                    <h4 style="color: #aacd4e" > Registro de Usuario</h4>
+                {% endblock %}
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                {% block searcher %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="row mt-4 ml-15">
+            <div class="col-lg-4 offset-lg-2">
+                {{ form_start(form, {'attr': {'id': 'register_super_form'}}) }}
+                <div class="my-custom-class-for-errors">
+                    {{ form_errors(form) }}
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.username) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.nombre) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.primer_apellido) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.segundo_apellido) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" id="some-custom-id">
+                        {{ form_row(form.plainPassword) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(form.e_mail) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 offset-lg-4">
+                        {{ form_row(form.registrar) }}
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="offset-lg-2">
+
+                        {{ form_row(form.roles) }}
+
+{#                        <div class="custom-control custom-radio custom-control-inline">#}
+{#                            <input type="radio" id="radioEstudiante" name="role" class="custom-control-input" value="super_admin">#}
+{#                            <label class="custom-control-label" for="radioEstudiante">Super Admin</label>#}
+{#                        </div>#}
+{#                        <div class="custom-control custom-radio custom-control-inline">#}
+{#                            <input type="radio" id="radioProfesor" name="role" class="custom-control-input" value="admin">#}
+{#                            <label class="custom-control-label" for="radioProfesor">Admin</label>#}
+{#                        </div>#}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

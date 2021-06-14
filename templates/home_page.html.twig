@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}¡Bienvenidos!{% endblock %}
+{% block stylesheet %}
+    {{ parent() }}
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        .bg {
+            /* The image used */
+            background-image: url('{{ asset('build/assets/images/home_page_background.ef60cda4.jpeg') }}');
+
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+
+    <div class="container-fluid bg">
+        <div class="row navbar fixed-bottom">
+            <div class="col m-5 p-5">
+                <div class="row justify-content-md-end m-5 p-5">
+                    <a href="{{ path('app_login') }}" class="btn btn-lg btn-login mr-5" id="btn-login"><i class="far fa-paper-plane"></i> Acceso</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block navbar %}
+{% endblock %}
+
+{% block  footer%}
+{% endblock %}
+
+{% block javascripts %}
+    {#{{ encore_entry_script_tags('login') }}#}
+{% endblock %}
