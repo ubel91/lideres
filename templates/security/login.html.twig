@@ -19,10 +19,7 @@
                 border-radius: 0 50px 0 50px;
             }
             i.fa-circle {
-                 color:white;
-                position:absolute;
-                left: 321px;
-                top: 40%;
+                color:white;
                 background-color: blue;
                 display: inline-block;
                 border: solid 3px white;
@@ -36,8 +33,8 @@
             i.fa-circle-2 {
                 color:white;
                 position:absolute;
-                left: 340px;
-                top: 40%;
+                {# left: 340px;
+                top: 40%; #}
                 background-color: blue;
                 display: inline-block;
                 border: solid 3px white;
@@ -65,22 +62,24 @@
                          class="img-fluid" id="logoLideres" alt="logo">
                 </div>
             </div>
-
+            
             <div class="row h-100">
                 <div class="col-md-2"></div>
                 <div class="col-md-3 justify-content-center align-items-center text-center">
-                    <div id="container-1" class="card pt-5" style="height: 350px">
-                        <i class="fa fa-circle fa-user-plus fa-2x"></i>
+                    <div id="container-1" class="card pt-5" style="height: 403px">
+                        {# <i class="fa fa-circle fa-user-plus fa-2x"></i> #}
                         <div class="card-body mt-3">
-                            <h1 style="text-transform:uppercase; color:white;">¿Eres nuevo por aquí?</h1><br>
-                            <a href="{{ path('app_register') }}" class="btn btn-link"><h1 style="color:white;">REGISTRATE</h1></a>
+                            <h1 style="text-transform:uppercase; color:white;">¿Eres nuevo?</h1><br>
+                            <a href="{{ path('app_register') }}" class="btn btn-link"><h1 style="color:white;">REGÍSTRATE</h1></a>
+                            <br>
+                            <a href="{{ path('app_register') }}" class="btn"><i class="fa fa-2x fa-user-plus fa-circle"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2"></div>
                 <div id="container-2" class="col-md-3 justify-content-center align-items-center">
-                    <div class="card rounded" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;" style="height: 350px">
-                        <i class="fa fa-circle-2 fa-lock fa-2x"></i>
+                    <div class="card rounded" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;" style="height: 403px">
+                        {# <i class="fa fa-circle-2 fa-lock fa-2x"></i> #}
                         <div class="card-body">
                             <div class="" id="login-form" >
                                 <form method="post">
@@ -127,8 +126,8 @@
                                            value="{{ csrf_token('authenticate') }}">
                                     <div class="form-row">
                                         <div class="form-group text-center col-12">
-                                            <button class="btn btn-primary btn-lg" type="submit">
-                                                <span><i class="far fa-paper-plane"></i></span> Ingresar
+                                            <button class="btn" style=" background-color: transparent;" type="submit">
+                                                <span><i class="fa fa-2x fa-lock fa-circle"></i></span>
                                             </button>
                                         </div>
                                     </div>
