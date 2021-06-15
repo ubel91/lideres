@@ -3,7 +3,10 @@
 
 namespace App\Twig;
 
+use App\Entity\Libro;
+use App\Entity\User;
 use App\Service\FileUploader;
+use DateTime;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -27,8 +30,29 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return [
             new TwigFunction('uploaded_asset', [$this, 'getUploadedAssetPath']),
             new TwigFunction('wkpath', [$this, 'getWkPath']),
-            new TwigFunction('pypath', [$this, 'getProyectPath'])
+            new TwigFunction('pypath', [$this, 'getProyectPath']),
+            new TwigFunction('bookState', [$this, 'bookState'])
         ];
+    }
+
+    public function bookState(Libro $book, User $user){
+        foreach($book->getLibroActivados() as $activado){
+            if($activado->getProfesor() === $user->getProfesor() || $activado->getEstudiante() === $user->getEstudiantes()){
+                $codeString = $activado->getCodigoActivacion();
+                foreach($book->getCodigos() as $code){
+                    if($code->getCodebook() === $codeString){
+                        if ($code->getFechaFin() < new DateTime('now')){
+                            return '<span class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</span>';
+                        }
+                        if ($code->getFechaFin() >= new DateTime('now')){
+                            return '<span class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</span>';
+                        }
+                        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
+                    }
+                }
+            }
+        }
+        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
     }
 
     public function getUploadedAssetPath(string $path): string

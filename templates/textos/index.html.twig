@@ -1,48 +1,77 @@
 {% extends 'dashboard/index.html.twig' %}
 
 {% block title %}
-   Mis Textos
+	Mis Textos
 {% endblock %}
 
 {% block username %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block body %}
-   {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 {% block title_panel %}
-      <h2>Mis textos</h2>
+	{% if is_super %}
+		<h3>{{user.nombre }}, Textos</h3>
+	{% else %}
+		<h2>Mis textos</h2>
+	{% endif %}
 {%  endblock %}
-{% block searcher %}
-{% endblock %}
+{% block searcher %}{% endblock %}
 
 {% block book_loop %}
-
-    {% for k, m in result %}
-        {% if m|length > 0 %}
-        <div class="card">
-            <div class="card-header" style="background-color: #1c8e8a; color: white;">
-                {{ k }}
-            </div>
-            <div class="card-body">
-                {% for r in m %}
-                {% set images = r.libro.portadaDir %}
-                {% set footer = r.libro.nombre %}
-                   <figure class="figure mr-5">
-                    <a href="{{ path('libro_show',  {'id': r.libro.id}) }}">
-                        <img src="{{ r.libro.portadaDir|imagine_filter('squared_thumbnail_medium')  }}" height="300" class="figure-img rounded" alt="libro_portada">
-                    </a>
-                       {% block picture_footer %}
-                        <figcaption class="figure-caption"><strong>Periodo de Activación: </strong></figcaption>
-                        <figcaption class="figure-caption"><strong>Fecha inicio: {{ r.fechaInicio | date('d-m-Y') }} </strong></figcaption>
-                        <figcaption class="figure-caption"><strong>Fecha Fin: {{ r.fechaFin | date('d-m-Y') }} </strong></figcaption>
-                    {% endblock %}
-                </figure>
-                {% endfor %}
-            </div>
-             </div>
-            </figure>
-        {% endif %}
-    {% endfor %}
+<a class="btn btn-success" href="{{ path('libro_activado_new',{id:user.id}) }}">Activar Texto</a>
+{% for k, m in result %}
+	{% if m|length > 0 %}
+		<div class="card">
+			<div class="card-header" style="background-color: #1c8e8a; color: white;">
+				{{ k }}
+			</div>
+			<div class="card-body">
+				{% for r in m %}
+					{% set images = r.libro.portadaDir %}
+					{% set footer = r.libro.nombre %}
+					<figure class="figure mr-5">
+						<a href="{{ path('libro_show', {'id': r.libro.id}) }}">
+							<img src="{{ r.libro.portadaDir|imagine_filter('squared_thumbnail_medium') }}" height="300" class="figure-img rounded" alt="libro_portada">
+						</a>
+						{% block picture_footer %}
+                            {% if is_super %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        {{ bookState(r.libro, user)|raw }}
+                                    </div>
+                                    <div class="col-md-6">  
+                                        <a href="{{ path('textosEdit', {'id': r.libro.id }) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                    </div>
+                                    <div class="col-md-6 text-right">  
+                                        <button class="btn btn-danger btnDelete pull-right" title="Borrar" id="{{ r.libro.id }}" data-routename="libro_delete"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </div> 
+                            {% endif %}
+							<figcaption class="figure-caption">
+								<strong>Periodo de Activación:
+								</strong>
+							</figcaption>
+							<figcaption class="figure-caption">
+								<strong>Fecha inicio:
+									{{ r.fechaInicio | date('d-m-Y') }}
+								</strong>
+							</figcaption>
+							<figcaption class="figure-caption">
+								<strong>Fecha Fin:
+									{{ r.fechaFin | date('d-m-Y') }}
+								</strong>
+							</figcaption>
+						{% endblock %}
+					</figure>
+				{% endfor %}
+			</div>
+		</div>
+	</figure>
+{% endif %}{% endfor %}{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('listados') }}
 {% endblock %}

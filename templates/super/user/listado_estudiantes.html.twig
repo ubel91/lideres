@@ -66,9 +66,10 @@
                                         <td>{{ u.canton.nombre }}</td>
                                         <td>{{ u.estudiantes.grado }}</td>
                                         <td>
-                                            <a class="btn btn-primary" href="{{ path('profile', {'id': u.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                                            <a class="btn btn-info" href="{{ path('superPrint', {'id': u.id }) }}" target="_blank" id="btnEditar"><i class="fas fa-print" title="Editar"></i></a>
-                                            <button class="btn btn-danger btnDelete" title="Borrar" id="{{ u.id }}" data-routename="usuario_delete"><i class="fas fa-trash-alt"></i></button>
+                                            <a class="text-primary" href="{{ path('profile', {'id': u.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                            <a class="text-info" href="{{ path('superPrint', {'id': u.id }) }}" target="_blank" id="btnEditar"><i class="fas fa-print" title="Editar"></i></a>
+                                            <button style=" background-color: transparent; border: transparent" class="text-danger btnDelete" title="Borrar" id="{{ u.id }}" data-routename="usuario_delete"><i class="fas fa-trash-alt"></i></button>
+                                            <a class="text-info" href="{{ path('textos', {'id': u.id }) }}" target="_blank" id=""><i class="fas fa-eye" title="Ver"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

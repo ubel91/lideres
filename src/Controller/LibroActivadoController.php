@@ -8,6 +8,7 @@ use App\Entity\Libro;
 use App\Entity\LibroActivado;
 use App\Entity\Profesor;
 use App\Entity\Role;
+use App\Entity\User;
 use App\Form\LibroActivadoType;
 use App\Repository\LibroActivadoRepository;
 use DateTime;
@@ -43,7 +44,11 @@ class LibroActivadoController extends AbstractController
     public function new(Request $request): Response
     {
         $libroActivado = new LibroActivado();
-        $user = $this->getUser();
+        if(null != $id = $request->query->get('id')){
+            $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        }else{
+            $user = $this->getUser();
+        }
         $roles = $user->getRoles()[0];
         $emLibros = $this->getDoctrine()->getManager();
 

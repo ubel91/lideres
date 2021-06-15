@@ -82,11 +82,11 @@
                                                     {% set exist = true %}
                                                     {% if code.fechaFin|date('U') < 'now'|date('U') %}
                                                         <span class="text-warning"><i class="fa fa-exclamation-triangle"></i> Caducado</span>
-                                                    {% elseif  code.fechaFin('U') >= 'now'|date('U') %}
+                                                    {% elseif  code.fechaFin|date('U') >= 'now'|date('U') %}
                                                         <span class="text-success"><i class="fa fa-check-circle"></i> Activo</span>
                                                     {% else %}
                                                         <span class="text-danger"><i class="fa fa-times-circle"></i> Desactivado</span>
-                                                        {% endif %}
+                                                     {% endif %}
                                                 {% endif %}
                                             {% endfor %}
                                         </td>

@@ -64,6 +64,7 @@
                                 <td>
                                     <a class="btn btn-primary" href="{{ path('textosEdit', {'id': b.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
                                     <button class="btn btn-danger btnDelete" title="Borrar" id="{{ b.id }}" data-routename="libro_delete"><i class="fas fa-trash-alt"></i></button>
+                                    <a href="{{ path('libro_show', {'id': b.id }) }}" target="blank" class="btn btn-info"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}

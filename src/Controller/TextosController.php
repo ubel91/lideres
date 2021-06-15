@@ -9,6 +9,7 @@ use App\Entity\LibroActivado;
 use App\Entity\Materia;
 use App\Entity\Role;
 use App\Entity\Unidad;
+use App\Entity\User;
 use App\Form\LibroType;
 use App\Service\FileUploader;
 use Exception;
@@ -33,10 +34,17 @@ class TextosController extends AbstractController
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
+        $super = false;
+        if(null != $id = $request->query->get('id'))
+        {
+            $user = $em->getRepository(User::class)->find($id);
+            $super = true;
+        }else{
+            $user = $this->getUser();
+        }
 
         if (count($user->getRoles()) === 1)
             if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE) {
@@ -56,6 +64,8 @@ class TextosController extends AbstractController
 
         return $this->render('textos/index.html.twig', [
             'result' => $ouput,
+            'is_super' => $super,
+            'user' => $user
         ]);
     }
 
