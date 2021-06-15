@@ -6,6 +6,7 @@ use App\Entity\Actividades;
 use App\Entity\Estudiantes;
 use App\Entity\Libro;
 use App\Entity\LibroActivado;
+use App\Entity\Materia;
 use App\Entity\Role;
 use App\Entity\Unidad;
 use App\Form\LibroType;
@@ -46,9 +47,31 @@ class TextosController extends AbstractController
                 $result = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
             }
 
+            $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
+            $ouput = [];
+
+            foreach ($materias as $materia){
+                $ouput[$materia->getNombre()] = $this->getByMateria($materia,$result);
+            }
+
         return $this->render('textos/index.html.twig', [
-            'result' => $result,
+            'result' => $ouput,
         ]);
+    }
+
+    /**
+     * @param \App\Entity\Materia $materia
+     * @param array $books
+     * @return array
+     */
+    public function getByMateria(Materia $materia, $books = array()){
+        $ouput = [];
+        /** @var LibroActivado $book */
+        foreach ($books as $book) {
+            if ($book->getLibro()->getCatalogo()->getMaterias() === $materia)
+                $ouput[]=$book;
+        }
+        return $ouput;
     }
 
     /**

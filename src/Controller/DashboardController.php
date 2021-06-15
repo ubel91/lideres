@@ -177,6 +177,7 @@ class DashboardController extends AbstractController
             $ouput[$materia->getNombre()] = $this->getByMateria($materia,$array);
         }
 
+        
         return $ouput ? $ouput : [];
     }
 

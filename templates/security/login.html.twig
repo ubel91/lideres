@@ -26,26 +26,11 @@
                 border-radius: 60px;
                 box-shadow: 0px 0px 2px #888;
                 padding: 0.5em 0.6em;
-                width:75px;
-                height:75px;
-                float: right:
+                width:55px;
+                height:55px;
+                font-size: 23px;
             }
-            i.fa-circle-2 {
-                color:white;
-                position:absolute;
-                {# left: 340px;
-                top: 40%; #}
-                background-color: blue;
-                display: inline-block;
-                border: solid 3px white;
-                border-radius: 60px;
-                box-shadow: 0px 0px 2px #888;
-                padding: 0.5em 0.6em;
-                width:75px;
-                height:75px;
-                float: right;
-                z-index: 100;
-            }
+            
             .footer img{
                 width: 50px;
                 height: 50px;
@@ -66,23 +51,21 @@
             <div class="row h-100">
                 <div class="col-md-2"></div>
                 <div class="col-md-3 justify-content-center align-items-center text-center">
-                    <div id="container-1" class="card pt-5" style="height: 403px">
-                        {# <i class="fa fa-circle fa-user-plus fa-2x"></i> #}
+                    <div id="container-1" class="card pt-5" style="height: 320px">
                         <div class="card-body mt-3">
-                            <h1 style="text-transform:uppercase; color:white;">¿Eres nuevo?</h1><br>
-                            <a href="{{ path('app_register') }}" class="btn btn-link"><h1 style="color:white;">REGÍSTRATE</h1></a>
+                            <h4 style="text-transform:uppercase; color:white;">¿Eres nuevo?</h4><br>
+                            <a href="{{ path('app_register') }}" class="btn btn-link"><h4 style="color:white;">REGÍSTRATE</h4></a>
                             <br>
                             <a href="{{ path('app_register') }}" class="btn"><i class="fa fa-2x fa-user-plus fa-circle"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2"></div>
-                <div id="container-2" class="col-md-3 justify-content-center align-items-center">
-                    <div class="card rounded" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;" style="height: 403px">
-                        {# <i class="fa fa-circle-2 fa-lock fa-2x"></i> #}
+                <div  class="col-md-3 justify-content-center align-items-center">
+                    <div id="container-2" class="card" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;"   style="height: 320px">
                         <div class="card-body">
                             <div class="" id="login-form" >
-                                <form method="post">
+                                <form method="post" style="margin:0">
                                     <div class="form-group">
                                         <div class="form-row">
                                             <div class="form-group">
@@ -99,7 +82,7 @@
                                             </div>
                                         </div>
                                         <div class="form-row text-center">
-                                            <h1 style="text-transform:uppercase; color:white;" class="mb-3">INICIAR SESIÓN</h1>
+                                            <h4 style="text-transform:uppercase; color:white;" class="mb-3">INICIAR SESIÓN</h4>
                                         </div>
                                         <div class="form-row">
                                             <div class="input-group" style="margin-bottom: 1rem">
@@ -127,16 +110,11 @@
                                     <div class="form-row">
                                         <div class="form-group text-center col-12">
                                             <button class="btn" style=" background-color: transparent;" type="submit">
-                                                <span><i class="fa fa-2x fa-lock fa-circle"></i></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group text-center col-12">
+                                                <span><i class="fa fa-lock fa-circle"></i></span>
+                                            </button><br>
                                             <a href="{{ path('app_forgot_password_request') }}">¿Olvidaste tu
                                                 contraseña?</a>
                                         </div>
-
                                     </div>
                                 </form>
                             </div>

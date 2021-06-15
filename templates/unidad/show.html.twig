@@ -59,6 +59,10 @@
                 <h6 style="margin-left: 6rem">
                     <a href="{{ path('actividades_show', { 'id': a.id }) }}" target="_blank" style="text-decoration: none"> {{ a.nombre ~ ' pag. ' ~ a.pagina }} </a>
                 </h6>
+                {% if a.soundCloud is not null %}
+                    <a href="{{ path('actividades_show', { 'id': a.id }) }}" target="_blank" style="text-decoration: none"> <i class="fa fa-2x fa-music"> </i> </a>
+                {% endif %}
+                
             {% endfor %}
         </div>
     </div>

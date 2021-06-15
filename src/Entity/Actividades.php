@@ -63,6 +63,17 @@ class Actividades
 
     /**
      * @Groups("actividades")
+     * @Assert\NotBlank()
+     * @Assert\Url(
+     *     protocols={"https"},
+     *     message="La URL, '{{ value }}', no es válida."
+     * )
+     * @ORM\Column(type="string", length=255)
+     */
+    private $soundCloud;
+
+    /**
+     * @Groups("actividades")
      * @ORM\ManyToOne(targetEntity=Unidad::class, inversedBy="actividades")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -118,6 +129,26 @@ class Actividades
     public function setUnidad(?Unidad $unidad): self
     {
         $this->unidad = $unidad;
+
+        return $this;
+    }
+
+    /**
+     * Get protocols={"https"},
+     */ 
+    public function getSoundCloud()
+    {
+        return $this->soundCloud;
+    }
+
+    /**
+     * Set protocols={"https"},
+     *
+     * @return  self
+     */ 
+    public function setSoundCloud($soundCloud)
+    {
+        $this->soundCloud = $soundCloud;
 
         return $this;
     }
