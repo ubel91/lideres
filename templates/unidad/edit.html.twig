@@ -51,7 +51,13 @@
                 <div class="list-group list-group-flush" id="list-tab" role="tablist">
                     {% for a in unidad.actividades %}
                     <div class="list-group-item list-group-item-action">
-                        <a class="activities-list" id="{{'actividad_'~a.id}}" data-id = "{{ a.id }}" aria-controls="profile"><i class="fas fa-clipboard-check mr-3"></i>{{ a.nombre }}</a>
+                        <a class="activities-list" id="{{'actividad_'~a.id}}" data-id = "{{ a.id }}" aria-controls="profile">
+                            {% if a.soundCloud is not null and a.soundCloud != "" %}
+                                <i class="fas fa-music mr-3"></i>
+                            {% else %}
+                                <i class="fas fa-clipboard-check mr-3"></i>
+                            {% endif %}
+                            {{ a.nombre }}</a>
                         <div class="delete-item" id="{{ 'delete_'~a.id }}" style="display: inline-block"><span class="far fa-trash-alt text-danger ml-5"></span></div>
                     </div>
                     {% endfor %}

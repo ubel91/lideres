@@ -1,80 +1,84 @@
 {% extends 'super/index.html.twig' %}
 
 {% block stylesheets %}
-    {{ parent() }}
+{{ parent() }}
 {% endblock %}
 
 {% block title %}
-    {{ parent() }} - Listados Usuarios
+{{ parent() }} - Listados Usuarios
 {% endblock %}
 
 {% block title_panel %}
-    <h4 style="color: #aacd4e" > Listado de Usuarios</h4>
+<h4 style="color: #aacd4e"> Listado de Usuarios</h4>
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+{{ parent() }}
 {% endblock %}
 
 {% block right_block %}
-
-    <div class="col-lg-9 pt-5">
-        <div class="row mb-1">
-            <div class="col">
-                <a class="btn btn-success" href="{{ path('superAdd') }}"><span class="fas fa-plus"></span> Adicionar</a>
-            </div>
+<div class="card col-lg-9 pt-5">
+    <div class="card-header">
+        <div class="">
+            
         </div>
+    </div>
+    <div class="card-body">
         <div class="row">
             <div class="col">
                 <div class="table-responsive-sm">
                     <table class="table table-bordered display" id="table">
                         <thead>
-                        <tr>
-                            <th scope="col">No.</th>
-                            <th scope="col">Usuario</th>
-                            <th scope="col">Roles</th>
-                            <th scope="col">Correo</th>
-                            <th scope="col" style="min-width: 5rem">Acciones</th>
-                        </tr>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">Roles</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col" style="min-width: 5rem">Acciones</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {% set count = 0 %}
-                        {% for u in user %}
+                            {% set count = 0 %}
+                            {% for u in user %}
                             {% if u.rolename == 'ROLE_ADMIN' or u.rolename == 'ROLE_SUPER_ADMIN' %}
                             {% set count = count + 1 %}
-                            <tr id="{{ "tr"~u.id }}">
+                            <tr id="{{ " tr"~u.id }}">
                                 <th scope="row"> {{ count }}</th>
                                 <td>{{ u.username }}</td>
                                 <td>
                                     {% if u %}
-                                        {% if u.rolename == 'ROLE_ADMIN' %}
-                                            Admin
-                                        {% elseif u.rolename == 'ROLE_SUPER_ADMIN' %}
-                                            Super Admin
-                                        {% endif %}
+                                    {% if u.rolename == 'ROLE_ADMIN' %}
+                                    Admin
+                                    {% elseif u.rolename == 'ROLE_SUPER_ADMIN' %}
+                                    Super Admin
+                                    {% endif %}
                                     {% endif %}
                                 </td>
                                 <td>{{ u.e_mail }}</td>
                                 <td>
-                                    {{pypath('/uploads/perfil/'~u.username~'/'~u.photo) }}
-                                    <a class="btn btn-primary" href="{{ path('super_edit', {'id': u.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                                    <a class="btn btn-info" href="{{ path('superPrint', {'id': u.id }) }}" target="_blank" id="btnEditar"><i class="fas fa-print" title="Editar"></i></a>
+                                    {# {{pypath('/uploads/perfil/'~u.username~'/'~u.photo) }} #}
+                                    <a class="btn btn-primary" href="{{ path('super_edit', {'id': u.id }) }}"
+                                        id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                    <a class="btn btn-info" href="{{ path('superPrint', {'id': u.id }) }}"
+                                        target="_blank" id="btnEditar"><i class="fas fa-print" title="Editar"></i></a>
                                     {% if app.user.id != u.id %}
-                                        <button class="btn btn-danger btnDelete" title="Borrar" id="{{ u.id }}" data-routename="usuario_delete"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn btn-danger btnDelete" title="Borrar" id="{{ u.id }}"
+                                        data-routename="usuario_delete"><i class="fas fa-trash-alt"></i></button>
                                     {% endif %}
                                 </td>
                             </tr>
                             {% endif %}
-                        {% endfor %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
+</div>
+
 {% endblock %}
 {% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('listados') }}
+{{ parent() }}
+{{ encore_entry_script_tags('listados') }}
 {% endblock %}

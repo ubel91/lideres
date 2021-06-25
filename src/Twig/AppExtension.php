@@ -9,6 +9,7 @@ use App\Service\FileUploader;
 use DateTime;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -19,10 +20,13 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     private $kernel;
 
-    public function __construct(ContainerInterface $container, KernelInterface $kernel)
+    private $router;
+
+    public function __construct(ContainerInterface $container, KernelInterface $kernel,UrlGeneratorInterface $router)
     {
         $this->container = $container;
         $this->kernel = $kernel;
+        $this->router = $router;
     }
 
     public function getFunctions(): array
@@ -45,7 +49,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
                             return '<span class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</span>';
                         }
                         if ($code->getFechaFin() >= new DateTime('now')){
-                            return '<span class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</span>';
+                            return '<a href="'. $this->router->generate('codigo_edit', [
+                                'id' => $code->getId(),
+                            ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
                         }
                         return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
                     }

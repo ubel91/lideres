@@ -42,7 +42,7 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Texto</th>
                             <th scope="col">Dirigido a:</th>
-                            <th scope="col">Recursos</th>
+                            <th style="max-width: 60px!important;">Recursos</th>
                             <th scope="col" style="min-width: 5rem">Acciones</th>
                         </tr>
                         </thead>
@@ -71,7 +71,7 @@
                                         </ul>
                                     {% endif %}
                                 </td>
-                                <td>
+                                <td style="max-width: 300px!important; overflow: hidden;">
                                     {% set customId = r.tipo.nombre ~ '_' ~ r.id %}
                                     {% set audioMime = 'audio/mpeg' %}
                                     {% set videoMime = 'video/mp4' %}

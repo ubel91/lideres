@@ -52,7 +52,7 @@ class Actividades
 
     /**
      * @Groups("actividades")
-     * @Assert\NotBlank()
+     * 
      * @Assert\Url(
      *     protocols={"https"},
      *     message="La URL, '{{ value }}', no es válida."
@@ -63,7 +63,7 @@ class Actividades
 
     /**
      * @Groups("actividades")
-     * @Assert\NotBlank()
+     * 
      * @Assert\Url(
      *     protocols={"https"},
      *     message="La URL, '{{ value }}', no es válida."

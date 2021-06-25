@@ -181,7 +181,7 @@ $(document).ready(function (e) {
         let inputActivities = [];
         inputActivities.push($formActivitiesNombre);
         inputActivities.push($formActivitiesPagina);
-        inputActivities.push($formActivitiesUrl);
+        // inputActivities.push($formActivitiesUrl);
 
         setRequiredFields(false, inputActivities);
     });
@@ -191,7 +191,7 @@ $(document).ready(function (e) {
         let inputActivities = [];
         inputActivities.push($formActivitiesNombre);
         inputActivities.push($formActivitiesPagina);
-        inputActivities.push($formActivitiesUrl);
+        // inputActivities.push($formActivitiesUrl);
         setRequiredFields(true, inputActivities);
 
         let $formSelector = $('#unidad_form');
@@ -231,8 +231,8 @@ $(document).ready(function (e) {
                 $formActivitiesPagina.removeClass('is-invalid');
                  id = '#' + $formActivitiesUrl.attr('id')+'_errors';
                 $(id).remove();
-                $formActivitiesUrl.prev(id);
-                $formActivitiesUrl.removeClass('is-invalid');
+                // $formActivitiesUrl.prev(id);
+                // $formActivitiesUrl.removeClass('is-invalid');
             },
             success: function (data) {
                 if(data.result === 'error') {

@@ -85,6 +85,7 @@ class UnidadController extends AbstractController
                             $a->setNombre($actividad->getNombre());
                             $a->setPagina($actividad->getPagina());
                             $a->setUrl($actividad->getUrl());
+                            $a->setSoundCloud($actividad->getSoundCloud());
                             $actividad = $a;
                         }
                     }

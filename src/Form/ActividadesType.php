@@ -37,12 +37,14 @@ class ActividadesType extends AbstractType
                 'property_path' => 'url',
                 'default_protocol'=>'https',
                 'attr' => ['placeholder'=>'URL de Actividad Genially'],
+                'required' => false,
             ])
             ->add('soundCloud', UrlType::class, [
                 'label'=>false,
                 'property_path' => 'soundCloud',
                 'default_protocol'=>'https',
                 'attr' => ['placeholder'=>'URL para SoundCloud'],
+                'required' => false,
             ])
             ->add('id', HiddenType::class, [
                 'required'=>false,
