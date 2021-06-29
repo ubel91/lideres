@@ -43,13 +43,15 @@ class RecursoType extends AbstractType
             ->add('tipo', EntityType::class, [
                 'class' => TipoRecurso::class,
                 'label' => false,
-                'required'=> true,
+                'required' => true,
                 'placeholder' => 'Escoja un tipo',
                 'choice_label' => function ($choice) {
                     if (TipoRecurso::REFERENCE_URL === $choice->getNombre()) {
                         return 'Youtube';
-                    } elseif (TipoRecurso::REFERENCE_FILE === $choice->getNombre()){
+                    } elseif (TipoRecurso::REFERENCE_FILE === $choice->getNombre()) {
                         return 'Doc(x), xls(x), pdf, mp3, mp4';
+                    } elseif (TipoRecurso::WEB_URL === $choice->getNombre()) {
+                        return 'Referencia web';
                     } else {
                         return '';
                     }
@@ -72,8 +74,7 @@ class RecursoType extends AbstractType
                 'label' => 'Recursos Docentes',
                 'label_attr' => ['class' => 'custom-control-label'],
                 'required' => false
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -88,12 +89,12 @@ class RecursoType extends AbstractType
         $form = $event->getForm();
         $data = $event->getData();
 
-        if ($data instanceof Recurso && $data->getTipo()){
-            if ($data->getTipo()->getNombre() === TipoRecurso::REFERENCE_FILE){
+        if ($data instanceof Recurso && $data->getTipo()) {
+            if ($data->getTipo()->getNombre() === TipoRecurso::REFERENCE_FILE) {
                 $form->add('referenciaFile', FileType::class, [
                     'label' => false,
                     'required' => false,
-                    'mapped'=>false,
+                    'mapped' => false,
                     'attr' => ['placeholder' => 'Escoja un Archivo'],
                     'constraints' => [
                         new File([
@@ -104,21 +105,53 @@ class RecursoType extends AbstractType
                         ])
                     ]
                 ])
-               ->add('referencia', TextType::class, [
-                    'label' => false,
-                    'empty_data' => '',
-                    'row_attr' => ['style' => 'display:none'],
-                    'attr' => ['placeholder' => 'URL']
-                ]);
-            } else {
+                    ->add('enlaceWeb', null, [
+                        'label' => 'Enlace web',
+                        'row_attr' => ['style' => 'display:none; position:absolute; z-index:-1'],
+                        'required' => false,
+                    ])
+                    ->add('referencia', TextType::class, [
+                        'label' => false,
+                        'empty_data' => '',
+                        'row_attr' => ['style' => 'display:none'],
+                        'attr' => ['placeholder' => 'URL']
+                    ]);
+            } elseif ($data->getTipo()->getNombre() === TipoRecurso::REFERENCE_URL) {
                 $form->add('referencia', TextType::class, [
                     'label' => false,
                     'empty_data' => '',
                     'attr' => ['placeholder' => 'URL'],
                 ])
+                    ->add('enlaceWeb', null, [
+                        'label' => 'Enlace web',
+                        'row_attr' => ['style' => 'display:none; position:absolute; z-index:-1'],
+                        'required' => false,
+                    ])
                     ->add('referenciaFile', FileType::class, [
                         'label' => false,
-                        'mapped'=>false,
+                        'mapped' => false,
+                        'attr' => ['placeholder' => 'Escoja un Archivo'],
+                        'row_attr' => ['style' => 'display:none; position:absolute; z-index:-1'],
+                        'required' => false,
+                        'constraints' => [
+                            new File([
+                                'mimeTypes' => $this->mimeTypesFile,
+                                'mimeTypesMessage' => 'Por favor seleccione un archivo válido',
+                                'maxSize' => '500M',
+                                'maxSizeMessage' => 'El archivo es muy grande ({{ size }} {{ suffix }}). Tamaño máximo permitido {{ limit }} {{ suffix }}.'
+                            ])
+                        ]
+                    ]);
+            } else {
+                $form->add('referencia', TextType::class, [
+                    'label' => false,
+                    'empty_data' => '',
+                    'row_attr' => ['style' => 'display:none'],
+                    'attr' => ['placeholder' => 'URL']
+                ])
+                    ->add('referenciaFile', FileType::class, [
+                        'label' => false,
+                        'mapped' => false,
                         'attr' => ['placeholder' => 'Escoja un Archivo'],
                         'row_attr' => ['style' => 'display:none; position:absolute; z-index:-1'],
                         'required' => false,
@@ -131,7 +164,10 @@ class RecursoType extends AbstractType
                             ])
                         ]
                     ])
-                ;
+                    ->add('enlaceWeb', null, [
+                        'label' => 'Enlace web',
+                        'required' => true,
+                    ]);
             }
         } else {
             $form->add('referencia', TextType::class, [
@@ -140,9 +176,14 @@ class RecursoType extends AbstractType
                 'row_attr' => ['style' => 'display:none'],
                 'attr' => ['placeholder' => 'URL']
             ])
+                ->add('enlaceWeb', null, [
+                    'label' => 'Enlace web',
+                    'row_attr' => ['style' => 'display:none; position:absolute; z-index:-1'],
+                    'required' => false,
+                ])
                 ->add('referenciaFile', FileType::class, [
                     'label' => false,
-                    'mapped'=>false,
+                    'mapped' => false,
                     'attr' => ['placeholder' => 'Escoja un Archivo'],
                     'row_attr' => ['style' => 'display:none; position:absolute; z-index:-1'],
                     'required' => false,

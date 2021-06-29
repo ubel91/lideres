@@ -76,6 +76,12 @@ class Recurso
      */
     private $referenciaFile;
 
+    /**
+     * @Groups("recurso")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $enlace_web;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -181,4 +187,21 @@ class Recurso
     {
         return FileUploader::TEXTOS.'/'.$this->getLibro()->getNombre().'/'.FileUploader::RECURSOS.'/'.$this->getReferenciaFile();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getEnlaceWeb()
+    {
+        return $this->enlace_web;
+    }
+
+    /**
+     * @param mixed $enlace_web
+     */
+    public function setEnlaceWeb($enlace_web): void
+    {
+        $this->enlace_web = $enlace_web;
+    }
+
 }

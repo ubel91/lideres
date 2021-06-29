@@ -46,7 +46,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
                 foreach($book->getCodigos() as $code){
                     if($code->getCodebook() === $codeString){
                         if ($code->getFechaFin() < new DateTime('now')){
-                            return '<span class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</span>';
+                            return '<a href="'. $this->router->generate('codigo_edit', [
+                                    'id' => $code->getId(),
+                                ]).'" class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</a>';
                         }
                         if ($code->getFechaFin() >= new DateTime('now')){
                             return '<a href="'. $this->router->generate('codigo_edit', [

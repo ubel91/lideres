@@ -83,6 +83,7 @@ $(document).ready(function (e) {
             $referenciaSelectorFile.parent().parent().append(iconWarning);
             $referenciaSelector.parent().css('position', 'absolute');
             $referenciaSelector.parent().fadeOut();
+            $('#recurso_enlaceWeb').parent().fadeOut();
             $referenciaSelector.prop('required', false);
             $referenciaSelector.val(referenceValue);
             // $referenciaSelectorFile.parent().find('.custom-file-label').html(refenciaValue);
@@ -99,13 +100,20 @@ $(document).ready(function (e) {
             $referenciaSelectorFile.parent().parent().css({position: 'absolute', 'z-index': -1});
             // $referenciaSelectorFile.css('position', 'absolute');
             $referenciaSelectorFile.parent().parent().fadeOut();
+            $('#recurso_enlaceWeb').parent().fadeOut();
             $referenciaSelector.val('');
             $referenciaSelector.parent().css("position", 'relative');
             $referenciaSelector.parent().fadeIn();
             $referenciaSelector.prop('required', true);
             $('[data-toggle="tooltip"]').tooltip({ boundary: 'window' });
-
+        } else{
+            $('#recurso_enlaceWeb').parent().fadeIn();
+            $('#recurso_enlaceWeb').parent().css("position", 'relative');
+            $('#recurso_enlaceWeb').parent().css({position: 'relative', 'z-index': 100});
+            $referenciaSelectorFile.parent().parent().fadeOut();
+            $referenciaSelector.parent().fadeOut();
         }
+
     }
     function validateInput(input, error = '', message = 'Debe escojer un tipo de recurso') {
         input.removeClass('is-invalid');

@@ -18,6 +18,7 @@ class TipoRecurso
 
     const REFERENCE_URL = 'url';
     const REFERENCE_FILE = 'archivo';
+    const WEB_URL = 'web_url';
 
 
     /**
