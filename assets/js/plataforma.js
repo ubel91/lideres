@@ -8,12 +8,17 @@ function menuMedia(item, menuId){
     let $misVideos = menu.find('#misVideos');
     let $misDocumentos = menu.find('#misDocumentos');
     let $misCanciones = menu.find('#misCanciones');
+    let $webs = menu.find('#webs');
     let icon = '';
     let template = null;
     if (item.tipo.nombre === TIPO_URL){
         icon = 'fas fa-link';
         template = templateMedia(icon, item);
         $misVideos.append(template);
+    }else if(item.tipo.nombre === 'web_url'){
+        icon = 'fa fa-link';
+        template = templateMedia(icon, item);
+        $webs.append(template);
     } else {
         switch (item.mimeType) {
             case 'application/pdf':
@@ -87,7 +92,16 @@ function templateMedia(icon, item){
               </div>
             </div>
         `;
-    } else {
+    } else if(item.tipo.nombre === 'web_url'){
+        return `
+        <div class="media my-2" style="border-bottom: 1px solid #00000020">
+          <div class="align-self-center mr-3"><i class="${icon}"></i></div>
+          <div class="media-body">
+            <a href="${item.enlace_web}" id="${customId}" target="_balnk" class="" ><h6 class="mt-0">${item.nombreRecurso}</h6></a>
+          </div>
+        </div>
+    `;
+    }else {
         if (item.mimeType === "audio/mpeg" || item.mimeType === 'video/mp4')
             return `
                 <div class="media my-2" style="border-bottom: 1px solid #00000020">
