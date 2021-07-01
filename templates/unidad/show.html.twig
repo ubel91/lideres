@@ -1,4 +1,4 @@
-{% extends 'dashboard/index.html.twig' %}
+{% extends 'dashboard/index.html.twig' %} 
 
 {%  block stylesheets %}
     {{ parent() }}
@@ -84,7 +84,7 @@
             </div>
         </div>
         <div class="row" style="">
-            <div id="contenedor" class="col-md-5" style="margin: 0 auto 0 auto">
+            <div id="contenedor" class="col-md-12" style="margin: 0 auto 0 auto">
                 <div class="container-magazine">
                     <div id="myDiv" style="background-color: #ededed;" data-url="{{ unidad.getArchivoDir() }}" ></div>
                 </div>
@@ -134,4 +134,6 @@
     </script>
 
     {{ encore_entry_script_tags('unidad') }}
+{% endblock %}
+{% block footer %}
 {% endblock %}

@@ -95,7 +95,7 @@ function loadImagesEditor(flipLeftPage, flipRightPage, preloadImage = null, canv
             canvasContainer.width = ancho * 2 + middle;
             canvasContainer.height = alto;
         } else {
-            let tmpAncho = ancho * 5;
+            let tmpAncho = ancho * 4;
             ancho = alto * 5.5;
             middle = middle * 2;
             alto = tmpAncho;
