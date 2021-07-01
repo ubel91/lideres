@@ -34,17 +34,15 @@ class DashboardController extends AbstractController
         $emLibros = $this->getDoctrine()->getManager();
         $route = 'dashboard/index.html.twig';
 
-        if(count($user->getRoles()) === 1 ){
+        if (count($user->getRoles()) === 1) {
             $roles = $user->getRoles()[0];
-            if ($roles === Role::ROLE_ESTUDIANTE){
+            if ($roles === Role::ROLE_ESTUDIANTE) {
                 $libros = $emLibros->getRepository(Libro::class)->findByRoleEstAndNotActivated();
                 $libros = $this->cleanSearchBooks($libros, $user, $roles);
-            }
-            elseif ($roles === Role::ROLE_PROFESOR){
+            } elseif ($roles === Role::ROLE_PROFESOR) {
                 $libros = $emLibros->getRepository(Libro::class)->findByRoleDocAndNotActivated();
                 $libros = $this->cleanSearchBooks($libros, $user, $roles);
-            }
-            else {
+            } else {
                 $route = 'super/index.html.twig';
             }
             $serializer = $this->get('serializer');
@@ -52,7 +50,6 @@ class DashboardController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $encodedPassword = $passwordEncoder->encodePassword(
                 $user,
                 $form->get('plainPassword')->getData()
@@ -63,20 +60,19 @@ class DashboardController extends AbstractController
 
             $currentPath = $request->headers->get('referer');
 
-            if ($request->isXmlHttpRequest()){
+            if ($request->isXmlHttpRequest()) {
                 return new JsonResponse(['success' => 'Clave actualizada correctamente']);
             }
 
             return $this->redirect($currentPath);
-        }
-        elseif ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
+        } elseif ($form->isSubmitted() && !$form->isValid() && $request->isXmlHttpRequest()) {
             return new JsonResponse(['error' => 'Las claves no coinciden o no son válidas por favor rectifique...']);
         }
 
 
         return $this->render($route, [
             'books' => $libros,
-            'booksJson' => $librosJson
+            'booksJson' => $librosJson,
         ]);
     }
     /**
@@ -103,14 +99,15 @@ class DashboardController extends AbstractController
         /** @var UploadedFile $foto */
         $foto = $request->files->get('photo');
 
-        if (!$id)
+        if (!$id) {
             $user = $this->getUser();
-        else
+        } else {
             $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        }
 
         $photoName = $user->getPhoto();
         if ($foto) {
-            $fotoFileName = $fileUploader->upload($foto, FileUploader::FOTO_PERFIL, $photoName, $user->getUsername() );
+            $fotoFileName = $fileUploader->upload($foto, FileUploader::FOTO_PERFIL, $photoName, $user->getUsername());
             $user->setPhoto($fotoFileName);
         }
         $entityManager = $this->getDoctrine()->getManager();
@@ -124,12 +121,13 @@ class DashboardController extends AbstractController
     public function showPhotoProfile(FileUploader $fileUploader, int $id = null)
     {
         //@Todo Security files
-        if (!$id)
+        if (!$id) {
             $user = $this->getUser();
-        else
+        } else {
             $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        }
 
-        return new StreamedResponse(function () use ($user, $fileUploader){
+        return new StreamedResponse(function () use ($user, $fileUploader) {
             $outputStream = fopen('php://output', 'wb');
             $fileStream = $fileUploader->readStream($user->getPhotoDir());
 
@@ -141,43 +139,44 @@ class DashboardController extends AbstractController
     {
         $deletedItems = [];
         $now = new DateTime('NOW');
-        foreach ($array as $i=>$l){
-            foreach ($l->getLibroActivados() as $la){
-                $outDateCode = false;
-                 foreach ($l->getCodigos() as $codigos){
-                     if ($la->getCodigoActivacion() === $codigos->getCodebook()){
-                        if ($now < $codigos->getFechaInicio() || $codigos->getFechaFin() < $now)
-                            $outDateCode = true;
-                     }
-                 }
-                if($role === Role::ROLE_ESTUDIANTE){
-                    $estudiante = $la->getEstudiante();
-                    if ($estudiante && ($la->getEstudiante()->getId() === $user->getEstudiantes()->getId())){
-                        if (!$outDateCode)
-                            $deletedItems[] = $i;
-                    }
-                } elseif ($role === Role::ROLE_PROFESOR){
-                    $profesor = $la->getProfesor();
-                    if ($profesor && ($la->getProfesor()->getId() === $user->getProfesor()->getId())){
-                        if (!$outDateCode)
-                            $deletedItems[] = $i;
-                    }
-                }
-            }
-        }
-        foreach ($deletedItems as $d){
-            unset($array[$d]);
-        }
-        array_values($array);
+        // foreach ($array as $i=>$l) {
+        //     foreach ($l->getLibroActivados() as $la) {
+        //         $outDateCode = false;
+        //         foreach ($l->getCodigos() as $codigos) {
+        //             if ($la->getCodigoActivacion() === $codigos->getCodebook()) {
+        //                 if ($now < $codigos->getFechaInicio() || $codigos->getFechaFin() < $now) {
+        //                     $outDateCode = true;
+        //                 }
+        //             }
+        //         }
+        //         if ($role === Role::ROLE_ESTUDIANTE) {
+        //             $estudiante = $la->getEstudiante();
+        //             if ($estudiante && ($la->getEstudiante()->getId() === $user->getEstudiantes()->getId())) {
+        //                 if (!$outDateCode) {
+        //                     $deletedItems[] = $i;
+        //                 }
+        //             }
+        //         } elseif ($role === Role::ROLE_PROFESOR) {
+        //             $profesor = $la->getProfesor();
+        //             if ($profesor && ($la->getProfesor()->getId() === $user->getProfesor()->getId())) {
+        //                 if (!$outDateCode) {
+        //                     $deletedItems[] = $i;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // foreach ($deletedItems as $d) {
+        //     unset($array[$d]);
+        // }
+        // array_values($array);
 
         $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
         $ouput = [];
 
-        foreach ($materias as $materia){
-            $ouput[$materia->getNombre()] = $this->getByMateria($materia,$array);
+        foreach ($materias as $materia) {
+            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $array);
         }
-
-        
         return $ouput ? $ouput : [];
     }
 
@@ -186,15 +185,15 @@ class DashboardController extends AbstractController
      * @param array $books
      * @return array
      */
-    public function getByMateria(Materia $materia, $books = array()){
+    public function getByMateria(Materia $materia, $books = array())
+    {
         $ouput = [];
         /** @var Libro $book */
         foreach ($books as $book) {
-            if ($book->getCatalogo()->getMaterias() === $materia)
+            if ($book->getCatalogo()->getMaterias() == $materia) {
                 $ouput[]=$book;
+            }
         }
         return $ouput;
     }
-
-
 }

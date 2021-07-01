@@ -107,8 +107,8 @@ class LibroRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('l')
 //            ->select('l.id', 'l.nombre', 'l.portada', 'l.para_estudiante')
-            // ->leftJoin('l.libroActivados', 'la', 'WITH')
-            // ->leftJoin('la.estudiante', 'e', 'WITH', 'e.id = la.estudiante')
+            ->leftJoin('l.libroActivados', 'la', 'WITH')
+            ->leftJoin('la.estudiante', 'e', 'WITH', 'e.id = la.estudiante')
             ->andWhere('l.para_estudiante = :val')
             ->setParameter('val', 1)
             ->orderBy('l.nombre', 'ASC')
@@ -121,8 +121,8 @@ class LibroRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('l')
 //            ->select('l.id', 'l.nombre', 'l.portada', 'l.para_estudiante')
-            // ->leftJoin('l.libroActivados', 'la', 'WITH')
-            // ->leftJoin('la.profesor', 'p', 'WITH', 'p.id = la.profesor')
+            ->leftJoin('l.libroActivados', 'la', 'WITH')
+            ->leftJoin('la.profesor', 'p', 'WITH', 'p.id = la.profesor')
             ->andWhere('l.para_docente = :val')
             ->setParameter('val', 1)
             ->orderBy('l.nombre', 'ASC')
