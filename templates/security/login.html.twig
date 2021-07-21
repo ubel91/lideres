@@ -7,6 +7,7 @@
                 background-image: url("{{ asset('build/assets/images/bg.9248ea3d.jpeg') }}");
                 background-repeat: no-repeat;
                 background-size: cover;
+                background-position: center;
             }
             #container-1{
                 border: solid 6px white;
@@ -49,18 +50,18 @@
             </div>
             
             <div class="row h-100">
-                <div class="col-md-2"></div>
+                <div class="col-md-3"></div>
                 <div class="col-md-3 justify-content-center align-items-center text-center">
                     <div id="container-1" class="card pt-5" style="height: 320px">
                         <div class="card-body mt-3">
-                            <h4 style="text-transform:uppercase; color:white;">¿Eres nuevo?</h4><br>
-                            <a href="{{ path('app_register') }}" class="btn btn-link"><h4 style="color:white;">REGÍSTRATE</h4></a>
+                            <h4 style="text-transform:uppercase; color:white;font-weight: bold;">¿Eres nuevo?</h4><br>
+                            <a href="{{ path('app_register') }}" class="btn btn-link"><h4 style="color:white;font-weight: bold;">REGÍSTRATE</h4></a>
                             <br>
                             <a href="{{ path('app_register') }}" class="btn"><i class="fa fa-2x fa-user-plus fa-circle"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2"></div>
+                {# <div class="col-md-1"></div> #}
                 <div  class="col-md-3 justify-content-center align-items-center">
                     <div id="container-2" class="card" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;"   style="height: 320px">
                         <div class="card-body">
@@ -82,13 +83,13 @@
                                             </div>
                                         </div>
                                         <div class="form-row text-center">
-                                            <h4 style="text-transform:uppercase; color:white;" class="mb-3">INICIAR SESIÓN</h4>
+                                            <h4 style="text-transform:uppercase; color:white;font-weight: bold;" class="mb-3">INICIAR SESIÓN</h4>
                                         </div>
                                         <div class="form-row">
                                             <div class="input-group" style="margin-bottom: 1rem">
                                                 <input type="text" value="{{ last_username }}" name="username"
                                                        id="inputUsername" class="form-control" required autofocus
-                                                       placeholder="Usuario">
+                                                       placeholder="Usuario o correo electrónico">
                                                 <div class="input-group-append">
                                             <span class="input-group-text" id="basic-addon2"><i
                                                         class="fas fa-lock"></i></span>
@@ -130,15 +131,19 @@
     {% block  footer%}
         <footer  class="footer fixed-bottom mb-2">
             <div class="row">
-                <div class="col-md-12 text-center">
-                    <a href='https://wa.me/+5930986257804' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/WHATSAPP-LOGO.png') }}" class="rounded" alt="..."></a>
+            
+                    <div class="col-md-5 pt-2">
+                        <h4 style="text-transform:uppercase; color:white;font-weight: bold;float: right;" >CONTÁCTENOS</h4>
+                    </div>
+                    <div class="col-md-7">
+                        <a href='https://wa.me/+5930986257804' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/WHATSAPP-LOGO.png') }}" class="rounded" alt="..."></a>
                     
                     <a href='https://www.instagram.com/lideresec' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/INTAGRAM-LOGO.png') }}" class="rounded" alt="..."></a>
                     
                     <a href='https://www.facebook.com/lideresed' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/FACEBOOK-LOGO.png') }}" class="rounded" alt="..."></a>
                     
                     <a href='https://youtube.com/channel/UCka8tDjH0Ne8EgXkxv2WSpQ' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/YOUTUBE-LOGO.png') }}" class="rounded" alt="..."></a>
-                </div>
+                    </div>
             </div>
         </footer>
     {% endblock %}

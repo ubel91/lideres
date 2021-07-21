@@ -92,12 +92,12 @@
                     <div class="col-lg-4 offset-lg-2">
                         {% block searcher %}
                             <form class="mr-5">
-                                <div class="input-group m-3">
+                                <div class="input-group ">
                                     <input type="text" id="searchInput" class="form-control"
                                            placeholder="Detallar el titulo del libro"
                                            aria-label="Detallar el titulo del libro" aria-describedby="button-addon2">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary custom-btn" type="button"
+                                        <button class="btn btn-outline-secondary custom-btn" type="button" style="color:white"
                                                 id="button-addon2"><span><i class="fas fa-search"></i></span></button>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row p-5 justify-content-center">
+                <div class="row px-5 justify-content-center">
                     <div class="row">
                         {% block book_loop %}
                             {% for k, m in books %}
@@ -121,7 +121,7 @@
                                             <figure id="{{ 'libro_'~l.id }}" class="figure mr-5">
                                                 <a href="{{ path('libro_activado_book_new',{id: l.id}) }}">
                                                     <img src="{{ l.portadaDir|imagine_filter('squared_thumbnail_medium') }}"
-                                                         height="300" class="figure-img rounded" alt="libro_portada">
+                                                         height="250" class="figure-img rounded" alt="libro_portada">
                                                 </a>
                                                 {% block picture_footer %}
                                                     <figcaption class="figure-caption" style="text-align: center">

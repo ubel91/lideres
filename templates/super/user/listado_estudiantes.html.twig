@@ -38,7 +38,7 @@
                                     <th scope="col">Nombres</th>
                                     <th scope="col">Institución</th>
                                     <th scope="col">Provincia</th>
-                                    <th scope="col">Cantón</th>
+                                    <th scope="col">Última conexión</th>
                                     <th scope="col">Grado</th>
                                     <th scope="col" style="min-width: 5rem">Acciones</th>
                                 </tr>
@@ -63,7 +63,7 @@
                                         <td>{{ u.nombre }}</td>
                                         <td>{{ u.nombreinstitucion }}</td>
                                         <td>{{ u.canton.provincia.nombre }}</td>
-                                        <td>{{ u.canton.nombre }}</td>
+                                        <td>{{ u.lastLogin ? u.lastLogin|date('d/m/Y h:m') : '' }}</td>
                                         <td>{{ u.estudiantes.grado }}</td>
                                         <td>
                                             <a class="text-primary" href="{{ path('profile', {'id': u.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>

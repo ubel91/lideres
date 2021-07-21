@@ -24,6 +24,18 @@
             display: none !important;
             visibility: hidden;
         }
+        body {
+            /* The image used */
+            background-image: url('{{ asset('build/assets/images/background_register.svg') }}');
+
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: :right;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
 
     </style>
 {% endblock %}
@@ -40,7 +52,7 @@
         <div class="row">
             <div class="col" style="padding: 1rem">
                 {{form_row(registrationForm.photo)}}
-                <img src="{{ user.photo ? path('photoProfile', {'id':user.id}) : asset('build/assets/images/user.png')}}" id="profilePic" alt="foto_perfil" class="img-thumbnail rounded-circle profile-pic" width="100">
+                <img src="{{ user.photo ? path('photoProfile', {'id':user.id}) : asset('build/assets/images/user.png')}}" id="profilePic" alt="foto_perfil" class="img-border img-thumbnail rounded-circle profile-pic" width="100">
                 <br>
                 {% if user.username %}
                     <strong>{{ user.username }}</strong>

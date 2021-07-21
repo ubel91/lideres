@@ -22,10 +22,7 @@
 
 {% block book_loop %}
 	<div class="row">
-		<div class="col-md-12 text-center">
-			<a class="btn btn-success" href="{{ path('libro_activado_new',{id:user.id}) }}">Activar Texto</a>
-		</div>
-		<div class="col-md-12 mt-2">
+		<div class="col-md-12">
 			{% for k, m in result %}
 				{% if m|length > 0 %}
 					<div class="card">
@@ -36,7 +33,7 @@
 							{% for r in m %}
 								{% set images = r.libro.portadaDir %}
 								{% set footer = r.libro.nombre %}
-								<figure class="figure mr-5">
+								<figure class="figure mr-1">
 									<a href="{{ path('libro_show', {'id': r.libro.id}) }}">
 										<img src="{{ r.libro.portadaDir|imagine_filter('squared_thumbnail_medium') }}" height="300" class="figure-img rounded" alt="libro_portada">
 									</a>

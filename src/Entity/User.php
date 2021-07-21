@@ -138,6 +138,11 @@ class User implements UserInterface
     private $imagenGuardadas;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogin;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -514,6 +519,18 @@ class User implements UserInterface
     public function setCelular($celular): void
     {
         $this->celular = $celular;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
     }
 
 }

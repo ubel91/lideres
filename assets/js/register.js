@@ -1,11 +1,19 @@
+
+   const ESTUDIANTES = 'estudiantes';
+   const PROFESORES = 'profesores';
+   const INSTITUTO_DEFAULT = 'Sistema';
+
 function hideAndShow(){
 
     let $radioEstudiante = $('[data="radioEstudiante"]:radio');
     let $radioProfesor = $('[data="radioProfesor"]:radio');
-
-    if ($radioEstudiante.prop('checked') === true || $radioProfesor.prop('checked') === true)
+    $('#container').removeClass('hidden')
+    if ($radioEstudiante.prop('checked') === true)
     {
-        $('#container').removeClass('hidden')
+        registerBehavior(ESTUDIANTES);
+    }
+    else if( $radioProfesor.prop('checked') === true){
+        registerBehavior(PROFESORES);
     }
 }
 $(document).ready(function () {
@@ -21,7 +29,9 @@ $(document).ready(function () {
     let $institutionInput = $('#registration_form_nombre_institucion');
     let $photo = $('#registration_form_photo');
 
+   
     hideAndShow();
+
     $radioEstudiante.on('change',function () {
         hideAndShow();
     });
@@ -29,10 +39,8 @@ $(document).ready(function () {
         hideAndShow();
     });
 
+    $radioEstudiante.trigger('change');
 
-    const ESTUDIANTES = 'estudiantes';
-    const PROFESORES = 'profesores';
-    const INSTITUTO_DEFAULT = 'Sistema';
 
     function registerBehavior(param) {
         if (param === ESTUDIANTES){
