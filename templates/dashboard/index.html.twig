@@ -82,7 +82,7 @@
 {% endblock %}
 {% block right_block %}
     <div class="col-lg-9">
-        <div class="card mt-2" >
+        <div class="card mt-2" style="padding: 0!important">
             <div class="card-header" style="background-color: #1c8e8a; color: white;">
                 <div class="row">
                     <div class="col-3">
@@ -106,8 +106,8 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="row px-5 justify-content-center">
+            <div class="card-body" style="margin-top: -13 !important;">
+                <div class="row px-3 justify-content-center">
                     <div class="row">
                         {% block book_loop %}
                             {% for k, m in books %}
