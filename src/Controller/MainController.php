@@ -25,6 +25,7 @@ class MainController extends AbstractController
      */
     public function index():Response
     {
-        return $this->render('home_page.html.twig');
+        // return $this->render('home_page.html.twig');
+        return $this->redirect('http://inicio.corplideres.com/?page_id=9');
     }
 }
