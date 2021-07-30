@@ -15,9 +15,50 @@ function hideAndShow(){
     else if( $radioProfesor.prop('checked') === true){
         registerBehavior(PROFESORES);
     }
+    $('body').removeClass('body')
+}
+function registerBehavior(param) {
+    if (param === ESTUDIANTES){
+        $('#profesores_form').fadeOut(function () {
+            $('#estudiantes_form').fadeIn();
+
+            $('#registration_form_profesorForm_numero_identificacion').removeAttr('required');
+            $('#registration_form_profesorForm_celular').removeAttr('required');
+
+            $('#registration_form_estudiantesForm_fecha_nacimiento').prop('required', true);
+            $('#registration_form_estudiantesForm_nombre_representante').prop('required', true);
+            $('#registration_form_estudiantesForm_primer_apellido_representante').prop('required', true);
+            $('#registration_form_estudiantesForm_segundo_apellido_representante').prop('required', true);
+            $('#registration_form_estudiantesForm_numero_identificacion').prop('required', true);
+            $('#registration_form_estudiantesForm_celular').prop('required', true);
+            $('#registration_form_estudiantesForm_grado').prop('required', true);
+
+            // $('#register_form').trigger("reset");
+            // .trigger("reset");
+        })
+    } else if (param === PROFESORES){
+        $('#estudiantes_form').fadeOut(function () {
+            $('#profesores_form').fadeIn();
+
+            $('#registration_form_profesorForm_numero_identificacion').prop('required', true);
+            $('#registration_form_profesorForm_celular').prop('required', true);
+
+            $('#registration_form_estudiantesForm_fecha_nacimiento').removeAttr('required');
+            $('#registration_form_estudiantesForm_nombre_representante').removeAttr('required');
+            $('#registration_form_estudiantesForm_primer_apellido_representante').removeAttr('required');
+            $('#registration_form_estudiantesForm_segundo_apellido_representante').removeAttr('required');
+            $('#registration_form_estudiantesForm_numero_identificacion').removeAttr('required');
+            $('#registration_form_estudiantesForm_celular').removeAttr('required');
+            $('#registration_form_estudiantesForm_grado').removeAttr('required');
+
+            // $('#register_form').trigger("reset");
+            //.trigger("reset");
+            // .reset();
+        });
+    }
 }
 $(document).ready(function () {
-
+    $('body').addClass('body')
     $('.js-datepicker').datepicker({
         format: 'DD/MM/YYYY',
         changeYear: true,
@@ -42,46 +83,7 @@ $(document).ready(function () {
     // $radioEstudiante.trigger('change');
 
 
-    function registerBehavior(param) {
-        if (param === ESTUDIANTES){
-            $('#profesores_form').fadeOut(function () {
-                $('#estudiantes_form').fadeIn();
 
-                $('#registration_form_profesorForm_numero_identificacion').removeAttr('required');
-                $('#registration_form_profesorForm_celular').removeAttr('required');
-
-                $('#registration_form_estudiantesForm_fecha_nacimiento').prop('required', true);
-                $('#registration_form_estudiantesForm_nombre_representante').prop('required', true);
-                $('#registration_form_estudiantesForm_primer_apellido_representante').prop('required', true);
-                $('#registration_form_estudiantesForm_segundo_apellido_representante').prop('required', true);
-                $('#registration_form_estudiantesForm_numero_identificacion').prop('required', true);
-                $('#registration_form_estudiantesForm_celular').prop('required', true);
-                $('#registration_form_estudiantesForm_grado').prop('required', true);
-
-                // $('#register_form').trigger("reset");
-                // .trigger("reset");
-            })
-        } else if (param === PROFESORES){
-            $('#estudiantes_form').fadeOut(function () {
-                $('#profesores_form').fadeIn();
-
-                $('#registration_form_profesorForm_numero_identificacion').prop('required', true);
-                $('#registration_form_profesorForm_celular').prop('required', true);
-
-                $('#registration_form_estudiantesForm_fecha_nacimiento').removeAttr('required');
-                $('#registration_form_estudiantesForm_nombre_representante').removeAttr('required');
-                $('#registration_form_estudiantesForm_primer_apellido_representante').removeAttr('required');
-                $('#registration_form_estudiantesForm_segundo_apellido_representante').removeAttr('required');
-                $('#registration_form_estudiantesForm_numero_identificacion').removeAttr('required');
-                $('#registration_form_estudiantesForm_celular').removeAttr('required');
-                $('#registration_form_estudiantesForm_grado').removeAttr('required');
-
-                // $('#register_form').trigger("reset");
-                //.trigger("reset");
-                // .reset();
-            });
-        }
-    }
 
     if ($institutionInput.val() === INSTITUTO_DEFAULT)
         $institutionInput.val("");
