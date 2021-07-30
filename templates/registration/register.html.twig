@@ -36,6 +36,18 @@
             background-repeat: no-repeat;
             background-size: cover;
         }
+        .col-foto:after {
+            background-color: #593fee;
+            opacity: 0.6;
+            content: '';
+            display: block;
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 60px;
+            bottom: 10px;
+            z-index: -1;
+        }
 
     </style>
 {% endblock %}
@@ -50,7 +62,7 @@
             {{ form_errors(registrationForm) }}
         </div>
         <div class="row">
-            <div class="col" style="padding: 1rem">
+            <div class="col col-foto" style="padding: 1rem; ">
                 {{form_row(registrationForm.photo)}}
                 <img src="{{ user.photo ? path('photoProfile', {'id':user.id}) : asset('build/assets/images/user.png')}}" id="profilePic" alt="foto_perfil" class="img-border img-thumbnail rounded-circle profile-pic" width="100">
                 <br>
@@ -67,6 +79,10 @@
                 {{ form_row(registrationForm.plainPassword) }}
                 {{ form_row(registrationForm.e_mail) }}
                 {{ form_row(registrationForm.roles) }}
+                {{ form_row(registrationForm.registrar) }}
+            </div>
+            <div class="col-lg-2">
+               
             </div>
         </div>
     </div>
@@ -119,20 +135,9 @@
                 </div>
             </div>
         </div>
-        {{ form_row(registrationForm.registrar) }}
+        
         <div id="profesores_form" style="display:none">
-{#            <div class="row ml-5 mt-2">#}
-{#                <h5 style="color: #aacd4e"> Registro del Docente </h5>#}
-{#            </div>#}
-
-{#            <div class="row justify-content-left mt-3">#}
-{#                <div class="col-lg-4">#}
-{#                    <h6 class="ml-3 mb-3">Mis Datos Personales</h6>#}
-{#                    {{ form_row(registrationForm.profesorForm.numero_identificacion) }}#}
-{#                    {{ form_row(registrationForm.profesorForm.celular) }}#}
-{#                </div>#}
-                {{ form_end(registrationForm) }}
-{#            </div>#}
+        {{ form_end(registrationForm) }}
         </div>
     </div>
 
