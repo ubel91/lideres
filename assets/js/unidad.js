@@ -8,7 +8,7 @@ import Pageflip from './pageflip/page-flip';
 import pdfjsLib from './pdfjs/pdf';
 // import './pdf.worker';
 import ImagedEditor from 'tui-image-editor';
-import {customTheme} from './theme-image-editor/default-theme-editor';
+import { customTheme } from './theme-image-editor/default-theme-editor';
 import translate from '../i18n/image-editor';
 // import {whiteTheme} from './theme-image-editor/white-theme';
 import './sticky_notes';
@@ -42,8 +42,12 @@ let onePageBehavior = true;
 let actualHeight = 0;
 
 let imagesGuardadasPage = {};
-if (typeof (imagenesGuardadas) !== 'undefined' && imagenesGuardadas.length)
-    imagesGuardadasPage = convertArrayToObject(imagenesGuardadas, 'pagina');
+
+$(function () {
+    if (typeof (imagenesGuardadas) !== 'undefined' && imagenesGuardadas.length)
+        imagesGuardadasPage = convertArrayToObject(imagenesGuardadas, 'pagina');
+
+})
 
 
 $(window).on('resize', function (e) {
@@ -56,7 +60,7 @@ $(window).on('resize', function (e) {
     resizeTimer = setTimeout(function () {
 
         resizeTimer = false;
-        $(window).trigger('resizeend'); 
+        $(window).trigger('resizeend');
 
     }, 100);
 
@@ -87,12 +91,15 @@ function loadImagesEditor(flipLeftPage, flipRightPage, preloadImage = null, canv
 
     if (!preloadImage) {
         //
-        let ancho = parseInt($toggleEditor.width()) / 2;
-        let alto = parseInt($toggleEditor.height());
+        let ancho = parseInt(900);
+        let alto = parseInt(800);
         let middle = ancho / 14;
 
+        console.log(horizontalBehavior)
+
         if (!horizontalBehavior) {
-            canvasContainer.width = ancho * 2 + middle;
+            // canvasContainer.width = ancho * 2 + middle;
+            canvasContainer.width = ancho;
             canvasContainer.height = alto;
         } else {
             let tmpAncho = ancho * 4;
@@ -116,8 +123,9 @@ function loadImagesEditor(flipLeftPage, flipRightPage, preloadImage = null, canv
 
 
         context.drawImage(image1, 0, 0, ancho, alto);
-        context.drawImage(image3, ancho, 0, middle, alto);
-        context.drawImage(image2, ancho + middle, 0, ancho, alto);
+        // context.drawImage(image3, ancho, 0, middle, alto);
+        if (flipRightPage != 'undefined')
+            context.drawImage(image2, ancho + middle, 0, ancho, alto);
 
     } else {
         let ancho = canvasContainer.width;
@@ -150,7 +158,7 @@ function convertToBlob(b64Data, contentType = '', sliceSize = 512) {
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
 }
 
 function base64Encode(str) {
@@ -182,13 +190,15 @@ function base64Encode(str) {
 }
 
 function maximize() {
-    // $('#editor').fadeToggle();
     let textBtn = $fullWidth.text();
 
-    if (textBtn === TXT_AMPLIAR) {
+    if (textBtn === TXT_AMPLIAR){
         $fullWidth.text(TXT_REDUCIR);
-    } else
+        $navBar.fadeOut();
+    } else{
         $fullWidth.text(TXT_AMPLIAR);
+        $navBar.fadeIn();
+    }
 
     block_height = $right.height();
     block_width = $right.width();
@@ -199,41 +209,42 @@ function maximize() {
     let blockHeightAfter = $right.height();
     let blockWidthAfter = $right.width();
 
-    let dimensionVarWidth = ((blockHeightAfter * blockWidthAfter) * $pageFlip.height()) / (block_height * block_width);
+    let dimensionVarWidth = ((blockHeightAfter*blockWidthAfter)*$pageFlip.height())/(block_height*block_width);
 
-    $pageFlip.height(dimensionVarWidth);
+    // $pageFlip.height(dimensionVarWidth);
 
     $pageFlip.animate({
         height: dimensionVarWidth,
     });
 
-    $right.fadeOut(function () {
-        if (!horizontalBehavior) {
-            $right.toggleClass('mx-5');
-        } else {
-            $right.removeClass('mx-5');
-        }
-        if ($leftBody.css('display') !== 'none') {
-            $leftBody.toggle("slide");
-            if (!horizontalBehavior)
-                $navBar.slideUp(function () {
-                    $right.fadeIn();
-                });
-            else
-                $right.fadeIn();
-        } else {
-            $navBar.slideDown();
-            if (!horizontalBehavior) {
-                $right.removeClass('col-lg-12');
-                $right.addClass('col-lg-9');
-                $leftBody.toggle("slide", function () {
-                    $right.fadeIn();
-                });
-            } else
-                $right.fadeIn();
-        }
-    });
+    // $right.fadeOut(function () {
+    //     if (!horizontalBehavior){
+    //         $right.toggleClass('mx-5');
+    //     }else {
+    //         $right.removeClass('mx-5');
+    //     }
+    //     if ($leftBody.css('display') !== 'none'){
+    //         $leftBody.toggle("slide");
+    //         if (!horizontalBehavior)
+    //             $navBar.slideUp(function () {
+    //                 $right.fadeIn();
+    //             });
+    //         else
+    //             $right.fadeIn();
+    //     } else {
+    //         $navBar.slideDown();
+    //         if (!horizontalBehavior){
+    //             $right.removeClass('col-lg-12');
+    //             $right.addClass('col-lg-9');
+    //             $leftBody.toggle("slide",function () {
+    //                 $right.fadeIn();
+    //             });
+    //         }
 
+    //         else
+    //             $right.fadeIn();
+    //     }
+    // });
 }
 
 $fullWidth.click((e) => {
@@ -252,7 +263,7 @@ function convertArrayToObject(array, key) {
 
 function viewDeleteBehavior(imagenesGuardadasPage, flip) {
 
-    let paginaActual = flip.leftPage + '_' + flip.rightPage;
+    let paginaActual = flip.leftPage;
 
     if (imagenesGuardadasPage[paginaActual]) {
 
@@ -278,6 +289,8 @@ function initEditor(preloadImage = null, deletePage = false) {
     let $actionBtn = $('#actionBtn');
     let imageBlob = null;
 
+    console.log(preloadImage)
+
     let canvasEditor = document.getElementById('canvas');
     if (canvasEditor) {
 
@@ -302,21 +315,14 @@ function initEditor(preloadImage = null, deletePage = false) {
                     path: imageBlob,
                     name: 'EditImage'
                 },
-                theme: customTheme,
+                // theme: customTheme,
                 locale: translate,
                 // initMenu: 'draw',
-                menu: ['draw', 'shape', 'icon', 'text'],
+                // menu: ['draw', 'shape', 'icon', 'text'],
                 menuBarPosition: 'left',
-                uiSize: {
-                    // width: '90%',
-                    // // width: combined.width*2 + 'px',
-                    // height: '100%'
-                                        // height: combined.height + 'px'
-                },
-
             },
-            cssMaxWidth: 2048,
-            cssMaxHeight: 1536,
+            // cssMaxWidth: 1900,
+            // cssMaxHeight: 1536,
             selectionStyle: {
                 cornerSize: 20,
                 rotatingPointOffset: 70
@@ -408,9 +414,9 @@ function adjustSize() {
 
 $('#editor').click((e) => {
     if ($navBar.css('display') !== 'none') {
-        // maximize();
+        maximize();
     }
-    if ($('#contenedor').hasClass('col-md-5')){
+    if ($('#contenedor').hasClass('col-md-5')) {
         $('#contenedor').removeClass('col-md-5').addClass('col-md-9 col-sm-11');
     }
     else
@@ -428,7 +434,7 @@ $('#editor').click((e) => {
 
 $saveBtn.click(function (e) {
 
-    let paginaImagenG = leftPage.number + '_' + rightPage.number;
+    let paginaImagenG = leftPage.number;
     let editedImagen = false;
     let idImagen = '';
     let url = '';
@@ -441,7 +447,7 @@ $saveBtn.click(function (e) {
     let b64Data = imgEl.src;
     b64Data = b64Data.replace(/^data:image\/(png|jpg);base64,/, "");
     const b64toBlob = convertToBlob(b64Data, contentType);
-    let imageName = unidad_nombre + '_' + leftPage.number + '_' + rightPage.number;
+    let imageName = unidad_nombre + '_' + leftPage.number;
     let formData = new FormData();
 
     if (imagesGuardadasPage)
@@ -466,7 +472,7 @@ $saveBtn.click(function (e) {
         url = Routing.generate('imagen_guardada_new');
     else {
         formData.append('imagen_guardada[mimeType]', mimeType);
-        url = Routing.generate('imagen_guardada_edit', {'id': idImagen});
+        url = Routing.generate('imagen_guardada_edit', { 'id': idImagen });
     }
     $.ajax({
         url: url,
@@ -529,7 +535,7 @@ $view.click(function (e) {
 
         let id = $view.data('image_id');
         let imageExist = new Image();
-        let urlFecth = Routing.generate('imagen_guardada', {'id': id});
+        let urlFecth = Routing.generate('imagen_guardada', { 'id': id });
 
         $.ajax({
             url: urlFecth,
@@ -588,11 +594,11 @@ $delete_page.click(function (e) {
         cancelButtonText: 'No'
     }).then((result) => {
         if (result.value) {
-            let Ruta = Routing.generate('imagen_guardada_delete', {'id': id});
+            let Ruta = Routing.generate('imagen_guardada_delete', { 'id': id });
             $.ajax({
                 type: 'POST',
                 url: Ruta,
-                data: ({id: id}),
+                data: ({ id: id }),
                 async: true,
                 dataType: "json",
                 beforeSend: () => {
@@ -666,7 +672,7 @@ $('#one_page').click(function (e) {
         $element.removeClass('fa-file-alt');
         $element.addClass('fa-book-open');
     } else {
-        // onePageBehavior = false;
+        onePageBehavior = false;
         $('.pages-container').fadeOut(function () {
             makeFlip(arrayImages);
         });
@@ -738,7 +744,7 @@ function makeFlip(arrayPages) {
 
     }
 
-    document.querySelector("#page-flip").style.height =  canvas.height + 'px';
+    document.querySelector("#page-flip").style.height = canvas.height + 'px';
     document.querySelector("#page-flip").style.lineHeight = canvas.height + 'px';
 
     viewDeleteBehavior(imagesGuardadasPage, flip);
@@ -810,7 +816,7 @@ function draw(cheigth, limitDraw = 0) {
 
 pdfjsLib.disableWorker = true;
 // let loadingTask = pdfjsLib.getDocument(pdf);
-let loadingTask = pdfjsLib.getDocument({ url: pdf, disableAutoFetch: true, disableStream: true})
+let loadingTask = pdfjsLib.getDocument({ url: pdf, disableAutoFetch: true, disableStream: true })
 let loop = 4;
 let limit = 0;
 let drawLimit = 6;
@@ -894,14 +900,14 @@ loadingTask.promise.then(function (pdf) {
 
     getPage();
 
-    observer.observe($('div#myDiv')[0], {attributes: false, childList: true, characterData: false, subtree: true});
+    observer.observe($('div#myDiv')[0], { attributes: false, childList: true, characterData: false, subtree: true });
 
 
     function getPage() {
 
         pdf.getPage(currentPage).then(function (page) {
 
-            let viewport = page.getViewport({scale: scale});
+            let viewport = page.getViewport({ scale: scale });
 
             let canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
 
@@ -913,7 +919,7 @@ loadingTask.promise.then(function (pdf) {
             canvas.height = viewport.height;
             canvas.width = viewport.width;
 
-            let renderContext = {canvasContext: ctx, viewport: viewport};
+            let renderContext = { canvasContext: ctx, viewport: viewport };
 
 
             page.render(renderContext).promise.then(function () {

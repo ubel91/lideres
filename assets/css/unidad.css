@@ -11,16 +11,16 @@
     height: 100%;
     margin: 0 auto;
 }
-
-#tui-image-editor{
-    width: 180% !important;
-    height: 140% !important;
-}
+ 
+ #tui-image-editor{
+    width: 100% !important;
+    height: 100% !important;
+} 
 
 
 .tui-image-editor-container {
-    min-height: 40rem !important;
-    /*max-width: 95rem !important;*/
+    min-height: 40rem !important; 
+    max-width: 95rem !important;
 }
 
 .tui-image-editor-save-btn {

@@ -38,7 +38,7 @@
     </div>
 {% endblock %}
 {% block left_body %}
-    {#{{ parent() }}#}
+    
 {% endblock %}
 {% block left_body_footer %}
     <div class="row">
@@ -91,7 +91,7 @@
                 <div style="height: 100%; width: 100%; display: none">
                     <canvas id="canvasFlip"></canvas>
                 </div>
-                <div id="tui-image-editor" style="height: 100%; width: 100%; display: none">
+                <div id="tui-image-editor" class="col-md-12" style="display: none">
                     <canvas style="width: 90%;" id="canvas"></canvas>
                 </div>
             </div>
@@ -118,7 +118,7 @@
     <script>
         let $myDiv = $('#myDiv');
         let pdf = '{{ path('unitLoader', {id: unidad.id}) }}';
-        let unidad = '{{ unidad.id }}';
+        const unidad = '{{ unidad.id }}';
         let unidad_nombre = '{{ unidad.nombre }}';
         let csfr = '{{ csrf_token('notas') }}';
         let csfrImagenGuardada = '{{ csrf_token('imagen_guardada') }}';
@@ -127,6 +127,7 @@
         let activities = {{ actividades | json_encode | raw }};
         activities = JSON.parse(activities);
         let imagenesGuardadas = {{ imagenesGuardadas | json_encode | raw }};
+
         imagenesGuardadas = JSON.parse(imagenesGuardadas);
         let pathGlue = '{{ asset('build/assets/images/glue.28bbcb9d.png') }}';
         let image3 = new Image();
