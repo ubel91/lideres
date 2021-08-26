@@ -56,7 +56,7 @@ $(window).on('resize', function (e) {
     resizeTimer = setTimeout(function () {
 
         resizeTimer = false;
-        $(window).trigger('resizeend');
+        $(window).trigger('resizeend'); 
 
     }, 100);
 
@@ -308,9 +308,9 @@ function initEditor(preloadImage = null, deletePage = false) {
                 menu: ['draw', 'shape', 'icon', 'text'],
                 menuBarPosition: 'left',
                 uiSize: {
-                    width: '100%',
-                    // width: combined.width*2 + 'px',
-                    height: '100%'
+                    // width: '90%',
+                    // // width: combined.width*2 + 'px',
+                    // height: '100%'
                                         // height: combined.height + 'px'
                 },
 
@@ -411,10 +411,10 @@ $('#editor').click((e) => {
         // maximize();
     }
     if ($('#contenedor').hasClass('col-md-5')){
-        $('#contenedor').removeClass('col-md-5').addClass('col-md-10 col-sm-12');
+        $('#contenedor').removeClass('col-md-5').addClass('col-md-9 col-sm-11');
     }
     else
-        $('#contenedor').removeClass('col-md-10 col-sm-12').addClass('col-md-5');
+        $('#contenedor').removeClass('col-md-9 col-sm-11').addClass('col-md-5');
 
     if ($toggleEditor && $toggleEditor.css('display') === 'none') {
         $view.prop('disabled', true);
@@ -809,7 +809,8 @@ function draw(cheigth, limitDraw = 0) {
 // }
 
 pdfjsLib.disableWorker = true;
-let loadingTask = pdfjsLib.getDocument(pdf);
+// let loadingTask = pdfjsLib.getDocument(pdf);
+let loadingTask = pdfjsLib.getDocument({ url: pdf, disableAutoFetch: true, disableStream: true})
 let loop = 4;
 let limit = 0;
 let drawLimit = 6;
