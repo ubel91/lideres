@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -272,12 +273,24 @@ class UnidadController extends AbstractController
     {
         //@Todo Security files
 
-        $response = new StreamedResponse(function () use ($unidad, $fileUploader){
-            $outputStream = fopen('php://output', 'wb');
+        $response = new StreamedResponse(static function () use ($unidad, $fileUploader){
+            $outputStream = fopen('php://output', 'rb');
             $fileStream = $fileUploader->readStream($unidad->getArchivoDir());
             stream_copy_to_stream($fileStream, $outputStream);
         });
-        $response->headers->set('Content-Type', $unidad->getMimeType());
+
+        $filename = \str_replace(['%', '/', '\\'], '', $unidad->getNombreArchivo());
+
+        
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $filename,
+            \filter_var($filename, \FILTER_SANITIZE_STRING, \FILTER_FLAG_STRIP_HIGH)
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $unidad->getMimeType()?: 'application/octet-stream');
+
         return $response;
     }
 
