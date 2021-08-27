@@ -16,7 +16,7 @@ import './sticky_notes';
 // const Routing = require('./routing');
 
 let pages = [], heights = [], width = [], height = 0, currentPage = 1;
-let scale = 5;
+let scale = 0.5;
 let arrayImages = [];
 let flip = {};
 let $right = $('#right_block');
@@ -814,9 +814,16 @@ function draw(cheigth, limitDraw = 0) {
 //     return drawPivot;
 // }
 
+
+
+
+
+
+
+
 pdfjsLib.disableWorker = true;
 // let loadingTask = pdfjsLib.getDocument(pdf);
-let loadingTask = pdfjsLib.getDocument({ url: pdf, disableAutoFetch: true, disableStream: true })
+let loadingTask = pdfjsLib.getDocument(pdf)
 let loop = 4;
 let limit = 0;
 let drawLimit = 6;
