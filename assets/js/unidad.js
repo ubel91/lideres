@@ -35,7 +35,7 @@ let $leftBody = $('#left_body');
 let $navBar = $('.navbar');
 const TXT_AMPLIAR = 'Ampliar';
 const TXT_REDUCIR = 'Reducir';
-const PIVOT_WIDTH = 1003.75;
+const PIVOT_WIDTH = 900;
 const PIVOT_HEIGHT = 725.375;
 let horizontalBehavior = false;
 let onePageBehavior = true;
@@ -94,8 +94,6 @@ function loadImagesEditor(flipLeftPage, flipRightPage, preloadImage = null, canv
         let ancho = parseInt(900);
         let alto = parseInt(800);
         let middle = ancho / 14;
-
-        console.log(horizontalBehavior)
 
         if (!horizontalBehavior) {
             // canvasContainer.width = ancho * 2 + middle;
@@ -192,10 +190,10 @@ function base64Encode(str) {
 function maximize() {
     let textBtn = $fullWidth.text();
 
-    if (textBtn === TXT_AMPLIAR){
+    if (textBtn === TXT_AMPLIAR) {
         $fullWidth.text(TXT_REDUCIR);
         $navBar.fadeOut();
-    } else{
+    } else {
         $fullWidth.text(TXT_AMPLIAR);
         $navBar.fadeIn();
     }
@@ -209,7 +207,7 @@ function maximize() {
     let blockHeightAfter = $right.height();
     let blockWidthAfter = $right.width();
 
-    let dimensionVarWidth = ((blockHeightAfter*blockWidthAfter)*$pageFlip.height())/(block_height*block_width);
+    let dimensionVarWidth = ((blockHeightAfter * blockWidthAfter) * $pageFlip.height()) / (block_height * block_width);
 
     // $pageFlip.height(dimensionVarWidth);
 
@@ -690,6 +688,7 @@ function horizontalTransf() {
 }
 
 function makeFlip(arrayPages) {
+
     let newHeight;
     let horizontalWidth = '100%';
     let divisor = 1.20;
@@ -705,6 +704,7 @@ function makeFlip(arrayPages) {
             $pageFlip.width(horizontalWidth);
         }
         $pageFlip.height(newHeight);
+       
 
     } else {
         let currentPageFlip = flip.leftPage;
@@ -751,6 +751,7 @@ function makeFlip(arrayPages) {
     if (horizontalBehavior) {
         horizontalTransf();
     }
+
 }
 
 // function saveCache(base64Img, num){
@@ -832,6 +833,7 @@ let realCurrentPage = 0;
 let cheight = 0;
 
 loadingTask.promise.then(function (pdf) {
+
     if (drawLimit > pdf.numPages)
         drawLimit = pdf.numPages;
     limit = pdf.numPages;
@@ -905,7 +907,10 @@ loadingTask.promise.then(function (pdf) {
         }
     });
 
+
     getPage();
+
+
 
     observer.observe($('div#myDiv')[0], { attributes: false, childList: true, characterData: false, subtree: true });
 

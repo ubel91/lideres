@@ -3,15 +3,26 @@
 namespace App\Entity;
 
 use App\Repository\CodigoRepository;
+use App\Traits\BlameableEntityTrait;
+use App\Traits\SoftDeleteableEntityTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteable;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=CodigoRepository::class)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
+ * @ORM\HasLifecycleCallbacks 
  */
 class Codigo
 {
+    use TimestampableTrait;
+    use BlameableEntityTrait;
+    use SoftDeleteableEntityTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

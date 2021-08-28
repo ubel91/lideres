@@ -4,22 +4,34 @@ namespace App\Entity;
 
 use App\Repository\UnidadRepository;
 use App\Service\FileUploader;
+use App\Traits\BlameableEntityTrait;
+use App\Traits\SoftDeleteableEntityTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteable;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UnidadRepository::class)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  * @UniqueEntity(
  *               fields={"nombre","libro"},
  *               errorPath="nombre",
  *               message="Existe una unidad con el nombre {{ value }} asignada al libro ")
+ * @ORM\HasLifecycleCallbacks
  */
 class Unidad
 {
+    use TimestampableTrait;
+    use BlameableEntityTrait;
+    use SoftDeleteableEntityTrait;
+
     const CREATED_SUCCESS = 'Unidad creada exitosamente';
     /**
      * @Groups("unidad")

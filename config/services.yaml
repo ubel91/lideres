@@ -76,6 +76,9 @@ services:
 
     Symfony\Component\Asset\Context\RequestStackContext: '@assets.context'
 
-    # App\Cache\RedisCache:
-    #   $redis_database_host: '%env(resolve:REDIS_DATABASE_HOST)%'
-    #   $redis_database_port: '%env(resolve:REDIS_DATABASE_PORT)%'
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
