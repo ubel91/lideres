@@ -16,7 +16,7 @@ import './sticky_notes';
 // const Routing = require('./routing');
 
 let pages = [], heights = [], width = [], height = 0, currentPage = 1;
-let scale = 1;
+let scale = 2;
 let arrayImages = [];
 let flip = {};
 let $right = $('#right_block');
