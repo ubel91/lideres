@@ -4,22 +4,33 @@ namespace App\Entity;
 
 use App\Repository\LibroRepository;
 use App\Service\FileUploader;
+use App\Traits\BlameableEntityTrait;
+use App\Traits\SoftDeleteableEntityTrait;
+use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteable;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=LibroRepository::class)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  * @UniqueEntity(
  *     fields={"nombre"},
  *     message="El texto {{ value }} ha sido registrado anteriormente"
  *     )
+ * @ORM\HasLifecycleCallbacks
  */
 class Libro
 {
+    use TimestampableTrait;
+    use BlameableEntityTrait;
+    use SoftDeleteableEntityTrait;
     /**
      * @Groups("libro")
      * @ORM\Id()
