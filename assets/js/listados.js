@@ -57,13 +57,12 @@ $(document).ready( function () {
         }).then((result) => {
             if (result.value) {
                 let route = $(selectorBtn).data('routename');
-                let Ruta = Routing.generate(route);
+                let Ruta = Routing.generate(route,{id:id});
                 $.ajax({
                     type: 'POST',
                     url: Ruta,
                     data: ({id: id}),
                     async: true,
-                    dataType: "json",
                     beforeSend: () => {
                         $('.overlayGeneral').show();
                     },

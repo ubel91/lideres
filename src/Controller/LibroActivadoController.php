@@ -14,6 +14,7 @@ use App\Repository\LibroActivadoRepository;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -195,20 +196,52 @@ class LibroActivadoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="libro_activado_delete", methods={"DELETE"})
+     * @Route("/delete/{id}", name="libro_activado_delete", options={"expose" = true}, methods={"POST"}) 
      * @param Request $request
      * @param LibroActivado $libroActivado
      * @return Response
      */
     public function delete(Request $request, LibroActivado $libroActivado): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$libroActivado->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($libroActivado);
             $entityManager->flush();
+        return new JsonResponse([
+            'data' => 'success',
+        ]);
+    }
+
+
+    /**
+     * @Route("/desactivate/{id}", name="desactivate_code", options={"expose" = true}, methods={"POST"}) 
+     * @param Request $request
+     * @param LibroActivado $libroActivado
+     * @return Response
+     */
+    public function desactivate(Request $request, Codigo $code): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var LibroActivado $libroActivado */
+        $libroActivado = $em->getRepository(LibroActivado::class)->findOneBy([
+            'codigoActivacion' => $code->getCodebook()
+        ]);
+
+        if($libroActivado){
+            $em->remove($libroActivado);
+            $code->setLibro(null);
+            $em->flush();
+            return new JsonResponse([
+                'data' => [
+                    'success' => 'Eliminado'
+                ],
+            ]);
         }
 
-        return $this->redirectToRoute('libro_activado_index');
+        return new JsonResponse([
+            'data' => [
+                'error' => 'Ha ocurrido un error'
+            ],
+        ]);
     }
 
     private function cleanSearchBooks($array, $user, $role): ?array
