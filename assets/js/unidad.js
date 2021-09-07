@@ -6,7 +6,6 @@ import 'sweetalert2'
 
 import pdfjsLib from './pdfjs/pdf';
 const pdfjsWorker = import('./pdfjs/pdf.worker');
-import ImagedEditor from 'tui-image-editor';
 import { customTheme } from './theme-image-editor/default-theme-editor';
 import translate from '../i18n/image-editor';
 import './sticky_notes';
@@ -14,8 +13,6 @@ import './sticky_notes';
 let imagesGuardadasPage = {};
 
 pdfjsLib.workerSrc = pdfjsWorker
-
-const loadingTask = pdfjsLib.getDocument(pdf);
 
 let imageEditor = null;
 let $view = $('#view');
@@ -35,354 +32,350 @@ $(function () {
     if (typeof (imagenesGuardadas) !== 'undefined' && imagenesGuardadas.length)
         imagesGuardadasPage = convertArrayToObject(imagenesGuardadas, 'pagina');
 
-        function renderPage(num) {
-            pageRendering = true;
-            pdfDoc.getPage(num).then(function (page) {
-                var viewport = page.getViewport({ scale: scale });
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-        
-                var renderContext = {
-                    canvasContext: ctx,
-                    viewport: viewport
-                };
-                var renderTask = page.render(renderContext);
-    
-                renderTask.promise.then(function () {
-                    pageRendering = false;
-                    if (pageNumPending !== null) {
-                        renderPage(pageNumPending);
-                        pageNumPending = null;
-                    }
-                    pagesBase64[num] = {
-                        img: canvas.toDataURL('image/jpeg'),
-                        width: viewport.width,
-                        height: viewport.height,
-                    };
-        
-                    let exist = false;
-                    let id;
-                    // for (let i=0; i<imagenesGuardadas.length; i++) {
-                    //     if (parseInt(imagenesGuardadas[i].pagina) === pageNum) {
-                    //         exist = true;
-                    //         id = imagenesGuardadas[i].id;
-                    //     }
-                    // }
-                    for (let imagen in imagesGuardadasPage) {
-                        if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && imagesGuardadasPage[imagen].pagina === pageNum) {
-                            exist = true;
-                            id = imagesGuardadasPage[imagen].id;
-                        }
-                    }
-                    if (exist) {
-                        $('#view').fadeIn();
-                        $('#view').data('image_id',id);
-                    }
-                    else {
-                        $('#view').fadeOut();
-                    }
-                    viewDeleteBehavior(imagesGuardadasPage);
-                });
-            });
-            document.getElementById('page_num').textContent = num;
-        }
-        /**
-         * If another page rendering in progress, waits until the rendering is
-         * finised. Otherwise, executes rendering immediately.
-         */
-        function queueRenderPage(num) {
-            if (pageRendering) {
-                pageNumPending = num;
-            } else {
-                renderPage(num);
-            }
-        }
-        
-        /**
-        * Displays previous page.
-        */
-        function onPrevPage() {
-            if (pageNum <= 1) {
-                return;
-            }
-            pageNum--;
-            queueRenderPage(pageNum);
-        }
-        document.getElementById('prev').addEventListener('click', onPrevPage);
+    function renderPage(num) {
+        pageRendering = true;
+        pdfDoc.getPage(num).then(function (page) {
+            var viewport = page.getViewport({ scale: scale });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-        
-
-/**
-* Displays next page.
-*/
-function onNextPage() {
-    if (pageNum >= pdfDoc.numPages) {
-        return;
-    }
-    pageNum++;
-    queueRenderPage(pageNum);
-}
-document.getElementById('next').addEventListener('click', onNextPage);
-
-
-/**
-* Asynchronously downloads PDF.
-*/
-pdfjsLib.getDocument(pdf).promise.then(function (pdfDoc_) {
-    pdfDoc = pdfDoc_;
-    document.getElementById('page_count').textContent = pdfDoc.numPages;
-
-    // Initial/first page rendering
-    renderPage(pageNum);
-});
-
-document.getElementById('editor').addEventListener('click', function (event) {
-    initEditor();
-});
-
-function initEditor(image = null){
-    if (editorVisible) {
-        $('#canvasFlip').fadeIn();
-        $('#tui-image-editor').fadeOut();
-        $('#save').fadeOut();
-        editorVisible = false;
-    } else {
-        editorVisible = true;
-        const ImageEditor = require('tui-image-editor');
-        $('#canvasFlip').fadeOut();
-        $('#tui-image-editor').fadeIn();
-        $('#save').fadeIn();
-        imageEditor = new ImageEditor(document.querySelector('#tui-image-editor'), {
-            includeUI: {
-                loadImage: {
-                    path: image != null ? image.src :pagesBase64[pageNum].img,
-                    name: 'SampleImage',
-                },
-                locale: translate,
-                theme: customTheme,
-                menuBarPosition: 'left',
-
-            },
-            selectionStyle: {
-                cornerSize: 20,
-                rotatingPointOffset: 70,
-            },
-        });
-    }
-}
-
-$('#save').click(function (e) {
-
-    let paginaImagenG = pageNum;
-    let editedImagen = false;
-    let idImagen = '';
-    let url = '';
-    let mimeType = '';
-
-    let imgEl = new Image();
-    imgEl.src = imageEditor.toDataURL();
-
-    const contentType = 'image/png';
-    let b64Data = imgEl.src;
-    b64Data = b64Data.replace(/^data:image\/(png|jpg);base64,/, "");
-    const b64toBlob = convertToBlob(b64Data, contentType);
-    let imageName = unidad_nombre + '_' + pageNum;
-    let formData = new FormData();
-
-    if (imagesGuardadasPage)
-        for (let imagen in imagesGuardadasPage) {
-            if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && parseInt(imagesGuardadasPage[imagen].pagina) === paginaImagenG) {
-                editedImagen = true;
-                imageName = imagesGuardadasPage[imagen].nombre;
-                idImagen = imagesGuardadasPage[imagen].id;
-                mimeType = imagesGuardadasPage[imagen].mimeType;
-            }
-        }
-
-
-    formData.append('imagen_guardada[archivo]', b64toBlob, imageName);
-    formData.append('imagen_guardada[nombre]', imageName);
-    formData.append('imagen_guardada[pagina]', paginaImagenG);
-    formData.append('imagen_guardada[unidad]', unidad);
-    formData.append('imagen_guardada[_token]', csfrImagenGuardada);
-
-
-    if (!editedImagen)
-        url = Routing.generate('imagen_guardada_new');
-    else {
-        formData.append('imagen_guardada[mimeType]', mimeType);
-        url = Routing.generate('imagen_guardada_edit', { 'id': idImagen });
-    }
-    $.ajax({
-        url: url,
-        type: "POST",
-        cache: false,
-        contentType: false,
-        processData: false,
-        mimeType: "multipart/form-data",
-        data: formData,
-        dataType: "JSON",
-        beforeSend: function () {
-            // $('.overlayGeneral').show();
-        },
-        success: function (data) {
-            let resultData = data.data;
-            swal.fire({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                // timerProgressBar: true,
-                icon: data.result,
-                title: data.message
-            });
-
-            resultData = JSON.parse(resultData);
-            let responsePage = resultData.pagina;
-            imagesGuardadasPage[responsePage] = {
-                archivo: resultData.archivo,
-                id: resultData.id,
-                mimeType: resultData.mimeType,
-                nombre: resultData.nombre,
-                pagina: responsePage,
-                unidad: []
+            var renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
             };
+            var renderTask = page.render(renderContext);
 
-            // $fullWidth.attr('disabled', true);
-            $('#editor').attr('disabled', true);
-            $delete_page.fadeIn();
+            renderTask.promise.then(function () {
+                pageRendering = false;
+                if (pageNumPending !== null) {
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+                pagesBase64[num] = {
+                    img: canvas.toDataURL('image/jpeg'),
+                    width: viewport.width,
+                    height: viewport.height,
+                };
 
-            $delete_page.data('image_id', resultData.id);
-            $delete_page.data('pagina_actual', responsePage);
-
-            $view.show().children().replaceWith('<span class="fas fa-eye-slash"></span>');
-            $view.prop('title', 'Volver al Libro');
-            $view.attr('disabled', false);
-            $view.data('image_id', resultData.id);
-        },
-        complete: function () {
-            // $('.overlayGeneral').hide();
+                let exist = false;
+                let id;
+                for (let imagen in imagesGuardadasPage) {
+                    if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && imagesGuardadasPage[imagen].pagina === pageNum) {
+                        exist = true;
+                        id = imagesGuardadasPage[imagen].id;
+                    }
+                }
+                if (exist) {
+                    $('#view').fadeIn();
+                    $('#view').data('image_id', id);
+                    $('#editor').fadeOut();
+                }
+                else {
+                    $('#view').fadeOut();
+                    $('#editor').fadeIn();
+                }
+                viewDeleteBehavior(imagesGuardadasPage);
+            });
+        });
+        document.getElementById('page_num').textContent = num;
+    }
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finised. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
         }
+    }
 
-    })
+    /**
+    * Displays previous page.
+    */
+    function onPrevPage() {
+        if (pageNum <= 1) {
+            return;
+        }
+        pageNum--;
+        queueRenderPage(pageNum);
+    }
+    document.getElementById('prev').addEventListener('click', onPrevPage);
 
-});
 
-$view.click(function (e) {
 
-    if (!$view.children().hasClass('fa-eye-slash')) {
+    /**
+    * Displays next page.
+    */
+    function onNextPage() {
+        if (pageNum >= pdfDoc.numPages) {
+            return;
+        }
+        pageNum++;
+        queueRenderPage(pageNum);
+    }
+    document.getElementById('next').addEventListener('click', onNextPage);
 
-        let id = $view.data('image_id');
-        let imageExist = new Image();
-        let urlFecth = Routing.generate('imagen_guardada', { 'id': id });
 
+    /**
+    * Asynchronously downloads PDF.
+    */
+    pdfjsLib.getDocument(pdf).promise.then(function (pdfDoc_) {
+        pdfDoc = pdfDoc_;
+        document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+        // Initial/first page rendering
+        renderPage(pageNum);
+    });
+
+    document.getElementById('editor').addEventListener('click', function (event) {
+        initEditor();
+    });
+
+    function initEditor(image = null) {
+        if (editorVisible) {
+            $('#canvasFlip').fadeIn();
+            $('#tui-image-editor').fadeOut();
+            $('#save').fadeOut();
+            editorVisible = false;
+        } else {
+            editorVisible = true;
+            const ImageEditor = require('tui-image-editor');
+            $('#canvasFlip').fadeOut();
+            $('#tui-image-editor').fadeIn();
+            $('#save').fadeIn();
+            imageEditor = new ImageEditor(document.querySelector('#tui-image-editor'), {
+                includeUI: {
+                    loadImage: {
+                        path: image != null ? image.src : pagesBase64[pageNum].img,
+                        name: 'SampleImage',
+                    },
+                    locale: translate,
+                    theme: customTheme,
+                    menuBarPosition: 'left',
+
+                },
+                selectionStyle: {
+                    cornerSize: 20,
+                    rotatingPointOffset: 70,
+                },
+            });
+        }
+    }
+
+    $('#save').click(function (e) {
+
+        let paginaImagenG = pageNum;
+        let editedImagen = false;
+        let idImagen = '';
+        let url = '';
+        let mimeType = '';
+
+        let imgEl = new Image();
+        imgEl.src = imageEditor.toDataURL();
+
+        const contentType = 'image/png';
+        let b64Data = imgEl.src;
+        b64Data = b64Data.replace(/^data:image\/(png|jpg);base64,/, "");
+        const b64toBlob = convertToBlob(b64Data, contentType);
+        let imageName = unidad_nombre + '_' + pageNum;
+        let formData = new FormData();
+
+        if (imagesGuardadasPage)
+            for (let imagen in imagesGuardadasPage) {
+                if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && parseInt(imagesGuardadasPage[imagen].pagina) === paginaImagenG) {
+                    editedImagen = true;
+                    imageName = imagesGuardadasPage[imagen].nombre;
+                    idImagen = imagesGuardadasPage[imagen].id;
+                    mimeType = imagesGuardadasPage[imagen].mimeType;
+                }
+            }
+
+
+        formData.append('imagen_guardada[archivo]', b64toBlob, imageName);
+        formData.append('imagen_guardada[nombre]', imageName);
+        formData.append('imagen_guardada[pagina]', paginaImagenG);
+        formData.append('imagen_guardada[unidad]', unidad);
+        formData.append('imagen_guardada[_token]', csfrImagenGuardada);
+
+
+        if (!editedImagen)
+            url = Routing.generate('imagen_guardada_new');
+        else {
+            formData.append('imagen_guardada[mimeType]', mimeType);
+            url = Routing.generate('imagen_guardada_edit', { 'id': idImagen });
+        }
         $.ajax({
-            url: urlFecth,
-            mimeType: "image/png",
+            url: url,
+            type: "POST",
             cache: false,
-            xhr: function () {
-                let xhr = new XMLHttpRequest();
-                xhr.responseType = 'blob';
-                return xhr;
-            },
+            contentType: false,
+            processData: false,
+            mimeType: "multipart/form-data",
+            data: formData,
+            dataType: "JSON",
             beforeSend: function () {
-                $('.overlayGeneral').show();
+                // $('.overlayGeneral').show();
             },
             success: function (data) {
-                let url = window.URL || window.webkitURL;
-                imageExist.src = url.createObjectURL(data);
-                initEditor(imageExist);
-                // $('#editor').attr('disabled', true);
-                $view.children().replaceWith('<span class="fas fa-eye-slash"></span>');
-                $view.prop('title', 'Volver al Libro');
+                let resultData = data.data;
+                swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    // timerProgressBar: true,
+                    icon: data.result,
+                    title: data.message
+                });
 
+                resultData = JSON.parse(resultData);
+                let responsePage = resultData.pagina;
+                imagesGuardadasPage[responsePage] = {
+                    archivo: resultData.archivo,
+                    id: resultData.id,
+                    mimeType: resultData.mimeType,
+                    nombre: resultData.nombre,
+                    pagina: responsePage,
+                    unidad: []
+                };
+
+                // $fullWidth.attr('disabled', true);
+                $('#editor').attr('disabled', true);
+                $delete_page.fadeIn();
+
+                $delete_page.data('image_id', resultData.id);
+                $delete_page.data('pagina_actual', responsePage);
+
+                $view.show().children().replaceWith('<span class="fas fa-eye-slash"></span>');
+                $view.prop('title', 'Volver al Libro');
+                $view.attr('disabled', false);
+                $view.data('image_id', resultData.id);
             },
             complete: function () {
-                $('.overlayGeneral').hide();
+                // $('.overlayGeneral').hide();
             }
-        });
-    } else {
-        // if ($navBar.css('display') !== 'none')
-            // maximize();
-            initEditor();
-        // $fullWidth.attr('disabled', false);
-        $('#editor').attr('disabled', false);
-        $view.children().replaceWith('<span class="fas fa-eye"></span>');
-        $view.prop('title', 'Ver Página Editada');
-    }
 
-});
+        })
 
-$delete_page.click(function (e) {
+    });
 
-    let id = $delete_page.data('image_id');
-    let paginaActual = $delete_page.data('pagina_actual');
-    let textDelete = "Esta acción <b class='text-danger'>NO</b> se puede deshacer.";
+    $view.click(function (e) {
 
-    swal.fire({
-        title: '<span class="text-danger">' + '¿Esta seguro de borrar la página marcada?' + '</span>',
-        html: textDelete,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No'
-    }).then((result) => {
-        if (result.value) {
-            let Ruta = Routing.generate('imagen_guardada_delete', { 'id': id });
+        if (!$view.children().hasClass('fa-eye-slash')) {
+
+            let id = $view.data('image_id');
+            let imageExist = new Image();
+            let urlFecth = Routing.generate('imagen_guardada', { 'id': id });
+
             $.ajax({
-                type: 'POST',
-                url: Ruta,
-                data: ({ id: id }),
-                async: true,
-                dataType: "json",
-                beforeSend: () => {
+                url: urlFecth,
+                mimeType: "image/png",
+                cache: false,
+                xhr: function () {
+                    let xhr = new XMLHttpRequest();
+                    xhr.responseType = 'blob';
+                    return xhr;
+                },
+                beforeSend: function () {
                     $('.overlayGeneral').show();
                 },
-                success: (data, response) => {
-                    if (data.success) {
-                        swal.fire(
-                            'Borrado',
-                            data.success,
-                            'success'
-                        );
-
-                        delete imagesGuardadasPage[paginaActual];
-
-                        $delete_page.fadeOut();
-                        $view.children().replaceWith('<span class="fas fa-eye"></span>');
-                        $view.prop('title', 'Ver Página Editada');
-                        $view.fadeOut();
-                        // $fullWidth.attr('disabled', false);
-                        $('#editor').attr('disabled', false);
-                        $('#save').fadeOut();
-                        initEditor();
-
-                        // if (textBtn === TXT_AMPLIAR) {
-                        //     $leftBody.fadeIn();
-                        //     $('#tui-image-editor').hide();
-                        // } else {
-                        //     $('#tui-image-editor').hide();
-                        //     // $('#myDiv').fadeIn();
-                        // }
-
-                    } else if (data.error) {
-                        swal.fire(
-                            'Borrado',
-                            data.error,
-                            'error'
-                        );
-                    }
+                success: function (data) {
+                    let url = window.URL || window.webkitURL;
+                    imageExist.src = url.createObjectURL(data);
+                    initEditor(imageExist);
+                    // $('#editor').attr('disabled', true);
+                    $view.children().replaceWith('<span class="fas fa-eye-slash"></span>');
+                    $view.prop('title', 'Volver al Libro');
 
                 },
                 complete: function () {
                     $('.overlayGeneral').hide();
                 }
-            })
+            });
+        } else {
+            // if ($navBar.css('display') !== 'none')
+            // maximize();
+            initEditor();
+            // $fullWidth.attr('disabled', false);
+            $('#editor').attr('disabled', false);
+            $view.children().replaceWith('<span class="fas fa-eye"></span>');
+            $view.prop('title', 'Ver Página Editada');
         }
+
     });
-});
+
+    $delete_page.click(function (e) {
+
+        let id = $delete_page.data('image_id');
+        let paginaActual = $delete_page.data('pagina_actual');
+        let textDelete = "Esta acción <b class='text-danger'>NO</b> se puede deshacer.";
+
+        swal.fire({
+            title: '<span class="text-danger">' + '¿Esta seguro de borrar la página marcada?' + '</span>',
+            html: textDelete,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                let Ruta = Routing.generate('imagen_guardada_delete', { 'id': id });
+                $.ajax({
+                    type: 'POST',
+                    url: Ruta,
+                    data: ({ id: id }),
+                    async: true,
+                    dataType: "json",
+                    beforeSend: () => {
+                        $('.overlayGeneral').show();
+                    },
+                    success: (data, response) => {
+                        if (data.success) {
+                            swal.fire(
+                                'Borrado',
+                                data.success,
+                                'success'
+                            );
+
+                            delete imagesGuardadasPage[paginaActual];
+
+                            $delete_page.fadeOut();
+                            $view.children().replaceWith('<span class="fas fa-eye"></span>');
+                            $view.prop('title', 'Ver Página Editada');
+                            $view.fadeOut();
+                            // $fullWidth.attr('disabled', false);
+                            $('#editor').attr('disabled', false);
+                            $('#save').fadeOut();
+                            initEditor();
+
+                            // if (textBtn === TXT_AMPLIAR) {
+                            //     $leftBody.fadeIn();
+                            //     $('#tui-image-editor').hide();
+                            // } else {
+                            //     $('#tui-image-editor').hide();
+                            //     // $('#myDiv').fadeIn();
+                            // }
+
+                        } else if (data.error) {
+                            swal.fire(
+                                'Borrado',
+                                data.error,
+                                'error'
+                            );
+                        }
+
+                    },
+                    complete: function () {
+                        $('.overlayGeneral').hide();
+                    }
+                })
+            }
+        });
+    });
 })
 
 
@@ -642,12 +635,14 @@ function viewDeleteBehavior(imagenesGuardadasPage) {
         $delete_page.show();
         $delete_page.data('image_id', image.id);
         $delete_page.data('pagina_actual', paginaActual);
+        $('#editor').hide();
 
     } else {
         $delete_page.fadeOut();
         $view.children().replaceWith('<span class="fas fa-eye"></span>');
         $view.prop('title', 'Ver Página Editada');
         $view.hide();
+        $('#editor').show();
     }
 }
 
