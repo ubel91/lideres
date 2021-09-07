@@ -62,10 +62,16 @@ $(function () {
         
                     let exist = false;
                     let id;
-                    for (let i=0; i<imagenesGuardadas.length; i++) {
-                        if (parseInt(imagenesGuardadas[i].pagina) === pageNum) {
+                    // for (let i=0; i<imagenesGuardadas.length; i++) {
+                    //     if (parseInt(imagenesGuardadas[i].pagina) === pageNum) {
+                    //         exist = true;
+                    //         id = imagenesGuardadas[i].id;
+                    //     }
+                    // }
+                    for (let imagen in imagesGuardadasPage) {
+                        if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && imagesGuardadasPage[imagen].pagina === pageNum) {
                             exist = true;
-                            id = imagenesGuardadas[i].id;
+                            id = imagesGuardadasPage[imagen].id;
                         }
                     }
                     if (exist) {
@@ -185,7 +191,7 @@ $('#save').click(function (e) {
 
     if (imagesGuardadasPage)
         for (let imagen in imagesGuardadasPage) {
-            if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && imagesGuardadasPage[imagen].pagina === paginaImagenG) {
+            if (imagesGuardadasPage.hasOwnProperty(imagen) && imagesGuardadasPage[imagen].hasOwnProperty('pagina') && parseInt(imagesGuardadasPage[imagen].pagina) === paginaImagenG) {
                 editedImagen = true;
                 imageName = imagesGuardadasPage[imagen].nombre;
                 idImagen = imagesGuardadasPage[imagen].id;
