@@ -88,9 +88,12 @@ $(function () {
      * finised. Otherwise, executes rendering immediately.
      */
     function queueRenderPage(num) {
+
         if (pageRendering) {
             pageNumPending = num;
         } else {
+            $('.overlayGeneral').css('background', "rgba(0,0,0, 0.9)");
+            $('.overlayGeneral').show();
             renderPage(num);
         }
     }
@@ -143,8 +146,12 @@ $(function () {
             $('#tui-image-editor').fadeOut();
             $('#save').fadeOut();
             editorVisible = false;
+            $('#prev').show();
+            $('#next').show();
         } else {
             editorVisible = true;
+            $('#prev').hide();
+            $('#next').hide();
             const ImageEditor = require('tui-image-editor');
             $('#canvasFlip').fadeOut();
             $('#tui-image-editor').fadeIn();
