@@ -23,7 +23,7 @@ var pdfDoc = null,
     pageNum = 1,
     pageRendering = false,
     pageNumPending = null,
-    scale = 1,
+    scale = 5,
     editorVisible = false,
     canvas = document.getElementById('canvasFlip'),
     ctx = canvas.getContext('2d');
@@ -31,6 +31,9 @@ var pdfDoc = null,
 $(function () {
     if (typeof (imagenesGuardadas) !== 'undefined' && imagenesGuardadas.length)
         imagesGuardadasPage = convertArrayToObject(imagenesGuardadas, 'pagina');
+
+        $('.overlayGeneral').css('background', "rgba(0,0,0, 0.9)");
+        $('.overlayGeneral').show();
 
     function renderPage(num) {
         pageRendering = true;
@@ -74,6 +77,7 @@ $(function () {
                     $('#view').fadeOut();
                     $('#editor').fadeIn();
                 }
+                $('.overlayGeneral').hide();
                 viewDeleteBehavior(imagesGuardadasPage);
             });
         });
@@ -216,7 +220,7 @@ $(function () {
             data: formData,
             dataType: "JSON",
             beforeSend: function () {
-                // $('.overlayGeneral').show();
+                $('.overlayGeneral').show();
             },
             success: function (data) {
                 let resultData = data.data;
@@ -254,7 +258,7 @@ $(function () {
                 $view.data('image_id', resultData.id);
             },
             complete: function () {
-                // $('.overlayGeneral').hide();
+                $('.overlayGeneral').hide();
             }
 
         })
