@@ -15,13 +15,11 @@ $(document).ready( function () {
             "language": {
                 "url": '../../build/assets/i18n/spanish.json'
             },
+            responsive: true,
             dom: 'Bfrtip',
             buttons: [
                 { "extend": 'excelHtml5', "text":'<span class="fa fa-file-excel"></span> Exportar',"className": 'btn btn-default btn-xs' },,
                 { "extend": 'csvHtml5', "text":'<span class="fa fa-file-excel"></span> Exportar',"className": 'btn btn-default btn-xs' },
-                // 'excelHtml5',
-                // 'csvHtml5',
-                // 'pdfHtml5'
             ],
             drawCallback: function () {
                 let pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');

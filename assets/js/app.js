@@ -17,6 +17,7 @@ import '@fortawesome/fontawesome-free/js/all.min';
 import 'datatables.net';
 import 'datatables.net-bs4';
 import 'datatables.net-buttons-bs4';
+import 'datatables.net-responsive'
 import swal from 'sweetalert2';
 require ('jquery-ui/ui/i18n/datepicker-es');
 require ('jquery-ui/themes/base/all.css');
