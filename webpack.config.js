@@ -27,6 +27,7 @@ Encore
     .addEntry('login', './assets/js/login.js')
     .addEntry('unidad', './assets/js/unidad.js')
     .addEntry('listados', './assets/js/listados.js')
+    .addEntry('listado_profesores', './assets/js/listado_profesores.js')
     .addEntry('activar_libro', './assets/js/activar_libro.js')
     .addEntry('ajax_categoria', './assets/js/ajax_categoria.js')
     .addEntry('left_panel', './assets/js/left_panel.js')

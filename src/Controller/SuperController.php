@@ -260,6 +260,11 @@ class SuperController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->find($id);
         if ($user) {
+            $libros = $entityManager->getRepository(LibroActivado::class)
+                ->findByUserProfesor($id);
+            foreach ($libros as $libro){
+                $entityManager->remove($libro);
+            }
             $entityManager->remove($user);
             $entityManager->flush();
             return new JsonResponse(['success' => 'Elemento eliminado correctamente']);
@@ -269,7 +274,7 @@ class SuperController extends AbstractController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      * @Security("is_granted(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'])")
      * @Route("/super/texts/list", name="listado_de_textos")
      */
