@@ -48,6 +48,7 @@ class TextosController extends AbstractController
         }
 
         if (count($user->getRoles()) === 1)
+            $result = [];
             if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE) {
                 $id = $user->getEstudiantes() ? $user->getEstudiantes()->getId() : null;
                 $result = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id); 

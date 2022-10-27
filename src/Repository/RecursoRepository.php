@@ -56,7 +56,7 @@ class RecursoRepository extends ServiceEntityRepository
      * @param null $book
      * @return array|null
      */
-    public function findRecursosById(int $id, string $role, $book =null)
+    public function findRecursosById(int $id, string $role, $book = null)
     {
         $resultArray = null;
 
@@ -79,13 +79,39 @@ class RecursoRepository extends ServiceEntityRepository
                 ->andWhere('estudiante.id=:id')
                 ->orderBy('libro.nombre');
         }
-        if ($book)
-        {
+        if ($book) {
             $qb
                 ->andWhere('libro.id=:book')
-                ->setParameter('book',$book);
+                ->setParameter('book', $book);
         }
-        $qb->setParameter('id',$id);
+        $qb->setParameter('id', $id);
+        $result = $qb->getQuery()->getResult();
+
+        if (array_key_exists(0, $result)) {
+            $hasted = $result[0]->getLibro()->getNombre();
+            $resultArray = $this->normalizeArray($result, $hasted);
+        }
+
+        return $resultArray;
+    }
+
+    public function findRecursos($book = null)
+    {
+        $resultArray = null;
+
+        $qb = $this->createQueryBuilder('recurso');
+
+
+        $qb
+            ->leftJoin('recurso.libro', 'libro')
+            ->leftJoin('libro.libroActivados', 'libroActivados')
+            ->orderBy('libro.nombre');
+
+        if ($book) {
+            $qb
+                ->andWhere('libro.id=:book')
+                ->setParameter('book', $book);
+        }
         $result = $qb->getQuery()->getResult();
 
         if (array_key_exists(0, $result)) {

@@ -66,21 +66,20 @@ class RecursoController extends AbstractController
      * @param RecursoRepository $recursoRepository
      * @param Request $request
      *
-     * @return JsonResponse|Response
+     * @return Response
      */
-    public function plataforma(RecursoRepository $recursoRepository, Request $request)
+    public function platform(RecursoRepository $recursoRepository, Request $request)
     {
         $user = $this->getUser();
         $recursos = [];
 
         $book = $request->get('book');
-        if ($this->getUser()->getEstudiantes()){
-            $recursos = $recursoRepository->findRecursosById($user->getEstudiantes()->getId(), Role::ROLE_ESTUDIANTE,$book);
-        }
-        else if ($this->getUser()->getProfesor()){
-            $recursos = $recursoRepository->findRecursosById($user->getProfesor()->getId(), Role::ROLE_PROFESOR,$book);
-        }
-
+        if ($this->getUser()->getEstudiantes()) {
+            $recursos = $recursoRepository->findRecursosById($user->getEstudiantes()->getId(), Role::ROLE_ESTUDIANTE, $book);
+        } else if ($this->getUser()->getProfesor()) {
+            $recursos = $recursoRepository->findRecursosById($user->getProfesor()->getId(), Role::ROLE_PROFESOR, $book);
+        } else if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SUPER_ADMIN'))
+            $recursos = $recursoRepository->findRecursos($book);
 
         $serializer = $this->get('serializer');
         $jrecursos = $serializer->serialize($recursos, 'json', ['groups' => ['recurso', 'tipo', 'libro']]);
@@ -125,10 +124,10 @@ class RecursoController extends AbstractController
 //                    $recurso->setReferencia($archivo->getClientOriginalName());
 //                    $recurso->setReferenciaFile($archivoFileName);
 //                } else {
-                    $archivoFileName = $fileUploader->upload($archivo, FileUploader::RECURSOS, '',$recurso->getLibro()->getNombre());
-                    $recurso->setReferencia($archivo->getClientOriginalName());
-                    $recurso->setReferenciaFile($archivoFileName);
-                    $recurso->setMimeType($archivo->getMimeType());
+                $archivoFileName = $fileUploader->upload($archivo, FileUploader::RECURSOS, '', $recurso->getLibro()->getNombre());
+                $recurso->setReferencia($archivo->getClientOriginalName());
+                $recurso->setReferenciaFile($archivoFileName);
+                $recurso->setMimeType($archivo->getMimeType());
 //                }
             }
 
@@ -185,14 +184,13 @@ class RecursoController extends AbstractController
 //                    }
 //                    $this->convertToPDF($archivo, $path);
 //                }
-                $archivoFileName = $fileUploader->upload($archivo, FileUploader::RECURSOS, $recurso->getReferenciaFile(),$recurso->getLibro()->getNombre());
+                $archivoFileName = $fileUploader->upload($archivo, FileUploader::RECURSOS, $recurso->getReferenciaFile(), $recurso->getLibro()->getNombre());
                 $recurso->setReferencia($archivo->getClientOriginalName());
                 $recurso->setReferenciaFile($archivoFileName);
                 $recurso->setMimeType($archivo->getMimeType());
-            }
-            else {
-                if ($recurso->getTipo()->getNombre() == TipoRecurso::REFERENCE_URL && $recurso->getReferenciaFile()){
-                    $fileUploader->deleteFile(FileUploader::TEXTOS, $recurso->getReferenciaFile(), $recurso->getLibro()->getNombre().'/'.FileUploader::RECURSOS, false);
+            } else {
+                if ($recurso->getTipo()->getNombre() == TipoRecurso::REFERENCE_URL && $recurso->getReferenciaFile()) {
+                    $fileUploader->deleteFile(FileUploader::TEXTOS, $recurso->getReferenciaFile(), $recurso->getLibro()->getNombre() . '/' . FileUploader::RECURSOS, false);
                     $recurso->setReferenciaFile('');
                     $recurso->setMimeType('');
                 }
@@ -208,6 +206,7 @@ class RecursoController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route("/{id}/load", name="resourceLoader", options={"expose"=true}, methods={"GET", "POST"})
      * @param Recurso $recurso
@@ -217,11 +216,11 @@ class RecursoController extends AbstractController
     public function resourceLoader(Recurso $recurso, FileUploader $fileUploader)
     {
         //@Todo Security files
-        if ($recurso->getMimeType() === 'audio/mpeg' || $recurso->getMimeType() === 'video/mp4'){
+        if ($recurso->getMimeType() === 'audio/mpeg' || $recurso->getMimeType() === 'video/mp4') {
             $path = $fileUploader->getFullUploadPath($recurso->getReferenciaFileDir());
             $response = new BinaryFileResponse($path);
-        }else{
-            $response = new StreamedResponse(function () use ($recurso, $fileUploader){
+        } else {
+            $response = new StreamedResponse(function () use ($recurso, $fileUploader) {
                 $outputStream = fopen('php://output', 'wb');
                 $fileStream = $fileUploader->readStream($recurso->getReferenciaFileDir());
                 stream_copy_to_stream($fileStream, $outputStream);
@@ -229,9 +228,9 @@ class RecursoController extends AbstractController
         }
 
         $response->headers->set('Content-Type', $recurso->getMimeType());
-        if ($recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'|| $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'||
+        if ($recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
             $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.presentationml.slideshow' || $recurso->getMimeType() === 'application/msword' ||
-            $recurso->getMimeType() === 'application/vnd.ms-powerpoint'|| $recurso->getMimeType() === 'application/vnd.ms-excel'|| $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ){
+            $recurso->getMimeType() === 'application/vnd.ms-powerpoint' || $recurso->getMimeType() === 'application/vnd.ms-excel' || $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,
@@ -254,12 +253,12 @@ class RecursoController extends AbstractController
         $id = $request->get('id');
         $entityManager = $this->getDoctrine()->getManager();
         $recurso = $entityManager->getRepository(Recurso::class)->find($id);
-        if ($recurso){
+        if ($recurso) {
             $entityManager->remove($recurso);
             $entityManager->flush();
-            return new JsonResponse(['success'=> 'Elemento eliminado correctamente']);
+            return new JsonResponse(['success' => 'Elemento eliminado correctamente']);
         } else {
-            return new JsonResponse(['error'=> 'El elemento no existe']);
+            return new JsonResponse(['error' => 'El elemento no existe']);
         }
     }
 
@@ -269,12 +268,12 @@ class RecursoController extends AbstractController
         $extension = $file->getClientOriginalExtension();
         $pdfWriter = null;
 
-        if($extension === 'xls' || $extension === 'xlsx'){
+        if ($extension === 'xls' || $extension === 'xlsx') {
             $phpWordXls = IOFactory::load($path);
             $pdfWriter = IOFactory::createWriter($phpWordXls, 'Dompdf');
 
         } else if ($extension === 'doc') {
-            Settings::setPdfRendererPath($this->base_path.'/vendor/dompdf/dompdf');
+            Settings::setPdfRendererPath($this->base_path . '/vendor/dompdf/dompdf');
             Settings::setPdfRendererName('DomPDF');
 
             $phpWord = \PhpOffice\PhpWord\IOFactory::load($path, 'MsDoc');
@@ -282,7 +281,7 @@ class RecursoController extends AbstractController
 
         } else if ($extension === 'docx') {
 
-            Settings::setPdfRendererPath($this->base_path.'/vendor/dompdf/dompdf');
+            Settings::setPdfRendererPath($this->base_path . '/vendor/dompdf/dompdf');
             Settings::setPdfRendererName(Settings::PDF_RENDERER_DOMPDF);
 
             $phpWord = \PhpOffice\PhpWord\IOFactory::load($path);
@@ -295,7 +294,7 @@ class RecursoController extends AbstractController
 //            $this->fileUploader->deleteFile(FileUploader::TEXTOS, $filename, $recurso->getLibro()->getNombre().'/'.FileUploader::RECURSOS, false);
         }
 
-        if ($pdfWriter){
+        if ($pdfWriter) {
             $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $saveFilename = $this->generatePathName($originalFileName);
             $this->uploadsDirectory->createDir($destinationPath);
@@ -310,7 +309,7 @@ class RecursoController extends AbstractController
     private function generatePathName(string $originalName): string
     {
         $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalName);
-        $fileName = $safeFilename.'-'.uniqid().'.pdf';
+        $fileName = $safeFilename . '-' . uniqid() . '.pdf';
         return $fileName;
     }
 
