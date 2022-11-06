@@ -20,22 +20,22 @@ class Estudiantes
     private $id;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     private $fecha_nacimiento;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $nombre_representante;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $primer_apellido_representante;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $segundo_apellido_representante;
 
@@ -61,7 +61,7 @@ class Estudiantes
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=LibroActivado::class, mappedBy="estudiante")
+     * @ORM\OneToMany(targetEntity=LibroActivado::class, mappedBy="estudiante", cascade={"remove"})
      */
     private $libroActivados;
 

@@ -264,6 +264,7 @@ class SuperController extends AbstractController
                 ->findByUserProfesor($id);
             foreach ($libros as $libro){
                 $entityManager->remove($libro);
+                $entityManager->flush();
             }
             $entityManager->remove($user);
             $entityManager->flush();

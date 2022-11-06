@@ -21,16 +21,16 @@ class EstudianteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fecha_nacimiento', DateTimeType::class, [
-                'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'dd/MM/yyyy',
-                'attr' => ['class' => 'js-datepicker'],
-            ])
-            ->add('nombre_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Nombre Representante']])
-            ->add('primer_apellido_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Primer Apellido Representante']])
-            ->add('segundo_apellido_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Segundo Apellido Representante']])
-            ->add('celular', TelType::class, ['label' => false, 'attr' => ['placeholder' => 'Teléfono Celular']])
+            // ->add('fecha_nacimiento', DateTimeType::class, [
+            //     'widget' => 'single_text',
+            //     'html5' => false,
+            //     'format' => 'dd/MM/yyyy',
+            //     'attr' => ['class' => 'js-datepicker'],
+            // ])
+            // ->add('nombre_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Nombre Representante']])
+            // ->add('primer_apellido_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Primer Apellido Representante']])
+            // ->add('segundo_apellido_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Segundo Apellido Representante']])
+            // ->add('celular', TelType::class, ['label' => false, 'attr' => ['placeholder' => 'Teléfono Celular']])
             ->add('grado', EntityType::class, [
                     'label' => 'Grado escolar',
                     'placeholder' => '--Seleccione--',
