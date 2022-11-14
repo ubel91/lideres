@@ -268,11 +268,11 @@ class SuperController extends AbstractController
                 $entityManager->remove($libro);
                 $entityManager->flush();
             }
-            $resets = $entityManager->getRepository(ResetPasswordRequest::class)->findAll();
-            foreach ($resets as $reset)
-                if (!isNull($reset))
-                    $entityManager->remove($reset);
-            $entityManager->flush();
+            $reset = $entityManager->getRepository(ResetPasswordRequest::class)->findOneBy([
+                'user' => $user
+            ]);
+            if (!isNull($reset))
+                $entityManager->remove($reset);
             $entityManager->remove($user);
             $entityManager->flush();
             return new JsonResponse(['success' => 'Elemento eliminado correctamente']);

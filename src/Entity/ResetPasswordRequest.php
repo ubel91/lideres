@@ -21,7 +21,7 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $user;
 

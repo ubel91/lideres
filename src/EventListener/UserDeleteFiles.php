@@ -23,7 +23,9 @@ class UserDeleteFiles
 
     public function postRemove(User $user, LifecycleEventArgs $eventArgs)
     {
-        $this->fileUploader->deleteFile(FileUploader::FOTO_PERFIL, $user->getPhoto(), $user->getUsername(), true);
+        try {
+            $this->fileUploader->deleteFile(FileUploader::FOTO_PERFIL, $user->getPhoto(), $user->getUsername(), true);
+        }catch (\Exception $exception){}
     }
 
 }

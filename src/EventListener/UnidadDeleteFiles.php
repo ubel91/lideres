@@ -23,7 +23,9 @@ class UnidadDeleteFiles
 
     public function postRemove(Unidad $unidad, LifecycleEventArgs $eventArgs)
     {
-        $this->fileUploader->deleteFile(FileUploader::TEXTOS, $unidad->getArchivo(),$unidad->getLibro()->getNombre().'/'.FileUploader::UNIDAD_ARCHIVO, false);
+        try {
+            $this->fileUploader->deleteFile(FileUploader::TEXTOS, $unidad->getArchivo(),$unidad->getLibro()->getNombre().'/'.FileUploader::UNIDAD_ARCHIVO, false);
+        }catch (\Exception $exception){}
     }
 
 }
