@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Estudiantes;
 use App\Entity\LibroActivado;
+use App\Entity\ResetPasswordRequest;
 use App\Entity\User;
 use App\Form\EstudianteType;
 use App\Form\UserType;
@@ -266,6 +267,10 @@ class SuperController extends AbstractController
                 $entityManager->remove($libro);
                 $entityManager->flush();
             }
+            $reset = $entityManager->getRepository(ResetPasswordRequest::class)->findOneBy([
+                'user' => $user
+            ]);
+            $entityManager->remove($reset);
             $entityManager->remove($user);
             $entityManager->flush();
             return new JsonResponse(['success' => 'Elemento eliminado correctamente']);
