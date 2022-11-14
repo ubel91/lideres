@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function PHPUnit\Framework\isNull;
 
 
 /**
@@ -263,14 +264,15 @@ class SuperController extends AbstractController
         if ($user) {
             $libros = $entityManager->getRepository(LibroActivado::class)
                 ->findByUserProfesor($id);
-            foreach ($libros as $libro){
+            foreach ($libros as $libro) {
                 $entityManager->remove($libro);
                 $entityManager->flush();
             }
             $reset = $entityManager->getRepository(ResetPasswordRequest::class)->findOneBy([
                 'user' => $user
             ]);
-            $entityManager->remove($reset);
+            if (!isNull($reset))
+                $entityManager->remove($reset);
             $entityManager->remove($user);
             $entityManager->flush();
             return new JsonResponse(['success' => 'Elemento eliminado correctamente']);
