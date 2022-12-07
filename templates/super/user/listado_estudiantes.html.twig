@@ -62,7 +62,7 @@
                                         <td>{{ u.email }}</td>
                                         <td>{{ u.nombre }}</td>
                                         <td>{{ u.nombreinstitucion }}</td>
-                                        <td>{{ u.canton.provincia.nombre }}</td>
+                                        <td>{%if u.canton is defined %}{{ u.canton.provincia.nombre }}{% endif %}</td>
                                         <td>{{ u.lastLogin ? u.lastLogin|date('d/m/Y h:m') : '' }}</td>
                                         <td>{{ u.estudiantes.grado }}</td>
                                         <td>
