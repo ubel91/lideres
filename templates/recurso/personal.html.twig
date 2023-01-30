@@ -1,6 +1,6 @@
 {% for l in recursosT %}
 {% if l is not empty %}
-{% set id = l[0].libro.nombre | replace({' ': ''}) %}
+{% set id = l[0].libro.nombre | replace({' ': '', '.':'-'}) %}
 {% set id = id~l[0].id %}
 <div class="row my-1">
     <div class="col">
