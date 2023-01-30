@@ -104,7 +104,7 @@ class RecursoController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function new(Request $request, FileUploader $fileUploader): Response
+    public function new (Request $request, FileUploader $fileUploader): Response
     {
         $recurso = new Recurso();
         $form = $this->createForm(RecursoType::class, $recurso);
@@ -114,9 +114,9 @@ class RecursoController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             /** @var UploadedFile $archivo */
-            $archivo = $form['referenciaFile']->getData();//$request->files->get('referenciaFile');
+            $archivo = $form['referenciaFile']->getData(); //$request->files->get('referenciaFile');
             if ($archivo) {
-//                if ($archivo->getClientOriginalExtension() === 'xls' || $archivo->getClientOriginalExtension() === 'xlsx' || $archivo->getClientOriginalExtension() === 'doc' || $archivo->getClientOriginalExtension() === 'docx' || $archivo->getClientOriginalExtension() === 'ppt' || $archivo->getClientOriginalExtension() === 'pptx'){
+                //                if ($archivo->getClientOriginalExtension() === 'xls' || $archivo->getClientOriginalExtension() === 'xlsx' || $archivo->getClientOriginalExtension() === 'doc' || $archivo->getClientOriginalExtension() === 'docx' || $archivo->getClientOriginalExtension() === 'ppt' || $archivo->getClientOriginalExtension() === 'pptx'){
 //                    $path = $archivo->getRealPath();
 //                    $destinationFolder = $recurso->getReferenciaFileDir();
 //                    $archivoFileName = $this->convertToPDF($archivo, $path, $destinationFolder);
@@ -128,7 +128,7 @@ class RecursoController extends AbstractController
                 $recurso->setReferencia($archivo->getClientOriginalName());
                 $recurso->setReferenciaFile($archivoFileName);
                 $recurso->setMimeType($archivo->getMimeType());
-//                }
+                //                }
             }
 
             $entityManager->persist($recurso);
@@ -174,9 +174,9 @@ class RecursoController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             /** @var UploadedFile $archivo */
-            $archivo = $form['referenciaFile']->getData();//$request->files->get('referenciaFile');
+            $archivo = $form['referenciaFile']->getData(); //$request->files->get('referenciaFile');
             if ($archivo) {
-//                if ($archivo->getClientOriginalExtension() === 'xls' || $archivo->getClientOriginalExtension() === 'xlsx' || $archivo->getClientOriginalExtension() === 'doc' || $archivo->getClientOriginalExtension() === 'docx' || $archivo->getClientOriginalExtension() === 'ppt' || $archivo->getClientOriginalExtension() === 'pptx'){
+                //                if ($archivo->getClientOriginalExtension() === 'xls' || $archivo->getClientOriginalExtension() === 'xlsx' || $archivo->getClientOriginalExtension() === 'doc' || $archivo->getClientOriginalExtension() === 'docx' || $archivo->getClientOriginalExtension() === 'ppt' || $archivo->getClientOriginalExtension() === 'pptx'){
 //                    if ($recurso->getReferenciaFileDir())
 //                        $path = $fileUploader->getFullUploadPath($recurso->getReferenciaFileDir());
 //                    else{
@@ -237,15 +237,14 @@ class RecursoController extends AbstractController
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ];
-        // if (in_array($recurso->getMimeType(), $mimeTypes)) {
+        if (in_array($recurso->getMimeType(), $mimeTypes)) {
 
-                $disposition = HeaderUtils::makeDisposition(
-                    HeaderUtils::DISPOSITION_ATTACHMENT,
-                
-                    $recurso->getNombreRecurso()
-                );
-                $response->headers->set('Content-Disposition', $disposition);
-        // }
+            $disposition = HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                iconv("UTF-8", "ASCII",$recurso->getReferencia())
+            );
+            $response->headers->set('Content-Disposition', $disposition);
+        }
 
         return $response;
     }
@@ -295,11 +294,11 @@ class RecursoController extends AbstractController
             $phpWord = \PhpOffice\PhpWord\IOFactory::load($path);
             $pdfWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
 
-//            $path = explode('.',$safeFilename);
+            //            $path = explode('.',$safeFilename);
 //            array_pop($path);
 //            $path = implode($path);
 
-//            $this->fileUploader->deleteFile(FileUploader::TEXTOS, $filename, $recurso->getLibro()->getNombre().'/'.FileUploader::RECURSOS, false);
+            //            $this->fileUploader->deleteFile(FileUploader::TEXTOS, $filename, $recurso->getLibro()->getNombre().'/'.FileUploader::RECURSOS, false);
         }
 
         if ($pdfWriter) {
