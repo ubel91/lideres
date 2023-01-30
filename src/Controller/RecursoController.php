@@ -228,9 +228,16 @@ class RecursoController extends AbstractController
         }
 
         $response->headers->set('Content-Type', $recurso->getMimeType());
-        if ($recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
-            $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.presentationml.slideshow' || $recurso->getMimeType() === 'application/msword' ||
-            $recurso->getMimeType() === 'application/vnd.ms-powerpoint' || $recurso->getMimeType() === 'application/vnd.ms-excel' || $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+        $mimeTypes = [
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+            'application/msword',
+            'application/vnd.ms-powerpoint',
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ];
+        // if (in_array($recurso->getMimeType(), $mimeTypes)) {
 
                 $disposition = HeaderUtils::makeDisposition(
                     HeaderUtils::DISPOSITION_ATTACHMENT,
@@ -238,7 +245,7 @@ class RecursoController extends AbstractController
                     $recurso->getNombreRecurso()
                 );
                 $response->headers->set('Content-Disposition', $disposition);
-        }
+        // }
 
         return $response;
     }
