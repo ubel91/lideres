@@ -65,7 +65,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [ 'class' => 'custom-control custom-radio custom-control-inline'],
                 'choice_attr' => function($choice, $key, $value) {
-                    $arrayClass = ['class' => 'custom-control-input estudiante-change'];
+                    $arrayClass = ['class' => 'estudiante-change'];
                     if (is_object($choice)){
                         if ($choice->getRolename() === Role::ROLE_ESTUDIANTE)
                             $arrayClass['data'] = 'radioEstudiante';
