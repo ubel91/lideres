@@ -232,14 +232,12 @@ class RecursoController extends AbstractController
             $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.presentationml.slideshow' || $recurso->getMimeType() === 'application/msword' ||
             $recurso->getMimeType() === 'application/vnd.ms-powerpoint' || $recurso->getMimeType() === 'application/vnd.ms-excel' || $recurso->getMimeType() === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
 
-                if (preg_match('/^[\x20-\x7e]*$/', $recurso->getReferencia())) {
-                    $disposition = HeaderUtils::makeDisposition(
-                        HeaderUtils::DISPOSITION_ATTACHMENT,
-                    
-                        $recurso->getNombreRecurso()
-                    );
-                    $response->headers->set('Content-Disposition', $disposition);
-                }
+                $disposition = HeaderUtils::makeDisposition(
+                    HeaderUtils::DISPOSITION_ATTACHMENT,
+                
+                    $recurso->getNombreRecurso()
+                );
+                $response->headers->set('Content-Disposition', $disposition);
         }
 
         return $response;
