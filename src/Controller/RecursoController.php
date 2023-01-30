@@ -234,7 +234,7 @@ class RecursoController extends AbstractController
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,
-                $recurso->getReferencia()
+                Str::ascii($recurso->getReferencia())
             );
             $response->headers->set('Content-Disposition', $disposition);
         }

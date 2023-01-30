@@ -104,7 +104,7 @@ class RecursoRepository extends ServiceEntityRepository
 
         $qb
             ->leftJoin('recurso.libro', 'libro')
-            ->leftJoin('libro.libroActivados', 'libroActivados')
+            // ->leftJoin('libro.libroActivados', 'libroActivados')
             ->orderBy('libro.nombre');
 
         if ($book) {
