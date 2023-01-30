@@ -4,13 +4,13 @@
 {% set id = id~l[0].id %}
 <div class="row my-1">
     <div class="col">
-        <a type="button" style="min-width: 50%" class="btn btn-success" data-toggle="collapse" data-target="{{'#'~id}}"
+        <a type="button" style="min-width: 50%" class="btn btn-success" data-toggle="collapse" data-target="{{'#element-'~ loop.index}}"
             aria-expanded="false" aria-controls="collapseExample">
             <span>{{ l[0] .libro.nombre }}</span> <span class="fas fa-chevron-right rotate"></span>
         </a>
     </div>
 </div>
-<div class="collapse" id="{{id}}" style="width: 100%">
+<div class="collapse" id="{{'element-'~loop.index	}}" style="width: 100%">
     <div class="card card-body">
         <div class="row">
             <div class="col-lg-4">
