@@ -218,7 +218,11 @@
 
         }
     }
-
+    function youtube_parser(url){
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        var match = url.match(regExp);
+        return (match&&match[7].length==11)? match[7] : false;
+    }
     $(document).ready(function (e) {
 
         if (recursos !== null) {
@@ -257,13 +261,15 @@
                 let modal = $('#modalVideoY').modal('show');
                 let $modalIframe = modal.find('#iframeVideo');
                 let $modalEmbed = $modalIframe.parent();
+                url = youtube_parser(data.referencia)
+                console.log(url)
                 urlModal = data.referencia;
-                let matches = urlModal.match(/[\\?\\&]v=([^\\?\\&]+)/);
-                console.log("matches-> " + matches)
-                let idUrl = matches[1];
+                //let matches = urlModal.match(/[\\?\\&]v=([^\\?\\&]+)/);
+                //console.log("matches-> " + matches)
+                //let idUrl = matches[1]; #}
                 $modalEmbed.show();
-                console.log("url-> "+idUrl)
-                $modalIframe.prop('src', 'https://www.youtube.com/embed/' + idUrl + '?rel=0&showinfo=0&color=white&iv_load_policy=3?enablejsapi=1');
+                console.log("url-> "+url)
+                $modalIframe.prop('src', 'https://www.youtube.com/embed/' + url + '?rel=0&showinfo=0&color=white&iv_load_policy=3?enablejsapi=1');
             } else if (data.mimetype === 'audio/mpeg' || data.mimetype === 'video/mp4') {
                 let modal = $('#modalMediaLocal').modal('show');
                 modal.find('.modal-title').text(title);
