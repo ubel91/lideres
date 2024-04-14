@@ -30,8 +30,14 @@
 
 {% block stylesheet %}
     <style>
+        body{
+            background-color: #242c34!important ;
+        }
+        table, div,label{
+            color: white!important;
+        }
         .my-navbar {
-            background-color: #fd6810;
+            background-color:  #0434cc;
             font-family: "Arial", sans-serif;
             font-weight: bold;
             font-size: 1.1rem;
@@ -77,10 +83,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto left-items-navbar">
-                    <li class="{{ dashboard }}">
-                        <a class="nav-link" href="{{ path(homepath) }}">Inicio <span
-                                    class="sr-only">(current)</span></a>
-                    </li>
+{#                    <li class="{{ dashboard }}">#}
+{#                        <a class="nav-link" href="{{ path(homepath) }}">Inicio <span#}
+{#                                    class="sr-only">(current)</span></a>#}
+{#                    </li>#}
                     <li class="{{ textos }}">
                         <a class="nav-link" href="{{ path('textos') }}">Mis Textos</a>
                     </li>
@@ -135,8 +141,8 @@
         <div class="row">
             {% block left_body %}
                 <div class="col-lg-2" id="left_body">
-                    <div class="card mt-2" style="background-color: #085667; color: white;">
-                        <div class="card-header" style="background-color: #1c8e8a; color: white;">
+                    <div class="card mt-2" style="background-color: #1c4c7c ; color: white;">
+                        <div class="card-header" style="background-color: #4c74cc; color: white;">
                             <p class="card-title">Area personal</p>
                         </div>
                         <div class="card-body">
@@ -166,15 +172,15 @@
                                         {% endif %}
                                         <div class="col-12" style="padding: 0;">
                                             <div class="card mt-3 mx-0"
-                                                 style="background-color: #085667; color: white;">
+                                                 style="background-color: #1c4c7c ; color: white;">
                                                 <div class="card-header"
-                                                     style="background-color: #1c8e8a; color: white;">
+                                                     style="background-color: #4c74cc; color: white;">
                                                     Mis enlaces
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-md-12 mt-2">
-                                                            <a href="https://www.mybookec.com/user-account/"
+                                                            <a href="https://www.mybookec.net"
                                                                style="color:white"
                                                                target="_blank">My Book<img class="float-right"
                                                                                                     width="24"
@@ -197,15 +203,6 @@
                                                                 Microsoft teams
                                                                 <img class="float-right" width="24" height="24"
                                                                      src="{{ asset('build/assets/images/sociales/LOGO-microsoft-teams.png') }}"
-                                                                     alt=""></a>
-                                                        </div>
-                                                        <div class="col-md-12 mt-2">
-                                                            <a href="https://jamboard.google.com/"
-                                                               style="color:white"
-                                                               target="_blank">
-                                                                Jamboard
-                                                                <img class="float-right" width="24" height="24"
-                                                                     src="{{ asset('build/assets/images/sociales/LOGO-JAMBOARD.png') }}"
                                                                      alt=""></a>
                                                         </div>
                                                     </div>

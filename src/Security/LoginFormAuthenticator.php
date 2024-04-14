@@ -102,7 +102,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $token->getUser()->setLastLogin(new DateTime('now'));
         $this->entityManager->flush();
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-            return new RedirectResponse($targetPath);
+//            return new RedirectResponse($targetPath);
         }
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));

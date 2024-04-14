@@ -15,6 +15,7 @@
   "repository": "https://github.com/roberto910907/lideres.git",
   "dependencies": {
     "bootstrap-datepicker": "^1.9.0",
+    "bootstrap-icons": "^1.11.3",
     "core-js": "^3.6.5",
     "datatables.net": "^1.10.21",
     "datatables.net-autofill": "^2.3.5",

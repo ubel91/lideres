@@ -4,6 +4,7 @@
 @import 'overlay.css';
 @import 'spinner.css';
 @import "~dropzone/dist/min/dropzone.min.css";
+@import "~bootstrap-icons";
 
 body {
     /*background-color: lightgray;*/

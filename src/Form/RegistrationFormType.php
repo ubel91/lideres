@@ -32,7 +32,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label'  => 'Usuario',
+                'label'  => false ,
                 'attr' => ['placeholder' => 'Nombre de usuario']
             ])
             ->add('nombre', TextType::class, ['label'  => false ,'attr' => ['placeholder' => 'Nombres']])
@@ -75,11 +75,11 @@ class RegistrationFormType extends AbstractType
                     }
 
                 },
-                'label_attr' => ['class' => 'custom-control-label mr-5'],
+                'label_attr' => ['class' => 'custom-control-label'],
                 'multiple' => false,
                 'expanded' => true
             ])
-            ->add('e_mail', EmailType::class, ['label'  => 'Correo Electrónico'])
+            ->add('e_mail', EmailType::class, ['label'  => false ,'attr' => ['placeholder'  => 'Correo Electrónico']])
 //            ->add('celular', TelType::class, ['label'  => false ,'attr' => ['placeholder' => 'Celular']])
             ->add('registrar', SubmitType::class)
             ->add('profesorForm', ProfesorType::class, ['label' => false])

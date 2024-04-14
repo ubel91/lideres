@@ -1,163 +1,173 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        .custom-file {
-            height: 0rem;
-            opacity: 1;
-            position: absolute;
-            right: 9rem;
-            top: 3rem;
-            width: 28%;
-            opacity: 0;
-        }
-        .custom-file-input {
-            height: 8rem;
-            cursor: pointer;
-            opacity: 0;
-        }
-        .profile-pic {
-            max-height: 7rem;
-        }
-        .hidden {
-            display: none !important;
-            visibility: hidden;
-        }
-        .body {
-            /* The image used */
-            background-image: url('{{ asset('build/assets/images/background_register.svg') }}');
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        {% set image = asset('build/assets/images/reg.jpg') %}
+        <style>
+            body {
+                background: #007bff;
+                background: linear-gradient(to right, #0062E6, #33AEFF);
+            }
+            .custom-file {
+                height: 0rem;
+                opacity: 1;
+                position: absolute;
+                right: 9rem;
+                top: 3rem;
+                width: 28%;
+                opacity: 0;
+            }
+            .custom-file-input {
+                height: 8rem;
+                cursor: pointer;
+                opacity: 0;
+            }
+            .card-img-left {
+                width: 45%;
+                /* Link to your background image using in the property below! */
+                background: scroll center url('{{ image }}');
+                background-size: cover;
+            }
+            .profile-pic {
+                max-height: 7rem;
+            }
+            .hidden {
+                display: none !important;
+                visibility: hidden;
+            }
+        </style>
+    {% endblock %}
 
-            /* Full height */
-            height: 100%;
-
-            /* Center and scale the image nicely */
-            background-position: :right;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .col-foto:after {
-            background-color: #1d3b79;
-            opacity: 0.6;
-            content: '';
-            display: block;
-            position: absolute;
-            top: 20px;
-            left: 60px;
-            right: 60px;
-            bottom: 10px;
-            z-index: -1;
-        }
-
-    </style>
-{% endblock %}
-
-{% block title %}Registrar usuario{% endblock %}
-{% block navbar %}
-{% endblock %}
-{% block left_body %}
-    <div class="col-lg-3">
-        {{ form_start(registrationForm, {'attr': {'id': 'register_form', 'style': 'text-align : center'}}) }}
-        <div class="my-custom-class-for-errors">
-            {{ form_errors(registrationForm) }}
-        </div>
-        <div class="row">
-            <div class="col col-foto" style="padding: 1rem; ">
-                {{form_row(registrationForm.photo)}}
-                <img src="{{ user.photo ? path('photoProfile', {'id':user.id}) : asset('build/assets/images/user.png')}}" id="profilePic" alt="foto_perfil" class="img-border img-thumbnail rounded-circle profile-pic" width="100">
-                <br>
-                {% if user.username %}
-                    <strong>{{ user.username }}</strong>
-                {% else %}
-                    <strong>Mi Perfil</strong>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="offset-lg-2 col-lg-8">
-                {{ form_row(registrationForm.username) }}
-                {{ form_row(registrationForm.plainPassword) }}
-                {{ form_row(registrationForm.e_mail) }}
-                {{ form_row(registrationForm.roles) }}
-                {{ form_row(registrationForm.registrar) }}
-            </div>
-            <div class="col-lg-2">
-               
-            </div>
-        </div>
-    </div>
-{% endblock %}
-{% block right_block %}
-    <div id="container" class="col-lg-9 hidden">
-        <div class="row ml-5 mt-2">
-            <div class="col-lg-4">
-                <h5 style="color: #aacd4e">Datos Generales</h5>
-            </div>
-            <div class="col">
-                <h5 style="color: #aacd4e">Datos de mi Institución</h5>
-            </div>
-        </div>
-        <div class="row justify-content-left mt-3">
-            <div class="col-lg-4">
-                {{ form_row(registrationForm.nombre) }}
-                {{ form_row(registrationForm.primer_apellido) }}
-                {{ form_row(registrationForm.segundo_apellido) }}
-            </div>
-            <div class="col-lg-4">
-                {{ form_row(registrationForm.nombre_institucion) }}
-                {{ form_row(registrationForm.pais_institucion) }}
-                {{ form_row(registrationForm.provincia) }}
-                {{ form_row(registrationForm.canton) }}
-
-            </div>
-        </div>
-        <div id="estudiantes_form" style="display:none">
-            <div class="row ml-5">
-                {# <h5 style="color: #aacd4e"> Registro Estudiantes </h5> #}
-            </div>
-
-            <div class="row justify-content-left mt-3">
-                <div class="col-lg-4">
-                    {# <h6 class="ml-3 mb-3">Mis Datos Personales</h6> #}
-                    {# {{ form_row(registrationForm.estudiantesForm.fecha_nacimiento) }} #}
-
-                    {# <h6 class="mt-4 ml-3 mb-3">Datos de mi Representante</h6> #}
-                    {# {{ form_row(registrationForm.estudiantesForm.nombre_representante) }} #}
-                    {# {{ form_row(registrationForm.estudiantesForm.primer_apellido_representante) }} #}
-                    {# {{ form_row(registrationForm.estudiantesForm.segundo_apellido_representante) }} #}
-{#                    {{ form_row(registrationForm.estudiantesForm.numero_identificacion) }}#}
-                    {# {{ form_row(registrationForm.estudiantesForm.celular) }} #}
-
-                </div>
-                <div class="col-lg-4">
-                    <h6 class="ml-3 mb-3">Otros datos de mi Institución</h6>
-                    {{ form_row(registrationForm.estudiantesForm.grado) }}
-                </div>
-            </div>
-        </div>
-        
-        <div id="profesores_form" style="display:none">
-        {{ form_end(registrationForm) }}
-        </div>
-    </div>
-
-
-{% endblock %}
 {% block body %}
-    {{ parent() }}
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        let urlCanton = '{{ path('canton_by_provincia')}}';
-        let role = {{ user.roles | json_encode | raw }};
-        let route_photo = "{{ path('photo_change') }}";
-        {% if user.id %}
-            let userId = {{ user.id }};
-            route_photo = "{{ path('photo_change', {'id': user.id}) }}";
-        {% endif %}
-    </script>
-    {{ encore_entry_script_tags('register') }}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row justify-content-center">
+                    <div class="col-8 p-5">
+                        <img src="{{ asset('build/assets/images/ultimo.png') }}"
+                             class="img-fluid" id="logoLideres" alt="logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-xl-9 mx-auto">
+                <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+                    <div class="card-img-left d-none d-md-flex">
+                        <!-- Background image for card set in CSS! -->
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-1 fw-light fs-5">Nuevo registro</h5>
+                        {{ form_start(registrationForm, {'attr': {'id': 'register_form'}}) }}
+                        <div class="form-floating mb-1">
 
+                        </div>
+                        <div class="mb-1 row justify-content-center">
+                            {{ form_row(registrationForm.photo) }}
+                            <img src="{{ user.photo ? path('photoProfile', {'id':user.id}) : asset('build/assets/images/user.png')}}" id="profilePic" alt="foto_perfil" class="img-border img-thumbnail rounded-circle profile-pic" width="100">
+                        </div>
+                        <h6 class="card-subtitle mb-1 text-info fs-5">Datos del usuario</h6>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.username) }}
+                        </div>
+
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.plainPassword) }}
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.e_mail) }}
+                        </div>
+                        <h6 class="card-subtitle mb-1 text-info fs-5">Datos generales</h6>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.nombre) }}
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.primer_apellido) }}
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.segundo_apellido) }}
+                        </div>
+                        <h6 class="card-subtitle mb-1 text-info fs-5">Datos de mi institución</h6>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.nombre_institucion) }}
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.pais_institucion) }}
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.provincia) }}
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(registrationForm.canton) }}
+                        </div>
+                        {{ form_end(registrationForm) }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+    {% block navbar %}
+    {% endblock %}
+    {% block  footer %}
+        <footer class="text-center text-white">
+            <div class="container p-4 pb-0">
+                <!-- Section: Social media -->
+                <section class="mb-4">
+                    <!-- Facebook -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #075e54;"
+                            href="https://wa.me/+5930986257804"
+                            role="button"
+                    ><i class="fab fa-whatsapp"></i
+                        ></a>
+
+                    <!-- Twitter -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #ac2bac;"
+                            href="https://www.instagram.com/lideresec"
+                            role="button"
+                    ><i class="fab fa-instagram"></i
+                        ></a>
+
+                    <!-- Google -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #3b5998;"
+                            href="https://www.facebook.com/lideresed"
+                            role="button"
+                    ><i class="fab fa-facebook-f"></i
+                        ></a>
+
+                    <!-- Instagram -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #c4302b;"
+                            href="https://youtube.com/channel/UCka8tDjH0Ne8EgXkxv2WSpQ"
+                            role="button"
+                    ><i class="fab fa-youtube"></i
+                        ></a>
+
+                </section>
+                <!-- Section: Social media -->
+            </div>
+        </footer>
+    {% endblock %}
+  {% block javascripts %}
+      {{ parent() }}
+      <script>
+          let urlCanton = '{{ path('canton_by_provincia')}}';
+          let role = {{ user.roles | json_encode | raw }};
+          let route_photo = "{{ path('photo_change') }}";
+          {% if user.id %}
+          let userId = {{ user.id }};
+          route_photo = "{{ path('photo_change', {'id': user.id}) }}";
+          {% endif %}
+      </script>
+      {{ encore_entry_script_tags('register') }}
+
+  {% endblock %}

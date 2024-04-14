@@ -71,7 +71,7 @@ $(document).ready(function () {
     let $photo = $('#registration_form_photo');
 
    
-    // hideAndShow();
+    hideAndShow();
 
     $radioEstudiante.on('change',function () {
         hideAndShow();
@@ -80,7 +80,7 @@ $(document).ready(function () {
         hideAndShow();
     });
 
-    // $radioEstudiante.trigger('change');
+    $radioEstudiante.trigger('change');
 
 
 

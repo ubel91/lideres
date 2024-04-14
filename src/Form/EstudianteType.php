@@ -31,12 +31,12 @@ class EstudianteType extends AbstractType
             // ->add('primer_apellido_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Primer Apellido Representante']])
             // ->add('segundo_apellido_representante', TextType::class, ['label' => false, 'attr' => ['placeholder' => 'Segundo Apellido Representante']])
             // ->add('celular', TelType::class, ['label' => false, 'attr' => ['placeholder' => 'Teléfono Celular']])
-            ->add('grado', EntityType::class, [
-                    'label' => 'Grado escolar',
-                    'placeholder' => '--Seleccione--',
-                    'class' => GradoEscolar::class,
-                    'choice_label' => 'nombre'
-                ])
+//            ->add('grado', EntityType::class, [
+//                    'label' => 'Grado escolar',
+//                    'placeholder' => '--Seleccione--',
+//                    'class' => GradoEscolar::class,
+//                    'choice_label' => 'nombre'
+//                ])
         ;
     }
 

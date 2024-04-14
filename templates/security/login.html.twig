@@ -1,153 +1,132 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}CREATIVE PLATAFORMA MULTIMEDIA{% endblock %}
-    {% block extraStyles %}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        {% set image = asset('build/assets/images/login.jpg') %}
         <style>
             body {
-                background-image: url("{{ asset('build/assets/images/bg.9248ea3d.jpeg') }}");
-                background-repeat: no-repeat;
+                background: #007bff;
+                background: linear-gradient(to right, #0062E6, #33AEFF);
+            }
+
+            .card-img-left {
+                width: 45%;
+                /* Link to your background image using in the property below! */
+                background: scroll center url('{{ image }}');
                 background-size: cover;
-                background-position: center;
             }
-            #container-1{
-                border: solid 6px white;
-                background-color: #00133e;
-                border-radius: 30px;
+            .btn-fw{
+                width: 100%!important;
             }
-             #container-2{
-                border: solid 6px white;
-                background-color: #00133e;
-                border-radius: 0 50px 0 50px;
-            }
-            i.fa-circle {
-                color:white;
-                background-color: blue;
-                display: inline-block;
-                border: solid 3px white;
-                border-radius: 60px;
-                box-shadow: 0px 0px 2px #888;
-                padding: 0.5em 0.6em;
-                width:55px;
-                height:55px;
-                font-size: 23px;
-            }
-            
-            .footer img{
-                width: 50px;
-                height: 50px;
-            } 
         </style>
     {% endblock %}
+
 {% block body %}
-<div class="container-fluid">
-    <div class="row align-items-center">
+
+<div class="container">
+    <div class="row">
         <div class="col-12">
             <div class="row justify-content-center">
-                <div class="col-5 p-5">
+                <div class="col-8 p-5">
                     <img src="{{ asset('build/assets/images/ultimo.png') }}"
                          class="img-fluid" id="logoLideres" alt="logo">
                 </div>
             </div>
-            
-            <div class="row h-100">
-                <div class="col-md-3"></div>
-                <div class="col-md-3 justify-content-center align-items-center text-center">
-                    <div id="container-1" class="card pt-5" style="height: 320px">
-                        <div class="card-body mt-3">
-                            <h4 style="text-transform:uppercase; color:white;font-weight: bold;">¿Eres nuevo?</h4><br>
-                            <a href="{{ path('app_register') }}" class="btn btn-link"><h4 style="color:white;font-weight: bold;">REGÍSTRATE</h4></a>
-                            <br>
-                            <a href="{{ path('app_register') }}" class="btn"><i class="fa fa-2x fa-user-plus fa-circle"></i></a>
-                        </div>
-                    </div>
-                </div>
-                {# <div class="col-md-1"></div> #}
-                <div  class="col-md-3 justify-content-center align-items-center">
-                    <div id="container-2" class="card" style="border-radius: 0 50px 0 50px!important;background-color: #00133e;"   style="height: 320px">
-                        <div class="card-body">
-                            <div class="" id="login-form" >
-                                <form method="post" style="margin:0">
-                                    <div class="form-group">
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                {% if error %}
-                                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                                                {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
 
-                                                {% if app.user %}
-                                                    <div class="mb-3">
-                                                        Usted esta logueado como {{ app.user.username }}, <a
-                                                                href="{{ path('app_logout') }}">Logout</a>
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="form-row text-center">
-                                            <h4 style="text-transform:uppercase; color:white;font-weight: bold;" class="mb-3">INICIAR SESIÓN</h4>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="input-group" style="margin-bottom: 1rem">
-                                                <input type="text" value="{{ last_username }}" name="username"
-                                                       id="inputUsername" class="form-control" required autofocus
-                                                       placeholder="Usuario o correo electrónico">
-                                                <div class="input-group-append">
-                                            <span class="input-group-text" id="basic-addon2"><i
-                                                        class="fas fa-lock"></i></span>
-                                                </div>
-                                            </div>
-                                            <div class="input-group">
-                                                <input type="password" name="password" id="inputPassword"
-                                                       class="form-control"
-                                                       required placeholder="Contraseña">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="basic-addon2"><i
-                                                                class="fas fa-key"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="_csrf_token"
-                                           value="{{ csrf_token('authenticate') }}">
-                                    <div class="form-row">
-                                        <div class="form-group text-center col-12">
-                                            <button class="btn" style=" background-color: transparent;" type="submit">
-                                                <span><i class="fa fa-lock fa-circle"></i></span>
-                                            </button><br>
-                                            <a href="{{ path('app_forgot_password_request') }}">¿Olvidaste tu
-                                                contraseña?</a>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                <div class="card-body p-4 p-sm-5">
+                    <h5 class="card-title text-center mb-5 fw-light fs-5">Login</h5>
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <div class="form-floating mb-3">
+                            <label for="inputUsername">Usuario o correo electrónico</label>
+                            <input type="text" value="{{ last_username }}" name="username"
+                                   id="inputUsername" class="form-control" required autofocus/>
                         </div>
-                    </div>
+
+                        <div class="form-floating mb-2">
+                            <label for="inputPassword">Contraseña</label>
+                            <input type="password" name="password" id="inputPassword"
+                                   class="form-control"
+                                   required>
+                        </div>
+
+                        <a class="d-block text-center mb-2 small" href="{{ path('app_forgot_password_request') }}">¿Olvidaste tu
+                            contraseña?</a>
+
+                        <div class="d-grid mb-2">
+                            <button class="btn btn-lg btn-fw btn-primary btn-outline" type="submit">
+                                Login
+                            </button>
+                        </div>
+
+                        <a class="d-block text-center mt-2 small" href="{{ path('app_register') }}">¿No tienes una cuenta? Regístrate</a>
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}">
+                    </form>
+                </div>
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
                 </div>
             </div>
         </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}
     {% block navbar %}
     {% endblock %}
     {% block  footer%}
-        <footer  class="footer fixed-bottom mb-2">
-            <div class="row">
-            
-                    <div class="col-md-5 pt-2">
-                        <h4 style="text-transform:uppercase; color:white;font-weight: bold;float: right;" >CONTÁCTENOS</h4>
-                    </div>
-                    <div class="col-md-7">
-                        <a href='https://wa.me/+5930986257804' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/WHATSAPP-LOGO.png') }}" class="rounded" alt="..."></a>
-                    
-                    <a href='https://www.instagram.com/lideresec' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/INTAGRAM-LOGO.png') }}" class="rounded" alt="..."></a>
-                    
-                    <a href='https://www.facebook.com/lideresed' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/FACEBOOK-LOGO.png') }}" class="rounded" alt="..."></a>
-                    
-                    <a href='https://youtube.com/channel/UCka8tDjH0Ne8EgXkxv2WSpQ' target="_blank" class="mr-4"><img src="{{ asset('build/assets/images/sociales/YOUTUBE-LOGO.png') }}" class="rounded" alt="..."></a>
-                    </div>
+        <footer class="text-center text-white">
+            <div class="container p-4 pb-0">
+                <!-- Section: Social media -->
+                <section class="mb-4">
+                    <!-- Facebook -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #075e54;"
+                            href="https://wa.me/+5930986257804"
+                            role="button"
+                    ><i class="fab fa-whatsapp"></i
+                        ></a>
+
+                    <!-- Twitter -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #ac2bac;"
+                            href="https://www.instagram.com/lideresed"
+                            role="button"
+                    ><i class="fab fa-instagram"></i
+                        ></a>
+
+                    <!-- Google -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #3b5998;"
+                            href="https://www.facebook.com/lideresed"
+                            role="button"
+                    ><i class="fab fa-facebook-f"></i
+                        ></a>
+
+                    <!-- Instagram -->
+                    <a
+                            data-mdb-button-init data-mdb-ripple-init class="btn text-white btn-floating m-1"
+                            style="background-color: #c4302b;"
+                            href="https://youtube.com/channel/UCka8tDjH0Ne8EgXkxv2WSpQ"
+                            role="button"
+                    ><i class="fab fa-youtube"></i
+                        ></a>
+
+                </section>
+                <!-- Section: Social media -->
             </div>
         </footer>
     {% endblock %}
-
     {% block javascripts %}
-    {{ encore_entry_script_tags('login') }}
-{% endblock %}
+        {{ encore_entry_script_tags('login') }}
+    {% endblock %}
