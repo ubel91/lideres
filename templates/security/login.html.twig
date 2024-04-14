@@ -36,22 +36,22 @@
     </div>
     <div class="row">
         <div class="col-lg-10 col-xl-9 mx-auto">
-            <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden">
+            <div class="card flex-row my-5 border-0 shadow rounded-3 overflow-hidden" style="background-color: #D3E4EE">
 
                 <div class="card-body p-4 p-sm-5">
-                    <h5 class="card-title text-center mb-5 fw-light fs-5">Login</h5>
+                    <h5 class="card-title text-center mb-5 fw-light fs-5" style="color: black!important;">Login</h5>
                     <form method="post">
                         {% if error %}
                             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                         {% endif %}
                         <div class="form-floating mb-3">
-                            <label for="inputUsername">Usuario o correo electrónico</label>
+                            <label for="inputUsername" style="color: black!important;">Usuario o correo electrónico</label>
                             <input type="text" value="{{ last_username }}" name="username"
                                    id="inputUsername" class="form-control" required autofocus/>
                         </div>
 
                         <div class="form-floating mb-2">
-                            <label for="inputPassword">Contraseña</label>
+                            <label for="inputPassword" style="color: black!important;">Contraseña</label>
                             <input type="password" name="password" id="inputPassword"
                                    class="form-control"
                                    required>
