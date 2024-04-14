@@ -11,9 +11,6 @@
     "deployer/deployer": {
         "version": "v6.8.0"
     },
-    "deployer/phar-update": {
-        "version": "v2.2.0"
-    },
     "deployer/recipes": {
         "version": "6.2.2"
     },
@@ -287,9 +284,6 @@
             "./phpunit.xml.dist",
             "./tests/bootstrap.php"
         ]
-    },
-    "pimple/pimple": {
-        "version": "v3.4.0"
     },
     "psr/cache": {
         "version": "1.0.1"
