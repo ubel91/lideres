@@ -44,3 +44,4 @@ uploads/*
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+composer.lock
