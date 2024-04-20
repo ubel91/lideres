@@ -12,13 +12,6 @@ use App\Validator\Constraints as CodeAssert;
 
 /**
  * @ORM\Entity(repositoryClass=LibroActivadoRepository::class)
- * @UniqueEntity(
- *     fields={"codigoActivacion", "libro"},
- *     errorPath="codigoActivacion",
- *     message="Este codigo ha sido usado anteriormente en este libro"
- * )
- *
- * @CodeAssert\ExistCode
  *
  */
 class LibroActivado

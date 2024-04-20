@@ -1,4 +1,8 @@
 {{ form_start(form, {'attr': {'id': 'code_form'}}) }}
-    {{ form_widget(form) }}
-{#    <button class="btn">{{ button_label|default('Save') }}</button>#}
+    {{ form_row(form.libro) }}
+    {{ form_row(form.fechaInicio) }}
+    {{ form_row(form.fechaFin) }}
+    {{ form_row(form.tag) }}
+    {{ form_row(form.cantidad) }}
+    <button type="submit" class="btn btn-primary">Aceptar</button>
 {{ form_end(form) }}

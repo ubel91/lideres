@@ -14,6 +14,7 @@ use App\Repository\LibroActivadoRepository;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,52 +45,34 @@ class LibroActivadoController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $libroActivado = new LibroActivado();
         if(null != $id = $request->query->get('id')){
             $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         }else{
             $user = $this->getUser();
         }
-        $roles = $user->getRoles()[0];
-        $emLibros = $this->getDoctrine()->getManager();
 
-        if (count($user->getRoles()) === 1){
-            if ($roles === Role::ROLE_ESTUDIANTE){
-                $estudiante = $user->getEstudiantes();
-                $libroActivado->setEstudiante($estudiante);
-                $libros = $emLibros->getRepository(Libro::class)->findByRoleEstAndNotActivated();
-            }
-            elseif ($roles === Role::ROLE_PROFESOR){
-                $profesor = $user->getProfesor();
-                $libroActivado->setProfesor($profesor);
-                $libros = $emLibros->getRepository(Libro::class)->findByRoleDocAndNotActivated();
-            }
-        }
-
-        //-----
-            $libros = $this->cleanSearchBooks($libros, $user, $roles);
-            $choiceBooks = [];
-            foreach ($libros as $l){
-                $choiceBooks[$l->getId()] = $l;
-            }
-        //-----
-        $form = $this->createForm(LibroActivadoType::class, $libroActivado, ['choiceBooks'=>$choiceBooks]);
-//        $form = $this->createForm(LibroActivadoType::class, $libroActivado);
+        $form = $this->createForm(LibroActivadoType::class, null);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
 
-            $entityManager = $this->getDoctrine()->getManager();
-
-
-            $entityManager->persist($libroActivado);
-            $entityManager->flush();
-
+            $codeStr = $form->get('codigo_activacion')->getData();
+            $code = $em->getRepository(Codigo::class)->findOneBy(['codebook'=>$codeStr]);
+            if (null != $code && !$code->getActivo()){
+                $code->setActivo(true);
+                $code->setUser($user);
+                $em->flush();
+            }else{
+                $form->get('codigo_activacion')->addError(new FormError('El código de activación proporcionado es inválido o ya ha sido utilizado.'));
+                return $this->render('libro_activado/new.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            }
             return $this->redirectToRoute('textos');
         }
 
         return $this->render('libro_activado/new.html.twig', [
-            'libro_activado' => $libroActivado,
             'form' => $form->createView()
         ]);
     }
@@ -99,62 +82,31 @@ class LibroActivadoController extends AbstractController
      */
     public function newFromBook(Request $request, Libro $libro): Response
     {
-        $libroActivado = new LibroActivado();
+
         $user = $this->getUser();
-        $libroActivado->setLibro($libro);
-
-        if (count($user->getRoles()) === 1){
-            if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE){
-                $estudiante = $user->getEstudiantes();
-                $libroActivado->setEstudiante($estudiante);
-            }
-            elseif ($user->getRoles()[0] === Role::ROLE_PROFESOR){
-                $profesor = $user->getProfesor();
-                $libroActivado->setProfesor($profesor);
-            }
-        }
-
-        $emLibros = $this->getDoctrine()->getManager();
-        $roles = $user->getRoles()[0];
-
-        if (count($user->getRoles()) === 1){
-            if ($roles === Role::ROLE_ESTUDIANTE){
-                $estudiante = $user->getEstudiantes();
-                $libroActivado->setEstudiante($estudiante);
-                $libros = $emLibros->getRepository(Libro::class)->findByRoleEstAndNotActivated();
-            }
-            elseif ($roles === Role::ROLE_PROFESOR){
-                $profesor = $user->getProfesor();
-                $libroActivado->setProfesor($profesor);
-                $libros = $emLibros->getRepository(Libro::class)->findByRoleDocAndNotActivated();
-            }
-        }
-        //----------------------
-
-        $libros = $this->cleanSearchBooks($libros, $user, $roles);
-        $choiceBooks = [];
-        foreach ($libros as $l){
-            $choiceBooks[$l->getId()] = $l;
-        }
-
-        //----------------------
-
-        $form = $this->createForm(LibroActivadoType::class, $libroActivado, ['choiceBooks'=>$choiceBooks]);
+        $form = $this->createForm(LibroActivadoType::class, null);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-
-            $entityManager->persist($libroActivado);
-            $entityManager->flush();
-
+            $codeStr = $form->get('codigo_activacion')->getData();
+            $code = $em->getRepository(Codigo::class)->findOneBy(['codebook'=>$codeStr]);
+            if (null != $code && !$code->getActivo()){
+                $code->setActivo(true);
+                $code->setUser($user);
+                $em->flush();
+            }else{
+                $form->get('codigo_activacion')->addError(new FormError('El código de activación proporcionado es inválido o ya ha sido utilizado.'));
+                return $this->render('libro_activado/new.html.twig', [
+                    'form' => $form->createView()
+                ]);
+            }
             return $this->redirectToRoute('textos');
         }
 
         return $this->render('libro_activado/new.html.twig', [
-            'libro_activado' => $libroActivado,
             'form' => $form->createView()
         ]);
     }

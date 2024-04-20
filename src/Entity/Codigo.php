@@ -55,6 +55,21 @@ class Codigo
      */
     private $fechaFin;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tag;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $activo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="codigos")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +119,42 @@ class Codigo
     public function setFechaFin(\DateTimeInterface $fechaFin): self
     {
         $this->fechaFin = $fechaFin;
+
+        return $this;
+    }
+
+    public function getTag(): ?string
+    {
+        return $this->tag;
+    }
+
+    public function setTag(?string $tag): self
+    {
+        $this->tag = $tag;
+
+        return $this;
+    }
+
+    public function getActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(?bool $activo): self
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

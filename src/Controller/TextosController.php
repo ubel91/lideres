@@ -39,30 +39,21 @@ class TextosController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $super = false;
-        if(null != $id = $request->query->get('id'))
-        {
+        if (null != $id = $request->query->get('id')) {
             $user = $em->getRepository(User::class)->find($id);
             $super = true;
-        }else{
+        } else {
             $user = $this->getUser();
         }
 
-        if (count($user->getRoles()) === 1)
-            $result = [];
-            if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE) {
-                $id = $user->getEstudiantes() ? $user->getEstudiantes()->getId() : null;
-                $result = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id); 
-            } elseif ($user->getRoles()[0] === Role::ROLE_PROFESOR) {
-                $id = $user->getProfesor() ? $user->getProfesor()->getId() : null;
-                $result = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
-            }
+        $result = $em->getRepository(Libro::class)->findByUser($this->getUser());
 
-            $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
-            $ouput = [];
+        $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
+        $ouput = [];
 
-            foreach ($materias as $materia){
-                $ouput[$materia->getNombre()] = $this->getByMateria($materia,$result);
-            }
+        foreach ($materias as $materia) {
+            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $result);
+        }
 
         return $this->render('textos/index.html.twig', [
             'result' => $ouput,
@@ -76,12 +67,13 @@ class TextosController extends AbstractController
      * @param array $books
      * @return array
      */
-    public function getByMateria(Materia $materia, $books = array()){
+    public function getByMateria(Materia $materia, $books = array())
+    {
         $ouput = [];
-        /** @var LibroActivado $book */
+        /** @var Libro $book */
         foreach ($books as $book) {
-            if ($book->getLibro()->getCatalogo()->getMaterias() === $materia)
-                $ouput[]=$book;
+            if ($book->getCatalogo()->getMaterias() === $materia)
+                $ouput[] = $book;
         }
         return $ouput;
     }

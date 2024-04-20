@@ -47,7 +47,7 @@
                                 <td>{{ codigo.fechaInicio | date("m/d/Y") }}</td>
                                 <td>{{ codigo.fechaFin | date("m/d/Y") }}</td>
                                 <td>
-                                    <a class="btn btn-primary" href="{{ path('codigo_edit', {'id': codigo.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+{#                                    <a class="btn btn-primary" href="{{ path('codigo_edit', {'id': codigo.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>#}
                                     <button class="btn btn-danger btnDelete" title="Borrar" id="{{ codigo.id }}" data-routename="codigo_delete"><i class="fas fa-trash-alt"></i></button>
                                 </td>
 {#                                <td>#}

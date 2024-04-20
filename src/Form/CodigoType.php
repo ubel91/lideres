@@ -9,7 +9,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -36,7 +39,13 @@ class CodigoType extends AbstractType
             ])
             ->add('fechaInicio', DateType::class)
             ->add('fechaFin', DateType::class)
-            ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'))
+            ->add('tag', TelType::class,[
+                'label'=> 'Prefijo'
+            ])
+            ->add('cantidad', IntegerType::class,[
+                'mapped' => false,
+            ])
+//            ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'))
         ;
     }
 

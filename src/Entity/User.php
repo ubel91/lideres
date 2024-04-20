@@ -143,6 +143,11 @@ class User implements UserInterface
     private $lastLogin;
 
     /**
+     * @ORM\OneToMany(targetEntity=Codigo::class, mappedBy="user")
+     */
+    private $codigos;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -152,6 +157,7 @@ class User implements UserInterface
         $this->nombre_institucion = 'Sistema';
         $this->notas = new ArrayCollection();
         $this->imagenGuardadas = new ArrayCollection();
+        $this->codigos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -529,6 +535,36 @@ class User implements UserInterface
     public function setLastLogin(?\DateTimeInterface $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Codigo>
+     */
+    public function getCodigos(): Collection
+    {
+        return $this->codigos;
+    }
+
+    public function addCodigo(Codigo $codigo): self
+    {
+        if (!$this->codigos->contains($codigo)) {
+            $this->codigos[] = $codigo;
+            $codigo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCodigo(Codigo $codigo): self
+    {
+        if ($this->codigos->removeElement($codigo)) {
+            // set the owning side to null (unless already changed)
+            if ($codigo->getUser() === $this) {
+                $codigo->setUser(null);
+            }
+        }
 
         return $this;
     }

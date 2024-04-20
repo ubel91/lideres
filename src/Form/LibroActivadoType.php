@@ -35,17 +35,17 @@ class LibroActivadoType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $choiceBooks = $options['choiceBooks'];
+//        $choiceBooks = $options['choiceBooks'];
 //        dd($choiceBooks[30]);
         $builder
             ->add('codigo_activacion', TextType::class)
-            ->add('libro', EntityType::class, [
-                'class' => Libro::class,
-                'choice_label' => 'nombre',
-                'placeholder' => 'Escoja un Libro',
-                'label' => false,
-                'choices' => $choiceBooks,
-            ])
+//            ->add('libro', EntityType::class, [
+//                'class' => Libro::class,
+//                'choice_label' => 'nombre',
+//                'placeholder' => 'Escoja un Libro',
+//                'label' => false,
+//                'choices' => $choiceBooks,
+//            ])
             ->add('Activar', SubmitType::class)
 //            ->add('profesor')
 //            ->add('estudiante')
@@ -56,7 +56,7 @@ class LibroActivadoType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => LibroActivado::class,
-            'choiceBooks' => null
+//            'choiceBooks' => null
         ]);
     }
 }
