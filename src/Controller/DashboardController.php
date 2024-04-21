@@ -37,10 +37,10 @@ class DashboardController extends AbstractController
         if (count($user->getRoles()) === 1) {
             $roles = $user->getRoles()[0];
             if ($roles === Role::ROLE_ESTUDIANTE) {
-                $libros = $emLibros->getRepository(Libro::class)->findByEstNotActivated();
+                $libros = $emLibros->getRepository(Libro::class)->findByEstNotActivated($user);
                 $libros = $this->cleanSearchBooks($libros, $user, $roles);
             } elseif ($roles === Role::ROLE_PROFESOR) {
-                $libros = $emLibros->getRepository(Libro::class)->findByProfNotActivated();
+                $libros = $emLibros->getRepository(Libro::class)->findByProfNotActivated($user);
                 $libros = $this->cleanSearchBooks($libros, $user, $roles);
             } else {
                 $route = 'super/index.html.twig';

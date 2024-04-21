@@ -110,36 +110,46 @@ class LibroRepository extends ServiceEntityRepository
             ->join('l.codigos', 'codigo')
             ->where('codigo.activo = :activo')
             ->andWhere('codigo.user = :user')
-//            ->andWhere(':date BETWEEN codigo.fechaInicio AND codigo.fechaFin')
+            ->andWhere(':date BETWEEN codigo.fechaInicio AND codigo.fechaFin')
             ->setParameter('activo', true)
             ->setParameter('user', $user)
-//            ->setParameter('date', new \DateTime())
+            ->setParameter('date', new \DateTime())
             ->getQuery()
             ->getResult(Query::HYDRATE_OBJECT);
     }
 
-    public function findByEstNotActivated(){
+    public function findByEstNotActivated($user){
         return $this->createQueryBuilder('l')
-            ->join('l.codigos','c')
+            ->leftJoin('l.codigos', 'c')
+            ->leftJoin('c.user', 'u')
             ->where('l.para_estudiante = :para_estudiante')
-            ->andWhere('c.activo = :activo')
-//            ->andWhere('c.user =:user')
+            ->andWhere('c.activo = :activo OR c.id IS NULL')
+            ->andWhere('u IS NULL')
+            ->andWhere('NOT EXISTS (
+            SELECT 1 FROM App\Entity\Codigo c2
+            WHERE c2.user = :user AND c2.libro = l
+        )')
             ->setParameter('para_estudiante', true)
-            ->setParameter('activo',false)
-//            ->setParameter('user',null)`
+            ->setParameter('activo', false)
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult(Query::HYDRATE_OBJECT);
     }
 
-    public function findByProfNotActivated(){
+    public function findByProfNotActivated($user){
         return $this->createQueryBuilder('l')
-            ->join('l.codigos','c')
+            ->leftJoin('l.codigos', 'c')
+            ->leftJoin('c.user', 'u')
             ->where('l.para_docente = :para_docente')
-            ->andWhere('c.activo = :activo')
-//            ->andWhere('c.user =:user')
+            ->andWhere('c.activo = :activo OR c.id IS NULL')
+            ->andWhere('u IS NULL')
+            ->andWhere('NOT EXISTS (
+            SELECT 1 FROM App\Entity\Codigo c2
+            WHERE c2.user = :user AND c2.libro = l
+        )')
             ->setParameter('para_docente', true)
-            ->setParameter('activo',false)
-//            ->setParameter('user',null)`
+            ->setParameter('activo', false)
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult(Query::HYDRATE_OBJECT);
     }

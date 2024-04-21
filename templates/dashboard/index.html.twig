@@ -89,7 +89,7 @@
                         {% block title_panel %}
                         {% endblock %}
                     </div>
-                    <div class="col-lg-4 offset-lg-2">
+                    <div class="col-lg-4">
                         {% block searcher %}
                             <form class="mr-5">
                                 <div class="input-group ">
@@ -103,6 +103,21 @@
                                 </div>
                             </form>
                         {% endblock %}
+                    </div>
+                    <div class="col-md-5">
+                        {% if formActivacion is defined %}
+                            {{ form_start(formActivacion, {'action': url('textos', {'id': user.id}) }) }}
+                            <div class="row">
+                                <div class="col-md-5">
+                                    {{ form_row(formActivacion.codigo_activacion, {'attr': {'placeholder': 'Código de activación', 'style': 'float: right!important'}}) }}
+                                </div>
+                                <div class="col-md-5 pt-4">
+                                    {{form_row(formActivacion.Activar,{'attr': { 'style': 'margin-top: 7px'}}) }}
+                                </div>
+                            </div>
+                            {{form_end(formActivacion)}}
+{#                            <button class="btn btn-success float-right">Activar Texto</button>#}
+                        {%endif%}
                     </div>
                 </div>
             </div>

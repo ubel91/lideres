@@ -22,7 +22,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     private $router;
 
-    public function __construct(ContainerInterface $container, KernelInterface $kernel,UrlGeneratorInterface $router)
+    public function __construct(ContainerInterface $container, KernelInterface $kernel, UrlGeneratorInterface $router)
     {
         $this->container = $container;
         $this->kernel = $kernel;
@@ -40,24 +40,39 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     }
 
     public function bookState(Libro $book, User $user){
-        foreach($book->getLibroActivados() as $activado){
-            if($activado->getProfesor() === $user->getProfesor() || $activado->getEstudiante() === $user->getEstudiantes()){
-                $codeString = $activado->getCodigoActivacion();
-                foreach($book->getCodigos() as $code){
-                    if($code->getCodebook() === $codeString){
-                        if ($code->getFechaFin() < new DateTime('now')){
-                            return '<a href="'. $this->router->generate('codigo_edit', [
-                                    'id' => $code->getId(),
-                                ]).'" class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</a>';
-                        }
-                        if ($code->getFechaFin() >= new DateTime('now')){
-                            return '<a href="'. $this->router->generate('codigo_edit', [
-                                'id' => $code->getId(),
-                            ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
-                        }
-                        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
-                    }
+//        foreach($book->getLibroActivados() as $activado){
+//            if($activado->getProfesor() === $user->getProfesor() || $activado->getEstudiante() === $user->getEstudiantes()){
+//                $codeString = $activado->getCodigoActivacion();
+//                foreach($book->getCodigos() as $code){
+//                    if($code->getCodebook() === $codeString){
+//                        if ($code->getFechaFin() < new DateTime('now')){
+//                            return '<a href="'. $this->router->generate('codigo_edit', [
+//                                    'id' => $code->getId(),
+//                                ]).'" class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</a>';
+//                        }
+//                        if ($code->getFechaFin() >= new DateTime('now')){
+//                            return '<a href="'. $this->router->generate('codigo_edit', [
+//                                'id' => $code->getId(),
+//                            ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
+//                        }
+//                        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
+//                    }
+//                }
+//            }
+//        }
+        foreach ($user->getCodigos() as $codigo) {
+            if ($codigo->getLibro() === $book) {
+                if ($codigo->getActivo() && $codigo->getFechaFin() < new DateTime('now')){
+                    return '<a href="'. $this->router->generate('codigo_edit', [
+                            'id' => $codigo->getId(),
+                        ]).'" class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</a>';
                 }
+                if ($codigo->getActivo() && $codigo->getFechaFin() >= new DateTime('now')){
+                    return '<a href="'. $this->router->generate('codigo_edit', [
+                            'id' => $codigo->getId(),
+                        ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
+                }
+                    return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
             }
         }
         return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
@@ -84,7 +99,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function getProyectPath($path)
     {
-        return $this->kernel->getProjectDir()  . $path;
+        return $this->kernel->getProjectDir() . $path;
     }
 
 }

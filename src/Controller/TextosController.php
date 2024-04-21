@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Actividades;
+use App\Entity\Codigo;
 use App\Entity\Estudiantes;
 use App\Entity\Libro;
 use App\Entity\LibroActivado;
@@ -10,11 +11,13 @@ use App\Entity\Materia;
 use App\Entity\Role;
 use App\Entity\Unidad;
 use App\Entity\User;
+use App\Form\LibroActivadoType;
 use App\Form\LibroType;
 use App\Service\FileUploader;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -46,20 +49,85 @@ class TextosController extends AbstractController
             $user = $this->getUser();
         }
 
+        $result1 = [];
+        if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE) {
+            $id = $user->getEstudiantes() ? $user->getEstudiantes()->getId() : null;
+            $values = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id);
+            /** @var LibroActivado $item */
+            foreach ($values as $item){
+                $result1[]=$item->getLibro();
+            }
+        } elseif ($user->getRoles()[0] === Role::ROLE_PROFESOR) {
+            $id = $user->getProfesor() ? $user->getProfesor()->getId() : null;
+            $values = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
+            /** @var LibroActivado $item */
+            foreach ($values as $item){
+                $result1[]=$item->getLibro();
+            }
+        }
+
         $result = $em->getRepository(Libro::class)->findByUser($this->getUser());
+        $data = $this->mergue($result1, $result);
 
         $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
         $ouput = [];
 
         foreach ($materias as $materia) {
-            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $result);
+            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $data);
+        }
+
+        $formActivacion = $this->createForm(LibroActivadoType::class, null);
+        $formActivacion->handleRequest($request);
+        if ($formActivacion->isSubmitted() && $formActivacion->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $codeStr = $formActivacion->get('codigo_activacion')->getData();
+            $code = $em->getRepository(Codigo::class)->findOneBy(['codebook'=>$codeStr]);
+            if (null != $code && !$code->getActivo()){
+                $code->setActivo(true);
+                $code->setUser($user);
+                $em->flush();
+            }else{
+                $formActivacion->get('codigo_activacion')->addError(new FormError('El código de activación proporcionado es inválido o ya ha sido utilizado.'));
+                return $this->render('textos/index.html.twig', [
+                    'result' => $ouput,
+                    'is_super' => $super,
+                    'user' => $user,
+                    'formActivacion' =>$formActivacion->createView()
+                ]);
+            }
+            return $super ? $this->redirectToRoute('textos',['id'=> $user->getId()]) :
+             $this->redirectToRoute('textos')            ;
         }
 
         return $this->render('textos/index.html.twig', [
             'result' => $ouput,
             'is_super' => $super,
-            'user' => $user
+            'user' => $user,
+            'formActivacion' =>$formActivacion->createView()
         ]);
+    }
+
+    function mergue($array1, $array2) {
+        $tempIds = array();
+        $resultado = array();
+
+
+        foreach ($array1 as $objeto) {
+            if (!in_array($objeto->getId(), $tempIds)) {
+                $resultado[] = $objeto;
+                $tempIds[] = $objeto->getId();
+            }
+        }
+
+        foreach ($array2 as $objeto) {
+            if (!in_array($objeto->getId(), $tempIds)) {
+                $resultado[] = $objeto;
+                $tempIds[] = $objeto->getId();
+            }
+        }
+
+        return $resultado;
     }
 
     /**
