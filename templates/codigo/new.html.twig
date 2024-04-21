@@ -65,8 +65,41 @@
     {{ parent() }}
     {{ encore_entry_script_tags('listados') }}
     <script>
-        $(document).ready(function () {
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("code_form").addEventListener("submit", function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
 
+                fetch("{{path('codigo_new')}}", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.blob();
+                        } else {
+                            console.error("Error en la respuesta:", response.status);
+                            throw new Error("Error en la respuesta");
+                        }
+                    })
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+
+                        const link = document.createElement("a");
+                        link.href = url;
+                        link.download = "codigos.xlsx";
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        window.location.href = "{{url('codigo_index')}}";
+                    })
+                    .catch(error => {
+                        console.error("Error en la solicitud:", error);
+                    });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
             let $loadExcel = $('.loadExcel');
             let textInputFile = '';
             $loadExcel.on('change', function (event) {

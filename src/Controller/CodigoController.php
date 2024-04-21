@@ -48,7 +48,6 @@ class CodigoController extends AbstractController
 
     /**
      * @Route("/new", name="codigo_new", methods={"GET","POST"})
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function new(Request $request): Response
     {
@@ -70,12 +69,12 @@ class CodigoController extends AbstractController
                         ->setActivo(false)
                         ->setCodebook($this->generarCodigo($codigo->getTag()));
                     $em->persist($autoCode);
-//                    $codes[]=$autoCode;
-//                    return $this->makeExcel($codes);
+                    $codes[]=$autoCode;
                 }
                 $em->flush();
+                return $this->makeExcel($codes);
             }
-            return $this->redirectToRoute('codigo_index');
+//            return $this->redirectToRoute('codigo_index');
         }
 
         return $this->render('codigo/new.html.twig', [
@@ -111,12 +110,16 @@ class CodigoController extends AbstractController
         }
 
         $writer = new WXlsx($spreadsheet);
+
         $response = new Response();
+        $response->headers->set('Content-Encoding', 'UTF-8');
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $response->headers->set('Content-Disposition', 'attachment;filename="codigos.xlsx"');
+        ob_start();
         $writer->save('php://output');
+        $excelData = ob_get_clean();
+        $response->setContent($excelData);
         return $response;
-
     }
 
     /**
