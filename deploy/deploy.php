@@ -2,24 +2,24 @@
 
 namespace Deployer;
 
-require 'recipe/symfony.php';
-//require 'recipe/yarn.php';
+require_once 'recipe/symfony4.php';
+require_once 'recipe/yarn.php';
 
-set('repository', 'https://github.com/ubel91/lideres.git');
+set('repository', 'git@github.com:ubel91/lideres.git');
 
 set('application', 'lideres');
 
-host('lideres.cortex.com.ec')
-//    ->hostname('lideres.cortex.com.ec')
+host('beta')
+    ->hostname('lideres.cortex.com.ec')
     ->set('branch', 'main')
-    ->set('remote_user','deploy')
+    ->user('deploy')
     ->set('deploy_path', '/var/www/html/Lideres');
 
-//host('production')
-//    ->hostname('corplideres.com')
-//    ->set('branch', 'main')
-//    ->user('deploy')
-//    ->set('deploy_path', '/var/www/html/Lideres_prod');
+host('production')
+    ->hostname('corplideres.com')
+    ->set('branch', 'main')
+    ->user('deploy')
+    ->set('deploy_path', '/var/www/html/Lideres_prod');
 
 set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --optimize-autoloader --no-suggest');
 
@@ -43,30 +43,20 @@ set('ssh_multiplexing',  true);
 //set('use_relative_symlinks', false);
 
 desc('Compile assets in production');
-task('build', function () {
-    cd('{{release_path}}');
-    run('yarn install');
-    run('yarn run encore production');
-});
+task('yarn:run:production', 'yarn run encore production');
+//task('yarn:run:dev', 'yarn run encore dev');
 
 
 desc('Database update');
 task('database:update', function () {
-    cd('{{release_path}}');
     run('php {{bin/console}} doctrine:schema:update --force');
 });
 
 desc('Publish assets');
-task('assets:install', function () {
-    cd('{{release_path}}');
-    run('php {{bin/console}} assets:install --symlink public');
-});
+task('assets:install', 'php {{bin/console}} assets:install --symlink public');
 
 desc('Dumping js routes');
-task('dump:js-routes', function () {
-    cd('{{release_path}}');
-    run('php {{bin/console}} fos:js-routing:dump --target=public/bundles/fosjsrouting/js/fos_js_routing.js');
-});
+task('dump:js-routes', 'php {{bin/console}} fos:js-routing:dump --target=public/bundles/fosjsrouting/js/fos_js_routing.js');
 
 desc('chmod');
 task('chmod:777', function () {
