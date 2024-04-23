@@ -109,7 +109,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $roles = $token->getRoleNames();
         if (count($roles) === 1)
             if ($roles[0] === Role::ROLE_ESTUDIANTE || $roles[0] === Role::ROLE_PROFESOR)
-                return new RedirectResponse($this->urlGenerator->generate('dashboard'));
+                return new RedirectResponse($this->urlGenerator->generate('textos'));
             elseif ($roles[0] === Role::ROLE_ADMIN || $roles[0] === Role::ROLE_SUPER_ADMIN)
                 return new RedirectResponse($this->urlGenerator->generate('super'));
 
