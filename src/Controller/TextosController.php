@@ -42,7 +42,9 @@ class TextosController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $super = false;
-        if (null != $id = $request->query->get('id')) {
+        if (null != $id = $request->query->get('id')
+                && (in_array(Role::ROLE_SUPER_ADMIN, $this->getUser()->getRoles())
+                    || in_array(Role::ROLE_ADMIN, $this->getUser()->getRoles()))) {
             $user = $em->getRepository(User::class)->find($id);
             $super = true;
         } else {
@@ -54,15 +56,15 @@ class TextosController extends AbstractController
             $id = $user->getEstudiantes() ? $user->getEstudiantes()->getId() : null;
             $values = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id);
             /** @var LibroActivado $item */
-            foreach ($values as $item){
-                $result1[]=$item->getLibro();
+            foreach ($values as $item) {
+                $result1[] = $item->getLibro();
             }
         } elseif ($user->getRoles()[0] === Role::ROLE_PROFESOR) {
             $id = $user->getProfesor() ? $user->getProfesor()->getId() : null;
             $values = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
             /** @var LibroActivado $item */
-            foreach ($values as $item){
-                $result1[]=$item->getLibro();
+            foreach ($values as $item) {
+                $result1[] = $item->getLibro();
             }
         }
 
@@ -82,33 +84,34 @@ class TextosController extends AbstractController
             $em = $this->getDoctrine()->getManager();
 
             $codeStr = $formActivacion->get('codigo_activacion')->getData();
-            $code = $em->getRepository(Codigo::class)->findOneBy(['codebook'=>$codeStr]);
-            if (null != $code && !$code->getActivo()){
+            $code = $em->getRepository(Codigo::class)->findOneBy(['codebook' => $codeStr]);
+            if (null != $code && !$code->getActivo()) {
                 $code->setActivo(true);
                 $code->setUser($user);
                 $em->flush();
-            }else{
+            } else {
                 $formActivacion->get('codigo_activacion')->addError(new FormError('El código de activación proporcionado es inválido o ya ha sido utilizado.'));
                 return $this->render('textos/index.html.twig', [
                     'result' => $ouput,
                     'is_super' => $super,
                     'user' => $user,
-                    'formActivacion' =>$formActivacion->createView()
+                    'formActivacion' => $formActivacion->createView()
                 ]);
             }
-            return $super ? $this->redirectToRoute('textos',['id'=> $user->getId()]) :
-             $this->redirectToRoute('textos')            ;
+            return $super ? $this->redirectToRoute('textos', ['id' => $user->getId()]) :
+                $this->redirectToRoute('textos');
         }
 
         return $this->render('textos/index.html.twig', [
             'result' => $ouput,
             'is_super' => $super,
             'user' => $user,
-            'formActivacion' =>$formActivacion->createView()
+            'formActivacion' => $formActivacion->createView()
         ]);
     }
 
-    function mergue($array1, $array2) {
+    function mergue($array1, $array2)
+    {
         $tempIds = array();
         $resultado = array();
 
