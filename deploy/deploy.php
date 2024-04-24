@@ -5,7 +5,7 @@ namespace Deployer;
 require_once 'recipe/symfony4.php';
 require_once 'recipe/yarn.php';
 
-set('repository', 'git@github.com:ubel91/lideres.git');
+set('repository', 'https://github.com/ubel91/lideres.git');
 
 set('application', 'lideres');
 
