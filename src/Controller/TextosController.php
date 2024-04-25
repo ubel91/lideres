@@ -42,13 +42,12 @@ class TextosController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $super = false;
+        $user = $this->getUser();
         if (null != $id = $request->query->get('id')
                 && (in_array(Role::ROLE_SUPER_ADMIN, $this->getUser()->getRoles())
                     || in_array(Role::ROLE_ADMIN, $this->getUser()->getRoles()))) {
             $user = $em->getRepository(User::class)->find($id);
             $super = true;
-        } else {
-            $user = $this->getUser();
         }
 
         $result1 = [];
