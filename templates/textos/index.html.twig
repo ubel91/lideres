@@ -39,22 +39,22 @@
                                              height="300" class="figure-img rounded" alt="libro_portada">
                                     </a>
                                     {% block picture_footer %}
-                                        {% if is_super %}
-                                            <div class="row">
-                                                <div class="col-md-12 text-center">
-                                                    {{ bookState(r, user)|raw }}
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <a href="{{ path('textosEdit', {'id': r.id }) }}" title="Editar"
-                                                       class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                    <button class="btn btn-warning btnDelete pull-right" title="Borrar"
-                                                            id="{{ r.id }}" data-routename="codigo_delete"><i
-                                                                class="fas fa-power-off"></i></button>
-                                                </div>
-                                            </div>
-                                        {% endif %}
+{#                                        {% if is_super %}#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-md-12 text-center">#}
+{#                                                    {{ bookState(r, user)|raw }}#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6">#}
+{#                                                    <a href="{{ path('textosEdit', {'id': r.id }) }}" title="Editar"#}
+{#                                                       class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>#}
+{#                                                </div>#}
+{#                                                <div class="col-md-6 text-right">#}
+{#                                                    <button class="btn btn-warning btnDelete pull-right" title="Borrar"#}
+{#                                                            id="{{ r.id }}" data-routename="codigo_delete"><i#}
+{#                                                                class="fas fa-power-off"></i></button>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        {% endif %}#}
                                         <figcaption class="figure-caption">
                                             <strong>Periodo de Activación:
                                             </strong>

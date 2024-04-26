@@ -66,7 +66,7 @@ class TextosController extends AbstractController
             }
         }
 
-        $result = $em->getRepository(Libro::class)->findByUser($this->getUser());
+        $result = $em->getRepository(Libro::class)->findByUser($user);
         $data = $this->mergue($result1, $result);
 
         $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
