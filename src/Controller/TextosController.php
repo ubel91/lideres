@@ -52,18 +52,18 @@ class TextosController extends AbstractController
             $result1 = [];
         if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE) {
             $id = $user->getEstudiantes() ? $user->getEstudiantes()->getId() : null;
-            $values = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id);
-            /** @var LibroActivado $item */
-            foreach ($values as $item) {
-                $result1[] = $item->getLibro();
-            }
+            $result1 = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id);
+//            /** @var LibroActivado $item */
+//            foreach ($values as $item) {
+//                $result1[] = $item->getLibro();
+//            }
         } elseif ($user->getRoles()[0] === Role::ROLE_PROFESOR) {
             $id = $user->getProfesor() ? $user->getProfesor()->getId() : null;
-            $values = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
+            $result1 = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
             /** @var LibroActivado $item */
-            foreach ($values as $item) {
-                $result1[] = $item->getLibro();
-            }
+//            foreach ($values as $item) {
+//                $result1[] = $item->getLibro();
+//            }
         }
 
         $result = $em->getRepository(Libro::class)->findByUser($user);
