@@ -68,12 +68,13 @@ class TextosController extends AbstractController
 
         $result = $em->getRepository(Libro::class)->findByUser($user);
         $data = $this->mergue($result1, $result);
-
         $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
         $ouput = [];
+        $ouput2 = [];
 
         foreach ($materias as $materia) {
-            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $data);
+            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $result1);
+            $ouput2[$materia->getNombre()] = $this->getByMateria($materia, $result);
         }
 
         $formActivacion = $this->createForm(LibroActivadoType::class, null);
@@ -91,6 +92,7 @@ class TextosController extends AbstractController
                 $formActivacion->get('codigo_activacion')->addError(new FormError('El código de activación proporcionado es inválido o ya ha sido utilizado.'));
                 return $this->render('textos/index.html.twig', [
                     'result' => $ouput,
+                    'result2' => $ouput2,
                     'is_super' => $super,
                     'user' => $user,
                     'formActivacion' => $formActivacion->createView()
@@ -102,6 +104,7 @@ class TextosController extends AbstractController
 
         return $this->render('textos/index.html.twig', [
             'result' => $ouput,
+            'result2' => $ouput2,
             'is_super' => $super,
             'user' => $user,
             'formActivacion' => $formActivacion->createView()

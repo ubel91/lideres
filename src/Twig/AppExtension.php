@@ -35,31 +35,11 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             new TwigFunction('uploaded_asset', [$this, 'getUploadedAssetPath']),
             new TwigFunction('wkpath', [$this, 'getWkPath']),
             new TwigFunction('pypath', [$this, 'getProyectPath']),
-            new TwigFunction('bookState', [$this, 'bookState'])
+            new TwigFunction('bookState', [$this, 'bookState']),
+            new TwigFunction('bookState2', [$this, 'bookState2'])
         ];
     }
-
-    public function bookState(Libro $book, User $user){
-//        foreach($book->getLibroActivados() as $activado){
-//            if($activado->getProfesor() === $user->getProfesor() || $activado->getEstudiante() === $user->getEstudiantes()){
-//                $codeString = $activado->getCodigoActivacion();
-//                foreach($book->getCodigos() as $code){
-//                    if($code->getCodebook() === $codeString){
-//                        if ($code->getFechaFin() < new DateTime('now')){
-//                            return '<a href="'. $this->router->generate('codigo_edit', [
-//                                    'id' => $code->getId(),
-//                                ]).'" class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</a>';
-//                        }
-//                        if ($code->getFechaFin() >= new DateTime('now')){
-//                            return '<a href="'. $this->router->generate('codigo_edit', [
-//                                'id' => $code->getId(),
-//                            ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
-//                        }
-//                        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
-//                    }
-//                }
-//            }
-//        }
+    public function bookState2(Libro $book, User $user){
         foreach ($user->getCodigos() as $codigo) {
             if ($codigo->getLibro() === $book) {
                 if ($codigo->getActivo() && $codigo->getFechaFin() < new DateTime('now')){
@@ -72,7 +52,31 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
                             'id' => $codigo->getId(),
                         ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
                 }
-                    return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
+                return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
+            }
+        }
+        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
+    }
+
+    public function bookState(Libro $book, User $user){
+        foreach($book->getLibroActivados() as $activado){
+            if($activado->getProfesor() === $user->getProfesor() || $activado->getEstudiante() === $user->getEstudiantes()){
+                $codeString = $activado->getCodigoActivacion();
+                foreach($book->getCodigos() as $code){
+                    if($code->getCodebook() === $codeString){
+                        if ($code->getFechaFin() < new DateTime('now')){
+                            return '<a href="'. $this->router->generate('codigo_edit', [
+                                    'id' => $code->getId(),
+                                ]).'" class="btn btn-warning "><i class="fa fa-exclamation-triangle"></i> Caducado</a>';
+                        }
+                        if ($code->getFechaFin() >= new DateTime('now')){
+                            return '<a href="'. $this->router->generate('codigo_edit', [
+                                'id' => $code->getId(),
+                            ]).'" class="btn btn-success"><i class="fa fa-check-circle"></i> Activo</a>';
+                        }
+                        return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
+                    }
+                }
             }
         }
         return ' <span class="btn btn-danger"><i class="fa fa-times-circle"></i> Desactivado</span>';
