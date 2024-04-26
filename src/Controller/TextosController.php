@@ -73,7 +73,7 @@ class TextosController extends AbstractController
         $ouput2 = [];
 
         foreach ($materias as $materia) {
-            $ouput[$materia->getNombre()] = $this->getByMateria($materia, $result1);
+            $ouput[$materia->getNombre()] = $this->getByMateria1($materia, $result1);
             $ouput2[$materia->getNombre()] = $this->getByMateria($materia, $result);
         }
 
@@ -132,6 +132,17 @@ class TextosController extends AbstractController
         }
 
         return $resultado;
+    }
+
+    public function getByMateria1(Materia $materia, $books = array())
+    {
+        $ouput = [];
+        /** @var LibroActivado $book */
+        foreach ($books as $book) {
+            if ($book->getLibro()->getCatalogo()->getMaterias() === $materia)
+                $ouput[]=$book;
+        }
+        return $ouput;
     }
 
     /**
