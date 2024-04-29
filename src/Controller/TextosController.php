@@ -53,21 +53,27 @@ class TextosController extends AbstractController
         if ($user->getRoles()[0] === Role::ROLE_ESTUDIANTE) {
             $id = $user->getEstudiantes() ? $user->getEstudiantes()->getId() : null;
             $result1 = $em->getRepository(LibroActivado::class)->findLibrosActivadosByEst($id);
-//            /** @var LibroActivado $item */
-//            foreach ($values as $item) {
-//                $result1[] = $item->getLibro();
-//            }
+
         } elseif ($user->getRoles()[0] === Role::ROLE_PROFESOR) {
             $id = $user->getProfesor() ? $user->getProfesor()->getId() : null;
             $result1 = $em->getRepository(LibroActivado::class)->findLibrosActivadosByDoc($id);
-            /** @var LibroActivado $item */
-//            foreach ($values as $item) {
-//                $result1[] = $item->getLibro();
-//            }
+
         }
+        $result1 = array_filter($result1, function ($k){
+            return $k->getLibro()->getDeletedBy() != null ;
+        });
 
         $result = $em->getRepository(Libro::class)->findByUser($user);
-        $data = $this->mergue($result1, $result);
+
+        $result = array_filter($result, function ($k) use ($user) {
+            $c = $k->getCodigos();
+            /** @var Codigo $code */
+            foreach ($c as $code){
+                if ($code->getUser() == $user){
+                   return $code->getDeletedAt() === null;
+                }
+            }
+        });
         $materias = $this->getDoctrine()->getRepository(Materia::class)->findAll();
         $ouput = [];
         $ouput2 = [];

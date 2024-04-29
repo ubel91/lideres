@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Codigo;
+use App\Entity\Libro;
+use App\Entity\User;
 use App\Form\CodigoType;
 use App\Repository\CodigoRepository;
 use Exception;
@@ -69,7 +71,7 @@ class CodigoController extends AbstractController
                         ->setActivo(false)
                         ->setCodebook($this->generarCodigo($codigo->getTag()));
                     $em->persist($autoCode);
-                    $codes[]=$autoCode;
+                    $codes[] = $autoCode;
                 }
                 $em->flush();
                 return $this->makeExcel($codes);
@@ -163,6 +165,32 @@ class CodigoController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $codigo = $entityManager->getRepository(Codigo::class)->find($id);
             $entityManager->remove($codigo);
+            $entityManager->flush();
+            return new JsonResponse(['success' => 'Elemento eliminado correctamente']);
+        } else {
+            throw new Exception('¡Operación no permitida!');
+        }
+    }
+
+    /**
+     * @Route("/deleteCode", options={"expose"=true}, name="codigo_code_delete", methods={"POST"})
+     * @throws Exception
+     */
+    public function deleteCode(Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $user_id = $request->get('user_id');
+            $libro_id = $request->get('libro_id');
+            $entityManager = $this->getDoctrine()->getManager();
+            $libro = $entityManager->getRepository(Libro::class)->find($libro_id);
+            $user = $entityManager->getRepository(User::class)->find($user_id);
+
+            $code = $entityManager->getRepository(Codigo::class)->findOneBy([
+                'user' => $user,
+                'libro' => $libro
+            ]);
+            if ($code)
+                $entityManager->remove($code);
             $entityManager->flush();
             return new JsonResponse(['success' => 'Elemento eliminado correctamente']);
         } else {

@@ -111,8 +111,8 @@
                                                        class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                                                 </div>
                                                 <div class="col-md-6 text-right">
-                                                    <button class="btn btn-warning btnDelete pull-right" title="Borrar"
-                                                            id="{{ r.id }}" data-routename="codigo_delete"><i
+                                                    <button class="btn btn-warning btnDeleteCode pull-right" title="Borrar"
+                                                            data-id="{{ r.id }}"><i
                                                                 class="fas fa-power-off"></i></button>
                                                 </div>
                                             </div>
@@ -144,5 +144,57 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('listados') }}
+{#    {{ encore_entry_script_tags('listados') }}#}
+
+    <script>
+        $(document).ready( function () {
+            $('.btnDeleteCode').on('click',function(){
+                let id = $(this).data('id')
+                let textDelete = "Esta acción <b class='text-danger'>NO</b> se puede deshacer.";
+                let user_id = '{{user.id}}'
+                if (typeof(delete_message) !== "undefined")
+                    textDelete = delete_message + textDelete;
+
+                swal.fire({
+                    title: '<span class="text-danger">'+'¿Esta seguro de borrar este elemento?'+'</span>',
+                    html: textDelete,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.value) {
+                        let Ruta = Routing.generate('codigo_code_delete',{libro_id:id,user_id:user_id});
+                        $.ajax({
+                            type: 'POST',
+                            url: Ruta,
+                            data: ({id: id}),
+                            async: true,
+                            beforeSend: () => {
+                                $('.overlayGeneral').show();
+                            },
+                            success: (data, response) => {
+                                if (data.success){
+                                   window.location.reload()
+                                } else if(data.error) {
+                                    swal.fire(
+                                        'Borrado',
+                                        data.error,
+                                        'error'
+                                    );
+                                }
+
+                            },
+                            complete: function () {
+                                $('.overlayGeneral').hide();
+                            }
+                        })
+                    }
+                });
+            })
+        })
+
+    </script>
 {% endblock %}
