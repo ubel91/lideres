@@ -42,7 +42,7 @@ class TextosController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $super = false;
-        if (null != $id = $request->query->get('id')) {
+        if (null != $id = $request->query->get('id') && ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SUPER_ADMIN'))) {
             $user = $em->getRepository(User::class)->find($id);
             $super = true;
         } else {
@@ -95,6 +95,7 @@ class TextosController extends AbstractController
                 $em->flush();
             } else {
                 $formActivacion->get('codigo_activacion')->addError(new FormError('El código de activación proporcionado es inválido o ya ha sido utilizado.'));
+
                 return $this->render('textos/index.html.twig', [
                     'result' => $ouput,
                     'result2' => $ouput2,
