@@ -60,9 +60,8 @@ class TextosController extends AbstractController
 
         }
         $result1 = array_filter($result1, function ($k){
-            return $k->getLibro()->getDeletedBy() != null ;
+            return $k->getDeletedAt() == null ;
         });
-
         $result = $em->getRepository(Libro::class)->findByUser($user);
 
         $result = array_filter($result, function ($k) use ($user) {
