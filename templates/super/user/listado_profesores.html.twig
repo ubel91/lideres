@@ -55,7 +55,7 @@
                                         <td>{{ u.email }}</td>
                                         <td>{{ u.nombre }}</td>
                                         <td>{{ u.nombreinstitucion }}</td>
-                                        <td>{{ u.canton.provincia.nombre }}</td>
+                                        <td>{{ u.canton.provincia.nombre ?? '' }}</td>
                                         <td>{{ u.lastLogin ? u.lastLogin|date('d/m/Y h:m') : '' }}</td>
                                         <td>
                                             <a class="text-primary" href="{{ path('profile', {'id': u.id }) }}" id="btnEditar"><i class="fas fa-pencil-alt" title="Editar"></i></a>
