@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Libro;
 use App\Entity\Recurso;
 use App\Entity\Role;
 use App\Entity\TipoRecurso;
@@ -73,7 +74,7 @@ class RecursoController extends AbstractController
         $user = $this->getUser();
         $recursos = [];
 
-        $book = $request->get('book');
+        $book = $this->getDoctrine()->getManager()->getRepository(Libro::class)->find($request->get('book'));
         if ($this->getUser()->getEstudiantes()) {
             $recursos = $recursoRepository->findRecursosById($user->getEstudiantes()->getId(), Role::ROLE_ESTUDIANTE, $book, $user);
         } else if ($this->getUser()->getProfesor()) {

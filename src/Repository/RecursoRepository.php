@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Libro;
 use App\Entity\LibroActivado;
 use App\Entity\Recurso;
 use App\Entity\Role;
@@ -54,16 +55,17 @@ class RecursoRepository extends ServiceEntityRepository
     /**
      * @param int $id
      * @param string $role
-     * @param null $book
+     * @param Libro|null $book
+     * @param User|null $user
      * @return array|null
      */
-    public function findRecursosById(int $id, string $role, $book = null, User $user)
+    public function findRecursosById(int $id, string $role,Libro $book = null, User $user = null): ?array
     {
         $resultArray = null;
         $libros = [];
-        foreach ($user->getCodigos() as $codigo) {
-            if ($codigo->getActivo() == $book && $codigo->getActivo() && $codigo->getFechaInicio() < new \DateTime('now') && $codigo->getFechaFin() > new \DateTime('now'))
-                $libros[] = $codigo->getLibro();
+        foreach ($user->getCodigos() as $code) {
+            if ($code->getActivo() == $book && $code->getActivo() && $code->getFechaInicio() < new \DateTime('now') && $code->getFechaFin() > new \DateTime('now'))
+                $libros[] = $code->getLibro();
 
         }
         $qb1 = $this->createQueryBuilder('recurso1');
@@ -94,13 +96,12 @@ class RecursoRepository extends ServiceEntityRepository
         $qb1->where('recurso1.libro IN (:libros)');
         $qb1->setParameter('libros', $libros);
         $qb->setParameter('id', $id);
-        $result = array_merge($qb->getQuery()->getResult(), $qb1->getQuery()->getResult()) ;
+        $result = array_merge($qb->getQuery()->getResult(), $book->getRecursos()->toArray()) ;
 
         if (array_key_exists(0, $result)) {
             $hasted = $result[0]->getLibro()->getNombre();
             $resultArray = $this->normalizeArray($result, $hasted);
         }
-
         return $resultArray;
     }
 
