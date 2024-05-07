@@ -62,7 +62,7 @@ class RecursoRepository extends ServiceEntityRepository
         $resultArray = null;
         $libros = [];
         foreach ($user->getCodigos() as $codigo) {
-            if ($codigo->getActivo() && $codigo->getFechaInicio() < new \DateTime('now') && $codigo->getFechaFin() > new \DateTime('now'))
+            if ($codigo->getActivo() == $book && $codigo->getActivo() && $codigo->getFechaInicio() < new \DateTime('now') && $codigo->getFechaFin() > new \DateTime('now'))
                 $libros[] = $codigo->getLibro();
 
         }
