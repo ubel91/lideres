@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\LibroActivado;
 use App\Entity\Recurso;
 use App\Entity\Role;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -56,10 +57,15 @@ class RecursoRepository extends ServiceEntityRepository
      * @param null $book
      * @return array|null
      */
-    public function findRecursosById(int $id, string $role, $book = null)
+    public function findRecursosById(int $id, string $role, $book = null, User $user)
     {
         $resultArray = null;
+        $libros = [];
+        foreach ($user->getCodigos() as $codigo) {
+            if ($codigo->getActivo() && $codigo->getFechaInicio() < new \DateTime('now') && $codigo->getFechaFin() > new \DateTime('now'))
+                $libros[] = $codigo->getLibro();
 
+        }
         $qb = $this->createQueryBuilder('recurso');
 
         if ($role === Role::ROLE_PROFESOR) {
@@ -84,7 +90,9 @@ class RecursoRepository extends ServiceEntityRepository
                 ->andWhere('libro.id=:book')
                 ->setParameter('book', $book);
         }
+        $qb->orWhere('recurso.libro IN (:libros)');
         $qb->setParameter('id', $id);
+        $qb->setParameter('libros', $libros);
         $result = $qb->getQuery()->getResult();
 
         if (array_key_exists(0, $result)) {

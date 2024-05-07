@@ -75,9 +75,9 @@ class RecursoController extends AbstractController
 
         $book = $request->get('book');
         if ($this->getUser()->getEstudiantes()) {
-            $recursos = $recursoRepository->findRecursosById($user->getEstudiantes()->getId(), Role::ROLE_ESTUDIANTE, $book);
+            $recursos = $recursoRepository->findRecursosById($user->getEstudiantes()->getId(), Role::ROLE_ESTUDIANTE, $book, $user);
         } else if ($this->getUser()->getProfesor()) {
-            $recursos = $recursoRepository->findRecursosById($user->getProfesor()->getId(), Role::ROLE_PROFESOR, $book);
+            $recursos = $recursoRepository->findRecursosById($user->getProfesor()->getId(), Role::ROLE_PROFESOR, $book, $user);
         } else if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SUPER_ADMIN'))
             $recursos = $recursoRepository->findRecursos($book);
 
