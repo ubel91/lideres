@@ -66,6 +66,7 @@ class RecursoRepository extends ServiceEntityRepository
                 $libros[] = $codigo->getLibro();
 
         }
+        $qb1 = $this->createQueryBuilder('recurso1');
         $qb = $this->createQueryBuilder('recurso');
 
         if ($role === Role::ROLE_PROFESOR) {
@@ -90,10 +91,10 @@ class RecursoRepository extends ServiceEntityRepository
                 ->andWhere('libro.id=:book')
                 ->setParameter('book', $book);
         }
-        $qb->orWhere('recurso.libro IN (:libros)');
+        $qb1->where('recurso1.libro IN (:libros)');
+        $qb1->setParameter('libros', $libros);
         $qb->setParameter('id', $id);
-        $qb->setParameter('libros', $libros);
-        $result = $qb->getQuery()->getResult();
+        $result = array_merge($qb->getQuery()->getResult(), $qb1->getQuery()->getResult()) ;
 
         if (array_key_exists(0, $result)) {
             $hasted = $result[0]->getLibro()->getNombre();
